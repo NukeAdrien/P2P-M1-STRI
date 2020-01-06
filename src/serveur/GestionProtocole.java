@@ -1,42 +1,40 @@
 package serveur;
+
 import java.util.Date;
 
+import client.ClientControle;
+import envoie.reception.PDU;
+import systeme.fichiers.GestionFichier;
+
 public class GestionProtocole {
-	BanqueSimple banqueS;
-	
-	public GestionProtocole(BanqueSimple b) {
-		banqueS = b;
+	ServeurControle controle;
+	ServeurDonnees donnees;
+
+	public GestionProtocole(ServeurControle sc, ServeurDonnees sd) {
+		controle = sc;
+		donnees = sd;
 	}
-	
-	public String gestion (String requete) {
-		 final String SEPARATEUR = " ";
-		String commande[] = requete.split(SEPARATEUR);
-		String reponse;
-		
-		switch (commande[0]) {
-		case "CREATION" :
-			banqueS.creerCompte(commande[1],  Double.parseDouble(commande[2]));
-			reponse = "OK " + commande[0];
-			break;
-		case "POSITION" :
-			double solde = banqueS.getSolde(commande[1]);
-			Date date = banqueS.getDerniereOperation(commande[1]);
-			reponse = commande[1] + " -> " + solde + " " + date;
-			break;
-		case "AJOUT" :
-			banqueS.ajouter(commande[1], Double.parseDouble(commande[2]));
-			reponse = "OK " + commande[0];
-			break;
-		case "RETRAIT" :
-			banqueS.retirer(commande[1], Double.parseDouble(commande[2]));
-			reponse = "OK " + commande[0];
-			break;
-		default :
-			reponse = "ERREUR " + commande[0] + " commande introuvable";
+
+	public PDU gestionRequete(PDU requete) {
+		if (requete.getType() == "CTRL") {
+			switch (requete.getCommande()) {
+			case "TSF":
+				return controle.TSF(requete);
+			default:
+				System.out.println("Erreur requete inexistante");
+				return null;
+			}
+
+		} else if (requete.getType() == "DATA") {
+
+		} else if (requete.getType() == "ERR") {
+
+		} else {
+			return null;
 		}
-		return reponse;
-		
+
+		return null;
+
 	}
-		
 
 }

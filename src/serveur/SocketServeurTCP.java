@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-public class SocketServeur extends Thread {
+public class SocketServeurTCP extends Thread {
 
 	GestionProtocole gestion;
 
-	public SocketServeur (GestionProtocole g) {
+	public SocketServeurTCP (GestionProtocole g) {
 		gestion = g;
 	}
 
