@@ -1,6 +1,9 @@
-package serveur;
+package socket;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import serveur.GestionProtocole;
+
 import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,7 +20,7 @@ public class SocketServeurTCP extends Thread {
 		ServerSocket sockServeur = null;
 		Socket sockClient = null;
 		try {
-			sockServeur = new ServerSocket(1234);
+			sockServeur = new ServerSocket(4444);
 			try {
 				while (true) {
 					sockClient = sockServeur.accept();

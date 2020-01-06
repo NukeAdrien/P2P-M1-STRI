@@ -13,7 +13,9 @@ public class ServeurControle {
 	public PDU TSF(PDU requete) {
 		PDU reponse = null;
 		Fichier fichier;
-		fichier = gestionFichier.RechercheFichier(requete.getDonnees());
+		reponse = new PDU("CTRL","TSF","Fichier introuvable",null);
+		return reponse;
+		/*fichier = gestionFichier.RechercheFichier(requete.getDonnees());
 		if (fichier == null) {
 			reponse = new PDU("CTRL","TSF","Fichier introuvable",null);
 		}else {
@@ -23,6 +25,6 @@ public class ServeurControle {
 				reponse = new PDU("CTRL","TSF","Fichier en cour de téléchargement sur le serveur",null);
 			}
 		}
-		return reponse;
+		return reponse;*/
 	}
 }

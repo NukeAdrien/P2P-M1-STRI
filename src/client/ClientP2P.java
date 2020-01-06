@@ -28,7 +28,7 @@ public class ClientP2P extends Thread {
 					System.out.println("Erreur saisie");
 				}
 			}
-
+			nomFichier = sc.nextLine();
 			switch (choix) {
 			case 1:
 				System.out.println("Entrez le nom du fichier a télécharger : ");

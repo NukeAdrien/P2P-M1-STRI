@@ -12,11 +12,13 @@ public class Envoie {
 
 	public Envoie(Socket s) {
 		this.sockClientTCP = s;
-		// Instancie un object output stream travaillant sur l’output stream de la socket
+		// Instancie un object output stream travaillant sur l’output stream de la
+		// socket
 		try {
 			envoiPDU = new ObjectOutputStream(sockClientTCP.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("Erreur");
 		}
 	}
 
@@ -33,11 +35,8 @@ public class Envoie {
 				e.printStackTrace();
 				return 1;
 			}
-		}
-		else if (sockClientUDP != null)
+		} else if (sockClientUDP != null) {
 			// TODO Auto-generated method stu
-		{
-
 		} else {
 			System.out.println("Erreur d'initialisation du socket");
 			return 1;

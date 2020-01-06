@@ -1,14 +1,11 @@
 package serveur;
 
-import java.util.Date;
-
-import client.ClientControle;
 import envoie.reception.PDU;
-import systeme.fichiers.GestionFichier;
 
 public class GestionProtocole {
 	ServeurControle controle;
 	ServeurDonnees donnees;
+	PDU reponse;
 
 	public GestionProtocole(ServeurControle sc, ServeurDonnees sd) {
 		controle = sc;
@@ -16,18 +13,19 @@ public class GestionProtocole {
 	}
 
 	public PDU gestionRequete(PDU requete) {
-		if (requete.getType() == "CTRL") {
+		if (requete.getType().compareTo("CTRL") == 0) {
 			switch (requete.getCommande()) {
 			case "TSF":
-				return controle.TSF(requete);
+				reponse = controle.TSF(requete);
+				return reponse;
 			default:
 				System.out.println("Erreur requete inexistante");
 				return null;
 			}
 
-		} else if (requete.getType() == "DATA") {
+		} else if (requete.getType().compareTo("DATA") == 0) {
 
-		} else if (requete.getType() == "ERR") {
+		} else if (requete.getType().compareTo("ERR") == 0) {
 
 		} else {
 			return null;

@@ -1,5 +1,7 @@
 package client;
 
+import socket.SocketClient;
+
 public class ClientDonnees {
 	SocketClient serveur;
 

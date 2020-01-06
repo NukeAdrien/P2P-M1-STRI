@@ -1,4 +1,4 @@
-package serveur;
+package socket;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 
 import envoie.reception.*;
+import serveur.GestionProtocole;
 
 public class GererClient implements Runnable {
 	Socket sockClient = null;
@@ -21,7 +22,6 @@ public class GererClient implements Runnable {
 	public GererClient(Socket socket, GestionProtocole g) {
 		sockClient = socket;
 		gestion = g;
-		
 	}
 
 	@Override
