@@ -55,4 +55,11 @@ public class Fichier {
 		return emplacement;
 	}
 	
+	public Byte getDonnees(Integer index) {
+		return listBlocs.get(index).getDonnees();
+	}
+	public void setDonnees(Integer index, Byte donnees) {
+		listBlocs.get(index).setDonnees(donnees);
+	}
+	
 }

@@ -42,7 +42,7 @@ public class ClientControle {
 		if (simpleTel.getCommande().compareTo("TSF") == 0) {
 			if (simpleTel.getFichier() != null) { 
 				ClientDonnees transfert = new ClientDonnees(sysFichiers,serveur);
-				transfert.Dowload("TSF", simpleTel.getFichier(), null);
+				transfert.Dowload(simpleTel.getFichier(), null);
 			} else if (simpleTel.getFichier() == null) {
 				System.out.println(simpleTel.getDonnees());
 			} else {

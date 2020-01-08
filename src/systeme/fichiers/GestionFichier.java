@@ -17,8 +17,8 @@ public class GestionFichier {
 		return etat;
 	}
 	
-	public Bloc Lire(Fichier fichier,Integer numBloc) {
-		Bloc lecture = null;
+	public Byte Lire(Fichier fichier,Integer numBloc) {
+		Byte lecture = null;
 		return lecture;
 	}
 	
