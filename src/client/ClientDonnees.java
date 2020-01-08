@@ -16,10 +16,11 @@ public class ClientDonnees {
 		sysFichiers = g;
 		serveur = s;
 	}
-	
+
 	public ClientDonnees(GestionFichier g) {
 		sysFichiers = g;
 	}
+
 	public Integer InitialiserConnexion(String ip, Integer port) {
 		if (serveur.InitialisationSocket(ip, 4444) != 0) {
 			System.out.println("Impossible de joindre le serveur");
@@ -28,16 +29,16 @@ public class ClientDonnees {
 			return 0;
 		}
 	}
-	
-	public Integer Dowload(String commande,Fichier fichier, List<Bloc> listBlocs) {
+
+	public Integer Dowload(Fichier fichier, List<Bloc> listBlocs) {
 		Integer i;
-		if(listBlocs == null) {
+		if (listBlocs == null) {
 			listBlocs = fichier.getListBlocs();
 		}
-		for(i =0; i < listBlocs.size(); i++) {
-			PDU requete = new PDU ("DATA",commande,listBlocs.get(i).getIndex().toString(),fichier);
+		for (i = 0; i < listBlocs.size(); i++) {
+			PDU requete = new PDU("DATA", null, listBlocs.get(i).getIndex().toString(), fichier);
 			// Envoie de la PDU au serveur
-			if(serveur.EnvoiePDU(requete) != 0) {
+			if (serveur.EnvoiePDU(requete) != 0) {
 				serveur.FermerSocket();
 				System.out.println("Erreur lors de l'envoie de la requete");
 				return 1;
@@ -51,19 +52,19 @@ public class ClientDonnees {
 				return 1;
 			}
 			// Vérification de la reponse
-			if (reponse.getCommande().compareTo("TSF") == 0) {
-				if (reponse.getFichier() != null) {
-					sysFichiers.Ecrire(fichier,listBlocs.get(i).getIndex(),reponse.getFichier().getListBlocs().get(listBlocs.get(i).getIndex()).getDonnees());
-					
-				} else if (reponse.getFichier() == null) {
-					System.out.println(reponse.getDonnees());
-				} else {
-					System.out.println("Erreur de type de la PDU");
-					return 1;
-				}
+			if (reponse.getType().compareTo("DATA") == 0) {
+				sysFichiers.Ecrire(fichier, listBlocs.get(i).getIndex(),
+						reponse.getFichier().getListBlocs().get(listBlocs.get(i).getIndex()).getDonnees());
+
+			} else if (reponse.getType().compareTo("ERR") == 0) {
+				System.out.println(reponse.getDonnees());
+			} else {
+				System.out.println("Erreur de type de la PDU");
+				return 1;
 			}
+
 		}
 		return 0;
 	}
-	
+
 }
