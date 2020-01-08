@@ -6,20 +6,20 @@ import envoie.reception.PDU;
 import socket.SocketClient;
 import systeme.fichiers.Bloc;
 import systeme.fichiers.Fichier;
+import systeme.fichiers.GestionFichier;
 
 public class ClientDonnees {
 	SocketClient serveur;
-	Fichier fichier;
+	GestionFichier sysFichiers;
 
-	public ClientDonnees(SocketClient s, Fichier f) {
+	public ClientDonnees(GestionFichier g, SocketClient s) {
+		sysFichiers = g;
 		serveur = s;
-		fichier = f;
 	}
-
-	public ClientDonnees(Fichier f) {
-		fichier = f;
+	
+	public ClientDonnees(GestionFichier g) {
+		sysFichiers = g;
 	}
-
 	public Integer InitialiserConnexion(String ip, Integer port) {
 		if (serveur.InitialisationSocket(ip, 4444) != 0) {
 			System.out.println("Impossible de joindre le serveur");
@@ -29,13 +29,13 @@ public class ClientDonnees {
 		}
 	}
 	
-	public Integer Telechargement(Fichier fihcier, List<Bloc> listBlocs) {
+	public Integer Dowload(String commande,Fichier fichier, List<Bloc> listBlocs) {
 		Integer i;
 		if(listBlocs == null) {
 			listBlocs = fichier.getListBlocs();
 		}
 		for(i =0; i < listBlocs.size(); i++) {
-			PDU requete = new PDU ("DATA","TSF",listBlocs.get(i).getIndex().toString(),fichier);
+			PDU requete = new PDU ("DATA",commande,listBlocs.get(i).getIndex().toString(),fichier);
 			// Envoie de la PDU au serveur
 			if(serveur.EnvoiePDU(requete) != 0) {
 				serveur.FermerSocket();
@@ -53,7 +53,8 @@ public class ClientDonnees {
 			// Vérification de la reponse
 			if (reponse.getCommande().compareTo("TSF") == 0) {
 				if (reponse.getFichier() != null) {
-					Byte bloc = reponse.getFichier().getListBlocs().get(listBlocs.get(i).getIndex()).getDonnees();
+					sysFichiers.Ecrire(fichier,listBlocs.get(i).getIndex(),reponse.getFichier().getListBlocs().get(listBlocs.get(i).getIndex()).getDonnees());
+					
 				} else if (reponse.getFichier() == null) {
 					System.out.println(reponse.getDonnees());
 				} else {
