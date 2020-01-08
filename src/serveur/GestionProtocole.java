@@ -24,6 +24,14 @@ public class GestionProtocole {
 			}
 
 		} else if (requete.getType().compareTo("DATA") == 0) {
+			switch (requete.getCommande()) {
+			case "TSF":
+				reponse = donnees.Upload(requete);
+				return reponse;
+			default:
+				System.out.println("Erreur requete inexistante");
+				return null;
+			}
 
 		} else if (requete.getType().compareTo("ERR") == 0) {
 

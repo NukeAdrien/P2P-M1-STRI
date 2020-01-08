@@ -2,12 +2,14 @@ package client;
 
 import envoie.reception.PDU;
 import socket.SocketClient;
+import systeme.fichiers.GestionFichier;
 
 public class ClientControle {
 	String transport;
-
-	public ClientControle(String t) {
+	GestionFichier sysFichiers;
+	public ClientControle(String t, GestionFichier g) {
 		transport = t;
+		sysFichiers = g;
 	}
 
 	// Permet de réaliser un simple téléchargement
@@ -38,8 +40,9 @@ public class ClientControle {
 		}
 		// Vérification de la reponse
 		if (simpleTel.getCommande().compareTo("TSF") == 0) {
-			if (simpleTel.getFichier() != null) {
-				ClientDonnees transfert = new ClientDonnees(serveur,simpleTel.getFichier());
+			if (simpleTel.getFichier() != null) { 
+				ClientDonnees transfert = new ClientDonnees(sysFichiers,serveur);
+				transfert.Dowload("TSF", simpleTel.getFichier(), null);
 			} else if (simpleTel.getFichier() == null) {
 				System.out.println(simpleTel.getDonnees());
 			} else {

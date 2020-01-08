@@ -2,13 +2,18 @@ package client;
 
 import java.util.Scanner;
 
-public class ClientP2P extends Thread {
+import systeme.fichiers.GestionFichier;
 
+public class ClientP2P extends Thread {
+	GestionFichier sysFichiers;
+	public ClientP2P(GestionFichier g ) {
+		sysFichiers = g;
+	}
 	public void run() {
 		int choix = -1;
 		boolean fin = false;
 		String nomFichier,ip;
-		ClientControle controle = new ClientControle("TCP");
+		ClientControle controle = new ClientControle("TCP",sysFichiers);
 		
 		Scanner sc = new Scanner(System.in);
 
