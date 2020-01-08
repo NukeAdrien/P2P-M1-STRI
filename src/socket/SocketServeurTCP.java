@@ -5,8 +5,6 @@ import java.net.Socket;
 import serveur.GestionProtocole;
 
 import java.io.IOException;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 
 public class SocketServeurTCP extends Thread {
 

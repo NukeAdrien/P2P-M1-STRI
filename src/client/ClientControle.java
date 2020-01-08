@@ -39,7 +39,7 @@ public class ClientControle {
 		// Vérification de la reponse
 		if (simpleTel.getCommande().compareTo("TSF") == 0) {
 			if (simpleTel.getFichier() != null) {
-				ClientDonnees transfert = new ClientDonnees(serveur);
+				ClientDonnees transfert = new ClientDonnees(serveur,simpleTel.getFichier());
 			} else if (simpleTel.getFichier() == null) {
 				System.out.println(simpleTel.getDonnees());
 			} else {
