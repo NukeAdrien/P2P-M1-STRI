@@ -1,12 +1,13 @@
 package systeme.fichiers;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.HashMap;
 
-public class Fichier {
+public class Fichier implements Serializable {
 	String nomFichier, auteur, date, emplacement;
 	Integer tailleOctets;
-	List<Bloc> listBlocs;
-	
+	HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>(); 
+
 	public Fichier(String n,String a,String d, String e, Integer t) {
 		nomFichier = n;
 		auteur = a;
@@ -39,12 +40,21 @@ public class Fichier {
 		this.tailleOctets = tailleOctets;
 	}
 
-	public List<Bloc> getListBlocs() {
-		return listBlocs;
+	public void setlistHeaderBlocs(HashMap<Integer, HeaderBloc> listHeaderBlocs) {
+		this.listHeaderBlocs = listHeaderBlocs;
+	}
+	
+
+	public HashMap<Integer, HeaderBloc> getListHeaderBlocs() {
+		return listHeaderBlocs;
 	}
 
-	public void setListBlocs(List<Bloc> listBlocs) {
-		this.listBlocs = listBlocs;
+	public void setListHeaderBlocs(HashMap<Integer, HeaderBloc> listHeaderBlocs) {
+		this.listHeaderBlocs = listHeaderBlocs;
+	}
+
+	public void setNomFichier(String nomFichier) {
+		this.nomFichier = nomFichier;
 	}
 
 	public String getNomFichier() {
@@ -53,6 +63,22 @@ public class Fichier {
 
 	public String getEmplacement() {
 		return emplacement;
+	}
+	
+	
+	public Boolean getDisponible(Integer index) {
+		return this.listHeaderBlocs.get(index).getDisponible();
+	}
+	public void setDisponible(Integer index, Boolean disponible) {
+		this.listHeaderBlocs.get(index).setDisponible(disponible);
+	}
+
+	public void setEmplacement(String emplacement) {
+		this.emplacement = emplacement;
+	}
+	
+	public void AjouterHeaderBloc(Integer index, HeaderBloc hd) {
+		this.listHeaderBlocs.put(index, hd);
 	}
 	
 }

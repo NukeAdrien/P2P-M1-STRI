@@ -1,6 +1,6 @@
 package serveur;
 
-import envoie.reception.PDU;
+import envoie.reception.*;
 
 public class GestionProtocole {
 	ServeurControle controle;
@@ -12,8 +12,9 @@ public class GestionProtocole {
 		donnees = sd;
 	}
 
-	public PDU gestionRequete(PDU requete) {
-		if (requete.getType().compareTo("CTRL") == 0) {
+	public PDU gestionRequete(PDU requetePDU) {
+		if (requetePDU instanceof PDUControle) {
+			PDUControle requete = (PDUControle)requetePDU;
 			switch (requete.getCommande()) {
 			case "TSF":
 				reponse = controle.TSF(requete);
@@ -22,25 +23,12 @@ public class GestionProtocole {
 				System.out.println("Erreur requete inexistante");
 				return null;
 			}
-
-		} else if (requete.getType().compareTo("DATA") == 0) {
-			switch (requete.getCommande()) {
-			case "TSF":
-				reponse = donnees.Upload(requete);
-				return reponse;
-			default:
-				System.out.println("Erreur requete inexistante");
-				return null;
-			}
-
-		} else if (requete.getType().compareTo("ERR") == 0) {
-
+		} else if (requetePDU instanceof PDUDonnees) {
+			PDUDonnees requete = (PDUDonnees )requetePDU;
+			return donnees.Upload(requete);
 		} else {
 			return null;
 		}
-
-		return null;
-
 	}
 
 }

@@ -15,12 +15,12 @@ public class ServeurControle {
 		Fichier fichier;
 		fichier = gestionFichier.RechercheFichier(requete.getDonnees());
 		if (fichier == null) {
-			reponse = new PDU("CTRL","TSF","Fichier introuvable",null);
+			reponse = new PDUControle("CTRL","TSF","Fichier introuvable",null);
 		}else {
 			if(gestionFichier.EtatFichier(requete.getDonnees()) == 1) {
-				reponse = new PDU("CTRL","TSF","Fichier disponible",fichier);
+				reponse = new PDUControle("CTRL","TSF","Fichier disponible",fichier);
 			}else {
-				reponse = new PDU("CTRL","TSF","Fichier en cour de téléchargement sur le serveur",null);
+				reponse = new PDUControle("CTRL","TSF","Fichier en cour de téléchargement sur le serveur",null);
 			}
 		}
 		return reponse;
