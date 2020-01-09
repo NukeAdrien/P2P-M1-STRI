@@ -8,10 +8,11 @@ import systeme.fichiers.GestionFichier;
 public class Main {
 
 	public static void main(String[] args) {
-		GestionFichier sysFichiers = new GestionFichier();
-		ClientP2P client = new ClientP2P(sysFichiers);
-		ServeurControle sc = new ServeurControle(sysFichiers);
-		ServeurDonnees sd = new ServeurDonnees(sysFichiers);
+		GestionFichier sysFichiersClient = new GestionFichier();
+		GestionFichier sysFichiersServeur = new GestionFichier();
+		ClientP2P client = new ClientP2P(sysFichiersClient);
+		ServeurControle sc = new ServeurControle(sysFichiersServeur);
+		ServeurDonnees sd = new ServeurDonnees(sysFichiersServeur);
 		GestionProtocole protocole = new GestionProtocole(sc,sd);
 		SocketServeurTCP serveurTCP = new SocketServeurTCP(protocole);
 		serveurTCP.start();
