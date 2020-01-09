@@ -1,7 +1,8 @@
 package client;
 
-import envoie.reception.PDU;
+import envoie.reception.*;
 import socket.SocketClient;
+import systeme.fichiers.Fichier;
 import systeme.fichiers.GestionFichier;
 
 public class ClientControle {
@@ -14,8 +15,9 @@ public class ClientControle {
 
 	// Permet de réaliser un simple téléchargement
 	public void SimpleTelechargement(String nomFichier, String ip) {
+		Fichier fichierDl;
 		// Cree un objet PDU pour l'envoyer au serveur
-		PDU simpleTel = new PDU("CTRL","TSF", nomFichier, null);
+		PDUControle simpleTel = new PDUControle("CTRL","TSF", nomFichier, null);
 		// Cree le socket en indiquant le mode de transport (TCP ou UDP)
 		SocketClient serveur = new SocketClient(transport);
 		// Initialise le socket avec l'adresse IP et le port du destinataire
@@ -29,24 +31,33 @@ public class ClientControle {
 			System.out.println("Erreur lors de l'envoie de la requete");
 			return;
 		}
-		// Rénitialise la variable
-		simpleTel = null;
+		// itialise la variable
+		PDU reponse = null;
 		// Recupere la PDU recu
-		simpleTel = serveur.RecevoirPDU();
-		// Test si la PDU n'est pas null
-		if (simpleTel == null) {
+		reponse  = serveur.RecevoirPDU();
+		// Test si la PDU n'est pas null ou une autre PDU
+		if (reponse == null) {
 			System.out.println("Erreur de connexion avec le serveur");
+			return;
+		}else if(reponse instanceof PDUControle) {
+			simpleTel = (PDUControle) reponse;
+		}else {
+			System.out.println("Erreur de PDU");
+			serveur.FermerSocket();
 			return;
 		}
 		// Vérification de la reponse
 		if (simpleTel.getCommande().compareTo("TSF") == 0) {
 			if (simpleTel.getFichier() != null) { 
+				fichierDl = simpleTel.getFichier();
+				fichierDl.setEmplacement("./Upload/"+fichierDl.getNomFichier());
+				sysFichiers.AjouterFichier(simpleTel.getFichier());
 				ClientDonnees transfert = new ClientDonnees(sysFichiers,serveur);
-				transfert.Dowload(simpleTel.getFichier(), null);
+				transfert.Dowload(fichierDl, null);
 			} else if (simpleTel.getFichier() == null) {
 				System.out.println(simpleTel.getDonnees());
 			} else {
-				System.out.println("Erreur de type de la PDU");
+				System.out.println("Erreur de commande");
 			}
 		}
 		return;

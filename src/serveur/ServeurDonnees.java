@@ -1,6 +1,6 @@
 package serveur;
 
-import envoie.reception.PDU;
+import envoie.reception.*;
 import systeme.fichiers.*;
 
 public class ServeurDonnees {
@@ -10,17 +10,15 @@ public class ServeurDonnees {
 		sysFichier = g;
 	}
 
-	public PDU Upload(PDU requete) {
-		PDU reponse = null;
-		Byte bloc = null;
-		Fichier fichier = requete.getFichier();
-		Integer index = Integer.parseInt(requete.getDonnees());
-		bloc = sysFichier.Lire(fichier, index);
+	public PDU Upload(PDUDonnees requete) {
+		PDUDonnees reponse = null;
+		byte[] bloc = null;
+		Fichier fichier = sysFichier.getListFichier().get(requete.getDonnees());
+		bloc = sysFichier.Lire(fichier, requete.getIndex());
 		if (bloc != null) {
-			fichier.setDonnees(index, bloc);
-			reponse = new PDU("DATA", null, null, fichier);
+			reponse = new PDUDonnees("DATA",null, requete.getIndex(), bloc);
 		}else {
-			reponse = new PDU("ERR", null,"Erreur lors de la lecture du bloc : "+requete.getDonnees(), null);
+			reponse = new PDUDonnees("ERR","Erreur lors de la lecture du bloc : "+requete.getIndex(), requete.getIndex(),null);
 		}
 		return reponse;
 	}
