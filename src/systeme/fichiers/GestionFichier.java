@@ -34,11 +34,11 @@ public class GestionFichier {
 		byte[] bloc = new byte[4000];
 		FileInputStream fileis = null;
 		int taille = bloc.length;
-		int offset = taille * numBloc;
+		long offset = taille * numBloc;
 		File fle = new File(fichier.getEmplacement());
 		try {
 			fileis = new FileInputStream(fle);
-			fileis.skip(offset);
+			fileis.getChannel().position(offset);
 			fileis.read(bloc, 0, taille);
 			fileis.close();
 		} catch (Exception e) {
@@ -49,7 +49,7 @@ public class GestionFichier {
 
 	}
 
-	public Integer Ecrire(Fichier fichier, Integer numbloc, byte[] donness) {
+	public Integer Ecrire(Fichier fichier, Integer numbloc, byte[] donnees) {
 		String file = fichier.getEmplacement();
 		File fle = new File(file);
 		if (!fle.exists()) {
@@ -60,13 +60,12 @@ public class GestionFichier {
 				e.printStackTrace();
 			}
 		}
-
 		int taille = 4000;
-		int offset = taille * numbloc;
-
+		long offset = taille * numbloc;
 		try {
 			FileOutputStream o = new FileOutputStream(fle, true);
-			o.write(donness, offset, taille);
+			o.getChannel().position(offset);
+			o.write(donnees, 0, taille);
 			o.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
