@@ -8,8 +8,8 @@ import systeme.fichiers.GestionFichier;
 public class Main {
 
 	public static void main(String[] args) {
-		GestionFichier sysFichiersClient = new GestionFichier();
-		GestionFichier sysFichiersServeur = new GestionFichier();
+		GestionFichier sysFichiersClient = new GestionFichier("./Upload/");
+		GestionFichier sysFichiersServeur = new GestionFichier("./Telechargment/");
 		ClientP2P client = new ClientP2P(sysFichiersClient);
 		ServeurControle sc = new ServeurControle(sysFichiersServeur);
 		ServeurDonnees sd = new ServeurDonnees(sysFichiersServeur);

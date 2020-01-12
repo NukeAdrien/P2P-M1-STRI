@@ -60,9 +60,9 @@ public class ClientDonnees {
 			// Vérification de la reponse
 			if (reponse.getType().compareTo("DATA") == 0) {
 				if(sysFichiers.Ecrire(fichier,(int) headerbloc.getKey(),reponse.getBloc()) != 0) {
-					sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), false);
+					sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), -1);
 				}
-				sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), true);
+				sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), 1);
 			} else if (reponse.getType().compareTo("ERR") == 0) {
 				System.out.println(reponse.getDonnees());
 			} else {

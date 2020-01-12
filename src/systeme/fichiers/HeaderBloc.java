@@ -3,17 +3,17 @@ package systeme.fichiers;
 import java.io.Serializable;
 
 public class HeaderBloc implements Serializable {
-	Boolean disponible;
+	int disponible;
 	
 	
-	public HeaderBloc(Boolean disponible) {
+	public HeaderBloc(int disponible) {
 		this.disponible = disponible;
 	}
 	
-	public Boolean getDisponible() {
+	public int getDisponible() {
 		return disponible;
 	}
-	public void setDisponible(Boolean disponible) {
+	public void setDisponible(int disponible) {
 		this.disponible = disponible;
 	}
 
