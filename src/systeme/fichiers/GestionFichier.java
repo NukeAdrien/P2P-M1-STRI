@@ -9,14 +9,18 @@ import java.util.HashMap;
 
 public class GestionFichier {
 	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
-
+	String chemin;
+	public GestionFichier (String c) {
+		this.chemin = c;
+	}
+	
 	public Fichier RechercheFichier(String nomFichier) {
 		Fichier recherche = null;
 		recherche = new Fichier("TOTO.txt", "TOTO", "10/10/2020",
 				"./Telechargment/TOTO.txt", 9100);
-		HeaderBloc b1 = new HeaderBloc(true);
-		HeaderBloc b2 = new HeaderBloc(true);
-		HeaderBloc b3 = new HeaderBloc(true);
+		HeaderBloc b1 = new HeaderBloc(1);
+		HeaderBloc b2 = new HeaderBloc(1);
+		HeaderBloc b3 = new HeaderBloc(1);
 		recherche.AjouterHeaderBloc(0, b1);
 		recherche.AjouterHeaderBloc(1, b2);
 		recherche.AjouterHeaderBloc(2, b3);
@@ -82,15 +86,24 @@ public class GestionFichier {
 		this.listFichier = listFichier;
 	}
 
-	public Boolean getDisponible(String nom, Integer index) {
+	public int getDisponible(String nom, Integer index) {
 		return this.listFichier.get(nom).getDisponible(index);
 	}
 
-	public void setDisponible(String nom, Integer index, Boolean disponible) {
+	public void setDisponible(String nom, Integer index, int disponible) {
 		this.listFichier.get(nom).setDisponible(index, disponible);
 	}
 
 	public void AjouterFichier(Fichier f) {
 		this.listFichier.put(f.getNomFichier(), f);
 	}
+
+	public String getChemin() {
+		return chemin;
+	}
+
+	public void setChemin(String chemin) {
+		this.chemin = chemin;
+	}
+	
 }

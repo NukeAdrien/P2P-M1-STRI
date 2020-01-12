@@ -66,10 +66,10 @@ public class Fichier implements Serializable {
 	}
 	
 	
-	public Boolean getDisponible(Integer index) {
+	public int getDisponible(Integer index) {
 		return this.listHeaderBlocs.get(index).getDisponible();
 	}
-	public void setDisponible(Integer index, Boolean disponible) {
+	public void setDisponible(Integer index, int disponible) {
 		this.listHeaderBlocs.get(index).setDisponible(disponible);
 	}
 

@@ -1,5 +1,7 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import systeme.fichiers.GestionFichier;
@@ -11,7 +13,9 @@ public class ClientP2P extends Thread {
 	}
 	public void run() {
 		int choix = -1;
-		boolean fin = false;
+		int port,nbServeur,i;
+		boolean fin= false;
+		boolean continuer = true; 
 		String nomFichier,ip;
 		ClientControle controle = new ClientControle("TCP",sysFichiers);
 		
@@ -40,9 +44,31 @@ public class ClientP2P extends Thread {
 				nomFichier = sc.nextLine();
 				System.out.println("Entrez l'IP du serveur : ");
 				ip = sc.nextLine();
-				controle.SimpleTelechargement(nomFichier,ip);
+				System.out.println("Entrez le port du serveur : ");
+				port = sc.nextInt();
+				sc.nextLine();
+				controle.TelechargementSimple(nomFichier,ip,port);
 				break;
 			case 2:
+				System.out.println("Entrez le nom du fichier a télécharger : ");
+				nomFichier = sc.nextLine();
+				List<String> listIP = new ArrayList();
+				List<Integer> listPort = new ArrayList();
+				System.out.println("Entrez le nombre de serveur a contacter : ");
+				nbServeur = sc.nextInt();
+				sc.nextLine();
+				if(nbServeur > 0) {
+					for(i=0;i<nbServeur;i++) {
+						System.out.println("Entrez l'IP du serveur : ");
+						listIP.add(sc.nextLine());
+						System.out.println("Entrez le port du serveur : ");
+						listPort.add(sc.nextInt());
+						sc.nextLine();
+					}
+					controle.TelechargementParallele(nomFichier, listIP, listPort);
+				}else {
+					System.out.println("Erreur de saisie");
+				}
 				break;
 			case 3:
 				break;
