@@ -15,7 +15,6 @@ public class ClientP2P extends Thread {
 		int choix = -1;
 		int port,nbServeur,i;
 		boolean fin= false;
-		boolean continuer = true; 
 		String nomFichier,ip;
 		ClientControle controle = new ClientControle("TCP",sysFichiers);
 		
@@ -52,8 +51,8 @@ public class ClientP2P extends Thread {
 			case 2:
 				System.out.println("Entrez le nom du fichier a télécharger : ");
 				nomFichier = sc.nextLine();
-				List<String> listIP = new ArrayList();
-				List<Integer> listPort = new ArrayList();
+				List<String> listIP = new ArrayList<String>();
+				List<Integer> listPort = new ArrayList<Integer>();
 				System.out.println("Entrez le nombre de serveur a contacter : ");
 				nbServeur = sc.nextInt();
 				sc.nextLine();
