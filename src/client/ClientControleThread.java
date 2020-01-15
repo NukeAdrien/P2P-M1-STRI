@@ -26,7 +26,6 @@ public class ClientControleThread implements Runnable {
 	}
 	public void run() {
 		Fichier fichierDl;
-		int i;
 		// Cree un objet PDU pour l'envoyer au serveur
 		PDUControle requete = new PDUControle("CTRL","TPF", nomFichier, null);
 		// Cree le socket en indiquant le mode de transport (TCP ou UDP)

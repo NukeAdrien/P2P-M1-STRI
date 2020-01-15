@@ -25,4 +25,20 @@ public class ServeurControle {
 		}
 		return reponse;
 	}
+	
+	public PDU TPF(PDU requete) {
+		PDU reponse = null;
+		Fichier fichier;
+		fichier = gestionFichier.RechercheFichier(requete.getDonnees());
+		if (fichier == null) {
+			reponse = new PDUControle("CTRL","TSF","Fichier introuvable",null);
+		}else {
+			if(gestionFichier.EtatFichier(requete.getDonnees()) == 1) {
+				reponse = new PDUControle("CTRL","TSF","Fichier disponible",fichier);
+			}else {
+				reponse = new PDUControle("CTRL","TSF","Fichier en cour de téléchargement sur le serveur",null);
+			}
+		}
+		return reponse;
+	}
 }
