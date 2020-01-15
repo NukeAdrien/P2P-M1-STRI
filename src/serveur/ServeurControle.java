@@ -1,5 +1,7 @@
 package serveur;
 
+import java.io.IOException;
+
 import envoie.reception.*;
 import systeme.fichiers.*;
 

@@ -5,11 +5,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+
+import javax.swing.JFileChooser;
 
 public class GestionFichier {
 	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
 
+	/*
+	 * new fichier avec methode 
+	 * Parcours fichier for(...taille/4)
+	 * bi
+	 * Ouverture fichier à sa création 
+	 * Si le fichier le bloc lu à 0 bytes --> Indisponible --> False
+	 * 
+	 */
 	public Fichier RechercheFichier(String nomFichier) {
 		Fichier recherche = null;
 		recherche = new Fichier("TOTO.txt", "TOTO", "10/10/2020",
@@ -20,14 +33,49 @@ public class GestionFichier {
 		recherche.AjouterHeaderBloc(0, b1);
 		recherche.AjouterHeaderBloc(1, b2);
 		recherche.AjouterHeaderBloc(2, b3);
+		System.out.println("TEST ...");
 		this.AjouterFichier(recherche);
+
+		this.EtatFichier("Upload");
+		System.exit(0);
+
 		return recherche;
 	}
 
 	public Integer EtatFichier(String nomFichier) {
-		Integer etat = 0;
-		etat = 1;// Provisoire
-		return etat;
+		/*
+		 * *Parcours la liste des blocs
+		 * Si il y en a un qui 0 ou -1 sortie
+		 */
+		return (int) 1;
+	}
+
+	private void getFilesRec(ArrayList<String> allFiles, String nomFichier) {
+		File f = new File(nomFichier);
+		File[] listFiles = f.listFiles();
+		for (int i = 0; i < listFiles.length; i++) {
+			if (listFiles[i].isDirectory()) {
+				getFilesRec(allFiles, listFiles[i].toString());
+			}
+			else allFiles.add(listFiles[i].toString());
+		}
+	}  
+
+	private Integer getTailleFichier(String nomFichier) {
+
+		double bytes;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+		JFileChooser chooser = new JFileChooser();
+
+		File f = new File (nomFichier);
+		f= new File (f.getAbsolutePath());
+		bytes = f.length();
+		System.out.println("Taille : " + bytes + " octets");
+		Date d = new Date(f.lastModified());
+		System.out.println("Dernière modification le : " + sdf.format(d));
+		System.out.println("Type : " + chooser.getTypeDescription(f));
+
+		return 1;
 	}
 
 	public byte[] Lire(Fichier fichier, Integer numBloc) {
@@ -92,5 +140,16 @@ public class GestionFichier {
 
 	public void AjouterFichier(Fichier f) {
 		this.listFichier.put(f.getNomFichier(), f);
+	}
+	public Integer initGestionFichier(String nomFichier) {
+		ArrayList<String> allFiles = new ArrayList<String>();
+		getFilesRec(allFiles, nomFichier);
+		for (int i = 0; i < allFiles.size(); i++) {
+			System.out.println(allFiles.get(i));
+			this.getTailleFichier(allFiles.get(i));
+			System.out.println("");
+
+		}
+		return null;
 	}
 }
