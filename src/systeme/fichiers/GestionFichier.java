@@ -15,6 +15,8 @@ import javax.swing.JFileChooser;
 public class GestionFichier {
 	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
 	String chemin;
+	HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>(); 
+
 	public GestionFichier (String c) {
 		this.chemin = c;
 	}
@@ -26,18 +28,32 @@ public class GestionFichier {
 	 * Si le fichier le bloc lu à 0 bytes --> Indisponible --> False
 	 * 
 	 */
-	
+
+	@SuppressWarnings("null")
 	public Fichier RechercheFichier(String nomFichier) {
 		Fichier recherche = null;
-		recherche = new Fichier("TOTO.txt", "TOTO", "10/10/2020",
-				"./Telechargment/TOTO.txt", 9100);
-		HeaderBloc b1 = new HeaderBloc(1);
-		HeaderBloc b2 = new HeaderBloc(1);
-		HeaderBloc b3 = new HeaderBloc(1);
-		recherche.AjouterHeaderBloc(0, b1);
-		recherche.AjouterHeaderBloc(1, b2);
-		recherche.AjouterHeaderBloc(2, b3);
-		this.AjouterFichier(recherche);
+		recherche = new Fichier(recherche.getNomFichier(), recherche.getAuteur(), recherche.getDate(),
+				recherche.getEmplacement(), recherche.getTailleOctets());
+		ArrayList<HeaderBloc> hb = new ArrayList<HeaderBloc>();
+		
+		for (int i=0; i<listFichier.size();i++) {
+			if (listFichier.get(i).getNomFichier().equals(recherche.getNomFichier())) {
+				System.out.println("Le fichier existe déjà");
+				return listFichier.get(i);
+			} else {
+				System.out.println("Le fichier n'existe pas");
+			}
+
+		}
+		if (recherche.getTailleOctets()==0) {
+			for (int i=0; i<(this.getTailleFichier(recherche.getNomFichier())/4);i++) {
+				hb.add(new HeaderBloc(1));
+				recherche.AjouterHeaderBloc(i, hb.get(i));
+
+			}
+			this.AjouterFichier(recherche);
+			return recherche;
+		}
 		return recherche;
 	}
 
@@ -45,10 +61,21 @@ public class GestionFichier {
 	 * *Parcours la liste des blocs
 	 * Si il y en a un qui 0 ou -1 sortie
 	 */
-	
+
 	public Integer EtatFichier(String nomFichier) {
 		Integer etat = 0;
-		etat = 1;// Provisoire
+		for (int i=0; i<listFichier.size();i++) {
+			for(int j=0; j<listHeaderBlocs.size();i++) {
+				if(listHeaderBlocs.get(j).getDisponible()==0 || listHeaderBlocs.get(j).getDisponible()==1) {
+					System.out.println("Erreur fichier non existant ou en cours de téléchargement");
+					return -1;
+				} else {
+					etat =1;
+					return etat;
+				}
+				
+			}
+		}
 		return etat;
 	}
 
@@ -123,7 +150,7 @@ public class GestionFichier {
 	public void setChemin(String chemin) {
 		this.chemin = chemin;
 	}
-	
+
 	private void getFilesRec(ArrayList<String> allFiles, String nomFichier) {
 		File f = new File(nomFichier);
 		File[] listFiles = f.listFiles();
@@ -151,7 +178,7 @@ public class GestionFichier {
 
 		return 1;
 	}
-	
+
 	public Integer initGestionFichier(String nomFichier) {
 		ArrayList<String> allFiles = new ArrayList<String>();
 		getFilesRec(allFiles, nomFichier);
@@ -163,5 +190,5 @@ public class GestionFichier {
 		}
 		return null;
 	}
-	
+
 }
