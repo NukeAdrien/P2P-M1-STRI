@@ -1,6 +1,5 @@
 package systeme.fichiers;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,74 +8,53 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JFileChooser;
 
 public class GestionFichier {
 	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
 	String chemin;
-	HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>(); 
 
-	public GestionFichier (String c) {
+	public GestionFichier(String c) {
 		this.chemin = c;
 	}
-	/*
-	 * new fichier avec methode 
-	 * Parcours fichier for(...taille/4)
-	 * bi
-	 * Ouverture fichier à sa création 
-	 * Si le fichier le bloc lu à 0 bytes --> Indisponible --> False
-	 * 
-	 */
-
-	@SuppressWarnings("null")
+	
+	//Alexandre 
+	//Permet avec un nom de fichier de retouner l'objet fichier correspondant
+	//Le fichier est dans la hash map
 	public Fichier RechercheFichier(String nomFichier) {
 		Fichier recherche = null;
-		recherche = new Fichier(recherche.getNomFichier(), recherche.getAuteur(), recherche.getDate(),
-				recherche.getEmplacement(), recherche.getTailleOctets());
-		ArrayList<HeaderBloc> hb = new ArrayList<HeaderBloc>();
-		
-		for (int i=0; i<listFichier.size();i++) {
-			if (listFichier.get(i).getNomFichier().equals(recherche.getNomFichier())) {
-				System.out.println("Le fichier existe déjà");
-				return listFichier.get(i);
-			} else {
-				System.out.println("Le fichier n'existe pas");
-			}
-
-		}
-		if (recherche.getTailleOctets()==0) {
-			for (int i=0; i<(this.getTailleFichier(recherche.getNomFichier())/4);i++) {
-				hb.add(new HeaderBloc(1));
-				recherche.AjouterHeaderBloc(i, hb.get(i));
-
-			}
-			this.AjouterFichier(recherche);
-			return recherche;
+		// Permet de parcourir une hash map de fichier
+		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
+			// Il faut comparer la cle de la has map avec le nom fichier si c'est bon alors
+			// on affecte a recherche le fichier correspondant
+			listFichier.getKey();// Renvoie le nom du fichier (index)
+			listFichier.getValue();// renvoie l'objet fichier rechercher
 		}
 		return recherche;
 	}
 
-	/*
-	 * *Parcours la liste des blocs
-	 * Si il y en a un qui 0 ou -1 sortie
-	 */
-
+	
+	//Alexandre Fonction permetant de retourner l'etat d'un fichier
+	//Sachant que si on a 0 ou -1  sur l'etat d'un hearder bloc on retourn directement l'info
 	public Integer EtatFichier(String nomFichier) {
-		Integer etat = 0;
-		for (int i=0; i<listFichier.size();i++) {
-			for(int j=0; j<listHeaderBlocs.size();i++) {
-				if(listHeaderBlocs.get(j).getDisponible()==0 || listHeaderBlocs.get(j).getDisponible()==1) {
-					System.out.println("Erreur fichier non existant ou en cours de téléchargement");
-					return -1;
-				} else {
-					etat =1;
-					return etat;
-				}
-				
-			}
+		Fichier fichier = null;
+		// On recupere d'abord le fichier demande avec ca
+		fichier = this.listFichier.get(nomFichier);
+		// On test si le fichier n'est pas egal a null
+		// on renvoie -1 si c'est le cas
+		// puis on viens parcourrir la list de hash map de header bloc
+		for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.listHeaderBlocs.entrySet()) {
+			headerbloc.getKey();// renvoie le numero d'index du bloc
+			headerbloc.getValue();// renvoie le headerbloc
+			headerbloc.getValue().getDisponible();// renvoie l'etat d'un header bloc en cour
+			// test si la valeur de header bloc est a -1 on retourne le -1
+			// test si la valeur est a 0 on retourne 0;
+			// si on quitte la boucle for alors on retourne 1;
 		}
-		return etat;
+		return 1;
 	}
 
 	public byte[] Lire(Fichier fichier, Integer numBloc) {
@@ -157,10 +135,10 @@ public class GestionFichier {
 		for (int i = 0; i < listFiles.length; i++) {
 			if (listFiles[i].isDirectory()) {
 				getFilesRec(allFiles, listFiles[i].toString());
-			}
-			else allFiles.add(listFiles[i].toString());
+			} else
+				allFiles.add(listFiles[i].toString());
 		}
-	}  
+	}
 
 	private Integer getTailleFichier(String nomFichier) {
 
@@ -168,8 +146,8 @@ public class GestionFichier {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
 		JFileChooser chooser = new JFileChooser();
 
-		File f = new File (nomFichier);
-		f= new File (f.getAbsolutePath());
+		File f = new File(nomFichier);
+		f = new File(f.getAbsolutePath());
 		bytes = f.length();
 		System.out.println("Taille : " + bytes + " octets");
 		Date d = new Date(f.lastModified());
