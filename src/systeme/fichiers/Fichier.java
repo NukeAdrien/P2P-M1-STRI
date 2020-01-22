@@ -65,11 +65,14 @@ public class Fichier implements Serializable {
 		return emplacement;
 	}
 	
-	
 	public int getDisponible(Integer index) {
-		return this.listHeaderBlocs.get(index).getDisponible();
+		int disp;
+		this.listHeaderBlocs.get(index).DebutLecture();
+		disp =this.listHeaderBlocs.get(index).getDisponible();
+		this.listHeaderBlocs.get(index).FinLecture();
+		return disp;
 	}
-	public void setDisponible(Integer index, int disponible) {
+	public synchronized void setDisponible(Integer index, int disponible) {
 		this.listHeaderBlocs.get(index).setDisponible(disponible);
 	}
 

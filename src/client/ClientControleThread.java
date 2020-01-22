@@ -57,7 +57,7 @@ public class ClientControleThread implements Runnable {
 			return;
 		}
 		// Vérification de la reponse
-		if (requete.getCommande().compareTo("TSF") == 0) {
+		if (requete.getCommande().compareTo("TPF") == 0) {
 			if (requete.getFichier() != null) { 
 				fichierDl = requete.getFichier();
 				if(sysFichiers.RechercheFichier(nomFichier) == null) {

@@ -19,6 +19,9 @@ public class GestionProtocole {
 			case "TSF":
 				reponse = controle.TSF(requete);
 				return reponse;
+			case "TPF":
+				reponse = controle.TPF(requete);
+				return reponse;
 			default:
 				System.out.println("Erreur requete inexistante");
 				return null;

@@ -16,6 +16,7 @@ import javax.swing.JFileChooser;
 public class GestionFichier {
 	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
 	String chemin;
+	int nbrLireEnCours,nbrRechercheEnCours,nbrAjoutEnCours;
 
 	public GestionFichier(String c) {
 		this.chemin = c;
@@ -25,6 +26,15 @@ public class GestionFichier {
 	//Permet avec un nom de fichier de retouner l'objet fichier correspondant
 	//Le fichier est dans la hash map
 	public Fichier RechercheFichier(String nomFichier) {
+		while(nbrAjoutEnCours != 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.DebutRecherche();
 		Fichier recherche = null;
 		// Permet de parcourir une hash map de fichier
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
@@ -39,6 +49,8 @@ public class GestionFichier {
 			/*listFichier.getKey();// Renvoie le nom du fichier (index)
 			listFichier.getValue();// renvoie l'objet fichier rechercher*/
 		}
+		this.FinRecherche();
+		notifyAll();
 		return recherche;
 	}
 
@@ -77,6 +89,7 @@ public class GestionFichier {
 	}
 
 	public byte[] Lire(Fichier fichier, Integer numBloc) {
+		this.DebutLire();
 		byte[] bloc = new byte[4000];
 		FileInputStream fileis = null;
 		int taille = bloc.length;
@@ -91,11 +104,20 @@ public class GestionFichier {
 			System.out.println(e.toString());
 			return null;
 		}
+		this.FinLire();
 		return bloc;
 
 	}
 
-	public Integer Ecrire(Fichier fichier, Integer numbloc, byte[] donnees) {
+	public synchronized Integer Ecrire(Fichier fichier, Integer numbloc, byte[] donnees) {
+		while(nbrLireEnCours != 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		String file = fichier.getEmplacement();
 		File fle = new File(file);
 		if (!fle.exists()) {
@@ -117,6 +139,7 @@ public class GestionFichier {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		notifyAll();
 		return 0;
 	}
 
@@ -137,7 +160,18 @@ public class GestionFichier {
 	}
 
 	public void AjouterFichier(Fichier f) {
+		while(nbrRechercheEnCours != 0 && nbrAjoutEnCours != 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.DebutAjout();
 		this.listFichier.put(f.getNomFichier(), f);
+		this.FinAjout();
+		notifyAll();
 	}
 
 	public String getChemin() {
@@ -187,5 +221,35 @@ public class GestionFichier {
 		}
 		return null;
 	}
+	
+	public synchronized void DebutLire() {
+		nbrLireEnCours++;
+	}
+
+	public synchronized void FinLire() {
+		nbrLireEnCours--;	
+		notifyAll();
+			
+		}
+	
+	public synchronized void DebutAjout() {
+		nbrAjoutEnCours++;
+	}
+
+	public synchronized void FinAjout() {
+		nbrAjoutEnCours--;	
+		notifyAll();
+			
+		}
+	
+	public synchronized void DebutRecherche() {
+		nbrRechercheEnCours++;
+	}
+
+	public synchronized void FinRecherche() {
+		nbrRechercheEnCours--;	
+		notifyAll();
+			
+		}
 
 }
