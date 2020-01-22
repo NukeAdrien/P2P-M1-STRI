@@ -20,7 +20,7 @@ public class GestionFichier {
 	public GestionFichier(String c) {
 		this.chemin = c;
 	}
-	
+
 	//Alexandre 
 	//Permet avec un nom de fichier de retouner l'objet fichier correspondant
 	//Le fichier est dans la hash map
@@ -29,28 +29,47 @@ public class GestionFichier {
 		// Permet de parcourir une hash map de fichier
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			// Il faut comparer la cle de la has map avec le nom fichier si c'est bon alors
+			if(listFichier.getKey().contentEquals(nomFichier)) {
+				recherche = this.listFichier.get(nomFichier);
+				break;
+			} else {
+				System.out.println("Le fichier est inexistant dans la HashMap");
+			}
 			// on affecte a recherche le fichier correspondant
-			listFichier.getKey();// Renvoie le nom du fichier (index)
-			listFichier.getValue();// renvoie l'objet fichier rechercher
+			/*listFichier.getKey();// Renvoie le nom du fichier (index)
+			listFichier.getValue();// renvoie l'objet fichier rechercher*/
 		}
 		return recherche;
 	}
 
-	
+
 	//Alexandre Fonction permetant de retourner l'etat d'un fichier
 	//Sachant que si on a 0 ou -1  sur l'etat d'un hearder bloc on retourn directement l'info
 	public Integer EtatFichier(String nomFichier) {
 		Fichier fichier = null;
 		// On recupere d'abord le fichier demande avec ca
 		fichier = this.listFichier.get(nomFichier);
+		if (fichier == null) {
+			System.out.println("Le fichier est inexistant ! ");
+			return -1;
+		}
 		// On test si le fichier n'est pas egal a null
 		// on renvoie -1 si c'est le cas
 		// puis on viens parcourrir la list de hash map de header bloc
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.listHeaderBlocs.entrySet()) {
-			headerbloc.getKey();// renvoie le numero d'index du bloc
+			/*headerbloc.getKey();// renvoie le numero d'index du bloc
 			headerbloc.getValue();// renvoie le headerbloc
 			headerbloc.getValue().getDisponible();// renvoie l'etat d'un header bloc en cour
-			// test si la valeur de header bloc est a -1 on retourne le -1
+			// test si la valeur de header bloc est a -1 on retourne le -1*/
+			if(headerbloc.getValue().getDisponible() == -1) {
+				System.out.println("Fichier inexistant");
+				return -1;
+			} else {
+				if (headerbloc.getValue().getDisponible() == 0) {
+					System.out.println("Fichier en cours de téléchargement");
+					return 0;
+				} 
+			}
 			// test si la valeur est a 0 on retourne 0;
 			// si on quitte la boucle for alors on retourne 1;
 		}
