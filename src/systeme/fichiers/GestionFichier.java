@@ -13,16 +13,25 @@ import java.util.Map.Entry;
 
 import javax.swing.JFileChooser;
 
+import client.ClientControle;
+import client.ClientControleThread;
+import client.ClientDonnees;
+import client.ClientP2P;
+import serveur.ServeurControle;
+import serveur.ServeurDonnees;
+import socket.SocketClient;
+
 public class GestionFichier {
-	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
+	HashMap<String, Fichier> listFichier;
 	String chemin;
 	int nbrLireEnCours,nbrRechercheEnCours,nbrAjoutEnCours;
 
 	public GestionFichier(String c) {
 		this.chemin = c;
+		listFichier= new HashMap<String, Fichier>();
 	}
 
-	//Alexandre 
+	 
 	//Permet avec un nom de fichier de retouner l'objet fichier correspondant
 	//Le fichier est dans la hash map
 	public Fichier RechercheFichier(String nomFichier) {
@@ -55,7 +64,6 @@ public class GestionFichier {
 	}
 
 
-	//Alexandre Fonction permetant de retourner l'etat d'un fichier
 	//Sachant que si on a 0 ou -1  sur l'etat d'un hearder bloc on retourn directement l'info
 	public Integer EtatFichier(String nomFichier) {
 		Fichier fichier = null;
@@ -78,7 +86,7 @@ public class GestionFichier {
 				return -1;
 			} else {
 				if (headerbloc.getValue().getDisponible() == 0) {
-					System.out.println("Fichier en cours de téléchargement");
+					System.out.println("Fichier en cours de tï¿½lï¿½chargement");
 					return 0;
 				} 
 			}
@@ -182,44 +190,74 @@ public class GestionFichier {
 		this.chemin = chemin;
 	}
 
-	private void getFilesRec(ArrayList<String> allFiles, String nomFichier) {
+/*	private HashMap<String, Fichier> getFilesRec() {
 		File f = new File(nomFichier);
 		File[] listFiles = f.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
 			if (listFiles[i].isDirectory()) {
-				getFilesRec(allFiles, listFiles[i].toString());
+				//getFilesRec(allFiles, listFiles[i].toString());
 			} else
 				allFiles.add(listFiles[i].toString());
 		}
-	}
-
-	private Integer getTailleFichier(String nomFichier) {
-
-		double bytes;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
-		JFileChooser chooser = new JFileChooser();
-
-		File f = new File(nomFichier);
-		f = new File(f.getAbsolutePath());
-		bytes = f.length();
-		System.out.println("Taille : " + bytes + " octets");
-		Date d = new Date(f.lastModified());
-		System.out.println("Dernière modification le : " + sdf.format(d));
-		System.out.println("Type : " + chooser.getTypeDescription(f));
-
-		return 1;
-	}
-
-	public Integer initGestionFichier(String nomFichier) {
-		ArrayList<String> allFiles = new ArrayList<String>();
-		getFilesRec(allFiles, nomFichier);
-		for (int i = 0; i < allFiles.size(); i++) {
-			System.out.println(allFiles.get(i));
-			this.getTailleFichier(allFiles.get(i));
-			System.out.println("");
-
+		for (int i=0; i<allFiles.size(); i++) {
+			this.getTailleFichier(nomFichier);
+			Fichier fichier = new Fichier(allFiles.get(i), this.dateModifFichier(nomFichier), this.chemin+allFiles.get(i), 
+					this.getTailleFichier(nomFichier));
+			this.listFichier.add(nomFichier, fichier);
 		}
-		return null;
+	}*/
+
+	private Long getTailleFichier(String nomFichier) {
+		File f = new File(nomFichier);
+		return f.length();
+	}
+
+	private String dateModifFichier(String nomFichier) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+		File f = new File(nomFichier);
+		Date d = new Date(f.lastModified());
+		System.out.println("Derniï¿½re modification le : " + sdf.format(d));
+		return sdf.format(d);
+
+	}
+	@SuppressWarnings("unused")
+	public Integer initGestionFichier() {
+		ArrayList<String> allFiles = new ArrayList<String>();
+		File f = new File(this.chemin);
+		HeaderBloc blc =null;
+		File[] listFiles = f.listFiles();
+		if (!(listFiles != null)) {
+			return -1;
+		}
+		for (int i = 0; i < listFiles.length; i++) {
+			if (listFiles[i].isDirectory()) {
+				//getFilesRec(allFiles, listFiles[i].toString());
+			} else
+				allFiles.add(listFiles[i].getName());
+		}
+		
+		for (int i=0; i<allFiles.size(); i++) {
+			long taillFich = this.getTailleFichier(this.chemin+allFiles.get(i));
+			
+			String date = this.dateModifFichier(allFiles.get(i));
+			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin+allFiles.get(i), 
+					taillFich);
+			int nbBloc = Math.round((int) taillFich/4000);
+			for (int j=0; j<nbBloc; j++) {
+				byte[] donnees = (byte[]) null;
+				donnees=this.Lire(fichier, j);
+				if (!(donnees != null)) {
+					blc = new HeaderBloc(-1);
+				}else {
+					blc = new HeaderBloc(1);
+				}
+				fichier.AjouterHeaderBloc(j, blc);
+				
+			}
+			this.listFichier.put(allFiles.get(i), fichier);
+		}
+		
+		return 0;
 	}
 	
 	public synchronized void DebutLire() {

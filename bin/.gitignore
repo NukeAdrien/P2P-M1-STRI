@@ -1,3 +1,10 @@
+<<<<<<< HEAD
 /client/
-/serveur/
+=======
+/envoie/
 /systeme/
+/main/
+>>>>>>> Alexandre
+/serveur/
+/socket/
+/client/

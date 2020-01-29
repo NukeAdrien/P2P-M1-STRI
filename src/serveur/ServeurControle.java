@@ -20,7 +20,7 @@ public class ServeurControle {
 			if(gestionFichier.EtatFichier(requete.getDonnees()) == 1) {
 				reponse = new PDUControle("CTRL","TSF","Fichier disponible",fichier);
 			}else {
-				reponse = new PDUControle("CTRL","TSF","Fichier en cour de téléchargement sur le serveur",null);
+				reponse = new PDUControle("CTRL","TSF","Fichier en cours de téléchargement sur le serveur",null);
 			}
 		}
 		return reponse;
