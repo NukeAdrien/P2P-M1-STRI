@@ -11,7 +11,7 @@ public class Fichier implements Serializable {
 	
 	/* Déclaration de variables */
 	String nomFichier, auteur, date, emplacement;
-	Integer tailleOctets;
+	Long tailleOctets;
 	HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>(); 
 
 	/*
@@ -19,22 +19,13 @@ public class Fichier implements Serializable {
 	 * et la taille en octets. Ce constructeur permet de créer un nouveau fichier.
 	 */
 	
-	public Fichier(String n,String a,String d, String e, Integer t) {
+	public Fichier(String n,String d, String e, Long t) {
 		nomFichier = n;
-		auteur = a;
 		date = d;
 		emplacement =e ;
 		tailleOctets = t;
 	}
 
-	/*
-	 * Méthode getAuteur : Méthode permettant de récupérer l'auteur du fichier
-	 * @return : l'auteur du fichier en String
-	 */
-	
-	public String getAuteur() {
-		return auteur;
-	}
 
 	/*
 	 * Méthode setAuteur : Méthode permettant de changer l'auteur du fichier
@@ -68,7 +59,7 @@ public class Fichier implements Serializable {
 	 * @return : la taille du fichier en octets en Integer
 	 */
 	
-	public Integer getTailleOctets() {
+	public Long getTailleOctets() {
 		return tailleOctets;
 	}
 
@@ -76,7 +67,7 @@ public class Fichier implements Serializable {
 	 * Méthode setTailleOctets : Méthode permettant de changer la taille en octets du fichier
 	 * @param : la nouvelle taille du fichier en octets en Integer
 	 */
-	public void setTailleOctets(Integer tailleOctets) {
+	public void setTailleOctets(Long tailleOctets) {
 		this.tailleOctets = tailleOctets;
 	}
 

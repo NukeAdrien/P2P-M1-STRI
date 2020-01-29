@@ -22,11 +22,12 @@ import serveur.ServeurDonnees;
 import socket.SocketClient;
 
 public class GestionFichier {
-	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
+	HashMap<String, Fichier> listFichier;
 	String chemin;
 
 	public GestionFichier(String c) {
 		this.chemin = c;
+		listFichier= new HashMap<String, Fichier>();
 	}
 
 	 
@@ -155,56 +156,73 @@ public class GestionFichier {
 		this.chemin = chemin;
 	}
 
-	private void getFilesRec(ArrayList<String> allFiles, String nomFichier) {
+/*	private HashMap<String, Fichier> getFilesRec() {
 		File f = new File(nomFichier);
 		File[] listFiles = f.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
 			if (listFiles[i].isDirectory()) {
-				getFilesRec(allFiles, listFiles[i].toString());
+				//getFilesRec(allFiles, listFiles[i].toString());
 			} else
 				allFiles.add(listFiles[i].toString());
 		}
+		for (int i=0; i<allFiles.size(); i++) {
+			this.getTailleFichier(nomFichier);
+			Fichier fichier = new Fichier(allFiles.get(i), this.dateModifFichier(nomFichier), this.chemin+allFiles.get(i), 
+					this.getTailleFichier(nomFichier));
+			this.listFichier.add(nomFichier, fichier);
+		}
+	}*/
+
+	private Long getTailleFichier(String nomFichier) {
+		File f = new File(nomFichier);
+		return f.length();
 	}
 
-	private Integer getTailleFichier(String nomFichier) {
-
-		double bytes;
+	private String dateModifFichier(String nomFichier) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
-		JFileChooser chooser = new JFileChooser();
-
 		File f = new File(nomFichier);
-		f = new File(f.getAbsolutePath());
-		bytes = f.length();
-		System.out.println("Taille : " + bytes + " octets");
 		Date d = new Date(f.lastModified());
 		System.out.println("Dernière modification le : " + sdf.format(d));
-		System.out.println("Type : " + chooser.getTypeDescription(f));
+		return sdf.format(d);
 
-		return 1;
 	}
-
 	@SuppressWarnings("unused")
-	public Integer initGestionFichier(String nomFichier) {
+	public Integer initGestionFichier() {
 		ArrayList<String> allFiles = new ArrayList<String>();
-		GestionFichier gf = new GestionFichier(this.getChemin());
+		File f = new File(this.chemin);
+		HeaderBloc blc =null;
+		File[] listFiles = f.listFiles();
+		if (!(listFiles != null)) {
+			return -1;
+		}
+		for (int i = 0; i < listFiles.length; i++) {
+			if (listFiles[i].isDirectory()) {
+				//getFilesRec(allFiles, listFiles[i].toString());
+			} else
+				allFiles.add(listFiles[i].getName());
+		}
 		
-		getFilesRec(allFiles, nomFichier);
-		if(allFiles==null) {
-			System.out.println("Aucun Fichier Présent");
-			return 1;
+		for (int i=0; i<allFiles.size(); i++) {
+			long taillFich = this.getTailleFichier(this.chemin+allFiles.get(i));
+			
+			String date = this.dateModifFichier(allFiles.get(i));
+			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin+allFiles.get(i), 
+					taillFich);
+			int nbBloc = Math.round((int) taillFich/4000);
+			for (int j=0; j<nbBloc; j++) {
+				byte[] donnees = (byte[]) null;
+				donnees=this.Lire(fichier, j);
+				if (!(donnees != null)) {
+					blc = new HeaderBloc(-1);
+				}else {
+					blc = new HeaderBloc(1);
+				}
+				fichier.AjouterHeaderBloc(j, blc);
+				
+			}
+			this.listFichier.put(allFiles.get(i), fichier);
 		}
-		for (int i = 0; i < allFiles.size(); i++) {
-			System.out.println(allFiles.get(i));
-			this.getTailleFichier(allFiles.get(i));
-			ServeurControle sc = new ServeurControle(gf);
-			ServeurDonnees sd = new ServeurDonnees(gf);
-			ClientControle cc = new ClientControle(null, gf);
-			ClientControleThread cct =new ClientControleThread(null, gf, null, 0, null);
-			ClientDonnees cd = new ClientDonnees(gf,new SocketClient(null));
-			ClientP2P cpp = new ClientP2P(gf);
-			System.out.println("");
-
-		}
+		
 		return 0;
 	}
 }

@@ -14,7 +14,9 @@ public class Main {
 	public static void main(String[] args) {
 		/* Crée et instancie un GestionFichier client et un GestionFichier serveur */
 		GestionFichier sysFichiersClient = new GestionFichier("./Upload/");
+		sysFichiersClient.initGestionFichier();
 		GestionFichier sysFichiersServeur = new GestionFichier("./Telechargment/");
+		sysFichiersServeur.initGestionFichier();
 		/* Crée et instancie un client P2P */
 		ClientP2P client = new ClientP2P(sysFichiersClient);
 		/* Crée et instancie un ServeurControle et un ServeurDonnees */
