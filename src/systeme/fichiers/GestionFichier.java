@@ -13,6 +13,14 @@ import java.util.Map.Entry;
 
 import javax.swing.JFileChooser;
 
+import client.ClientControle;
+import client.ClientControleThread;
+import client.ClientDonnees;
+import client.ClientP2P;
+import serveur.ServeurControle;
+import serveur.ServeurDonnees;
+import socket.SocketClient;
+
 public class GestionFichier {
 	HashMap<String, Fichier> listFichier = new HashMap<String, Fichier>();
 	String chemin;
@@ -21,7 +29,7 @@ public class GestionFichier {
 		this.chemin = c;
 	}
 
-	//Alexandre 
+	 
 	//Permet avec un nom de fichier de retouner l'objet fichier correspondant
 	//Le fichier est dans la hash map
 	public Fichier RechercheFichier(String nomFichier) {
@@ -43,7 +51,6 @@ public class GestionFichier {
 	}
 
 
-	//Alexandre Fonction permetant de retourner l'etat d'un fichier
 	//Sachant que si on a 0 ou -1  sur l'etat d'un hearder bloc on retourn directement l'info
 	public Integer EtatFichier(String nomFichier) {
 		Fichier fichier = null;
@@ -176,16 +183,28 @@ public class GestionFichier {
 		return 1;
 	}
 
+	@SuppressWarnings("unused")
 	public Integer initGestionFichier(String nomFichier) {
 		ArrayList<String> allFiles = new ArrayList<String>();
+		GestionFichier gf = new GestionFichier(this.getChemin());
+		
 		getFilesRec(allFiles, nomFichier);
+		if(allFiles==null) {
+			System.out.println("Aucun Fichier Présent");
+			return 1;
+		}
 		for (int i = 0; i < allFiles.size(); i++) {
 			System.out.println(allFiles.get(i));
 			this.getTailleFichier(allFiles.get(i));
+			ServeurControle sc = new ServeurControle(gf);
+			ServeurDonnees sd = new ServeurDonnees(gf);
+			ClientControle cc = new ClientControle(null, gf);
+			ClientControleThread cct =new ClientControleThread(null, gf, null, 0, null);
+			ClientDonnees cd = new ClientDonnees(gf,new SocketClient(null));
+			ClientP2P cpp = new ClientP2P(gf);
 			System.out.println("");
 
 		}
-		return null;
+		return 0;
 	}
-
 }

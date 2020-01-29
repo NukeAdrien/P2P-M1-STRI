@@ -1,5 +1,6 @@
-/client/
 /envoie/
+/systeme/
 /main/
 /serveur/
-/systeme/
+/socket/
+/client/
