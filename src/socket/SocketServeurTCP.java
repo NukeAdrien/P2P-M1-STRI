@@ -14,13 +14,15 @@ public class SocketServeurTCP extends Thread {
 
 	/* Déclaration de vaiables */
 	GestionProtocole gestion;
+	int port;
 
 	/*
 	 * Constructeur SocketServeurTCP --> Ce constructeur prend en paramètre un gestion de protocole
 	 * Ce constructeur permet de créer un nouveau socketClient.
 	 */
-	public SocketServeurTCP (GestionProtocole g) {
+	public SocketServeurTCP (GestionProtocole g,int p) {
 		gestion = g;
+		this.port = p;
 	}
 
 	/* Méthode run : méthode d'exécution du thread */
@@ -30,7 +32,7 @@ public class SocketServeurTCP extends Thread {
 		Socket sockClient = null;
 		try {
 			/*On initialise un serveur Socket */
-			sockServeur = new ServerSocket(4444);
+			sockServeur = new ServerSocket(port);
 			try {
 				/* On réalise une boucle finie */
 				while (true) {

@@ -44,7 +44,7 @@ public class HeaderBloc implements Serializable {
 			}
 		}
 		this.disponible = disponible;
-		notifyAll();
+
 	}
 	
 	public synchronized void DebutLecture() {

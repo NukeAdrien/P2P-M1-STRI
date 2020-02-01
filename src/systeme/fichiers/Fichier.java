@@ -4,19 +4,19 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /*
- * Classe Fichier --> Classe permettant de crï¿½er et d'instancier un fichier
+ * Classe Fichier --> Classe permettant de créer et d'instancier un fichier
  */
 
 public class Fichier implements Serializable {
 	
-	/* Dï¿½claration de variables */
+	/* Déclaration de variables */
 	String nomFichier, auteur, date, emplacement;
 	Long tailleOctets;
 	HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>(); 
 
 	/*
-	 * Constructeur Fichier --> Ce constructeur prend en paramï¿½tre le nom du fichier, l'auteur, la date, l'emplacement,
-	 * et la taille en octets. Ce constructeur permet de crï¿½er un nouveau fichier.
+	 * Constructeur Fichier --> Ce constructeur prend en paramétre le nom du fichier, l'auteur, la date, l'emplacement,
+	 * et la taille en octets. Ce constructeur permet de créer un nouveau fichier.
 	 */
 	
 	public Fichier(String n,String d, String e, Long t) {
@@ -28,7 +28,7 @@ public class Fichier implements Serializable {
 
 
 	/*
-	 * Mï¿½thode setAuteur : Mï¿½thode permettant de changer l'auteur du fichier
+	 * Méthode setAuteur : Méthode permettant de changer l'auteur du fichier
 	 * @param : le nouvel auteur du fichier en String
 	 */
 	
@@ -37,8 +37,8 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode getDate : Mï¿½thode permettant de rï¿½cupï¿½rer la derniï¿½re date de modification du fichier
-	 * @return : la derniï¿½re date de modification du fichier en String
+	 * Méthode getDate : Méthode permettant de récupérer la derniére date de modification du fichier
+	 * @return : la derniére date de modification du fichier en String
 	 */
 	
 	public String getDate() {
@@ -46,8 +46,8 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode setDate : Mï¿½thode permettant de changer la derniï¿½re date de modification du fichier
-	 * @param : la nouvelle derniï¿½re date de modification du fichier en String
+	 * Méthode setDate : Méthode permettant de changer la derniére date de modification du fichier
+	 * @param : la nouvelle derniére date de modification du fichier en String
 	 */
 	
 	public void setDate(String date) {
@@ -55,7 +55,7 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode getTailleOctets : Mï¿½thode permettant de rï¿½cupï¿½rer la taille en octets du fichier
+	 * Méthode getTailleOctets : Méthode permettant de récupérer la taille en octets du fichier
 	 * @return : la taille du fichier en octets en Integer
 	 */
 	
@@ -64,7 +64,7 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode setTailleOctets : Mï¿½thode permettant de changer la taille en octets du fichier
+	 * Méthode setTailleOctets : Méthode permettant de changer la taille en octets du fichier
 	 * @param : la nouvelle taille du fichier en octets en Integer
 	 */
 	public void setTailleOctets(Long tailleOctets) {
@@ -72,9 +72,9 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode setlistHeaderBlocs : Mï¿½thode permettant de changer les HeaderBlocs d'un fichier
-	 * @param : la nouvelle liste des HeaderBlocs du fichier stockï¿½es dans une HashMap (avec comme clï¿½ l'index, et en valeur
-	 * l'HeaderBloc). Pour plus d'informations se rï¿½fï¿½rer ï¿½ la classe HeaderBloc.java
+	 * Méthode setlistHeaderBlocs : Méthode permettant de changer les HeaderBlocs d'un fichier
+	 * @param : la nouvelle liste des HeaderBlocs du fichier stockées dans une HashMap (avec comme clé l'index, et en valeur
+	 * l'HeaderBloc). Pour plus d'informations se référer é la classe HeaderBloc.java
 	 */
 	/*public void setlistHeaderBlocs(HashMap<Integer, HeaderBloc> listHeaderBlocs) {
 		this.listHeaderBlocs = listHeaderBlocs;
@@ -82,9 +82,9 @@ public class Fichier implements Serializable {
 	
 
 	/*
-	 * Mï¿½thode getListHeaderBlocs : Mï¿½thode permettant de rï¿½cuperer tous les HeaderBlocs d'un fichier
-	 * @return : la liste de tous les HeaderBlocs du fichier stockï¿½es dans une HashMap (avec comme clï¿½ l'index, et en valeur
-	 * l'HeaderBloc). Pour plus d'informations se rï¿½fï¿½rer ï¿½ la classe HeaderBloc.java
+	 * Méthode getListHeaderBlocs : Méthode permettant de récuperer tous les HeaderBlocs d'un fichier
+	 * @return : la liste de tous les HeaderBlocs du fichier stockées dans une HashMap (avec comme clé l'index, et en valeur
+	 * l'HeaderBloc). Pour plus d'informations se référer é la classe HeaderBloc.java
 	 */
 	
 	public HashMap<Integer, HeaderBloc> getListHeaderBlocs() {
@@ -92,16 +92,16 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode setListHeaderBlocs : Mï¿½thode permettant de changer les HeaderBlocs d'un fichier
-	 * @param : la nouvelle liste des HeaderBlocs du fichier stockï¿½es dans une HashMap (avec comme clï¿½ l'index, et en valeur
-	 * l'HeaderBloc). Pour plus d'informations se rï¿½fï¿½rer ï¿½ la classe HeaderBloc.java
+	 * Méthode setListHeaderBlocs : Méthode permettant de changer les HeaderBlocs d'un fichier
+	 * @param : la nouvelle liste des HeaderBlocs du fichier stockées dans une HashMap (avec comme clé l'index, et en valeur
+	 * l'HeaderBloc). Pour plus d'informations se référer é la classe HeaderBloc.java
 	 */
 	public void setListHeaderBlocs(HashMap<Integer, HeaderBloc> listHeaderBlocs) {
 		this.listHeaderBlocs = listHeaderBlocs;
 	}
 
 	/*
-	 * Mï¿½thode setNomFichier : Mï¿½thode permettant de changer le nom du fichier
+	 * Méthode setNomFichier : Méthode permettant de changer le nom du fichier
 	 * @param : le nouveau nom du fichier en String
 	 */
 	
@@ -110,7 +110,7 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode getNomFichier : Mï¿½thode permettant de rï¿½cupï¿½rer le nom du fichier
+	 * Méthode getNomFichier : Méthode permettant de récupérer le nom du fichier
 	 * @return : le nom du fichier en String
 	 */
 	public String getNomFichier() {
@@ -118,7 +118,7 @@ public class Fichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode getEmplacement : Mï¿½thode permettant de rï¿½cupï¿½rer l'emplacement du fichier
+	 * Méthode getEmplacement : Méthode permettant de récupérer l'emplacement du fichier
 	 * @return : l'emplacement du fichier en String
 	 */
 	
@@ -127,10 +127,10 @@ public class Fichier implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode getDisponible : Mï¿½thode permettant de rï¿½cupï¿½rer la disponibilitï¿½ d'un bloc de fichier (si il est inexitant 
-	 * ou encore si il est en cours de tï¿½lï¿½chargement ou encore si il est disponible).
+	 * Méthode getDisponible : Méthode permettant de récupérer la disponibilité d'un bloc de fichier (si il est inexitant 
+	 * ou encore si il est en cours de téléchargement ou encore si il est disponible).
 	 * @param : Un index d'un des blocs constituant la PDU
-	 * @return : Sa disponibilitï¿½ en Integer.
+	 * @return : Sa disponibilité en Integer.
 	 */
 	
 	public int getDisponible(Integer index) {
@@ -142,9 +142,9 @@ public class Fichier implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode setDisponible : Mï¿½thode permettant de changer la disponibilitï¿½ d'un bloc de fichier (si il est inexitant 
-	 * ou encore si il est en cours de tï¿½lï¿½chargement ou encore si il est disponible).
-	 * @param : Le nouvel index d'un des blocs constituant la PDU et sa nouvelle disponibilitï¿½
+	 * Méthode setDisponible : Méthode permettant de changer la disponibilité d'un bloc de fichier (si il est inexitant 
+	 * ou encore si il est en cours de téléchargement ou encore si il est disponible).
+	 * @param : Le nouvel index d'un des blocs constituant la PDU et sa nouvelle disponibilité
 	 */
 	
 	public synchronized void setDisponible(Integer index, int disponible) {
@@ -152,7 +152,7 @@ public class Fichier implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode setEmplacement : Mï¿½thode permettant de changer l'emplacement du fichier
+	 * Méthode setEmplacement : Méthode permettant de changer l'emplacement du fichier
 	 * @param : le nouvel emplacement du fichier en String
 	 */
 	public void setEmplacement(String emplacement) {
@@ -160,7 +160,7 @@ public class Fichier implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode AjouterHeaderBloc : Mï¿½thode permettant d'ajouter un nouveau bloc de fichier
+	 * Méthode AjouterHeaderBloc : Méthode permettant d'ajouter un nouveau bloc de fichier
 	 * @param : Son index et son HeaderBloc (Voir la classe HeaderBloc.java)
 	 */
 	public void AjouterHeaderBloc(Integer index, HeaderBloc hd) {

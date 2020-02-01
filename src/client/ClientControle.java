@@ -7,7 +7,7 @@ import socket.SocketClient;
 import systeme.fichiers.Fichier;
 import systeme.fichiers.GestionFichier;
 
-public class ClientControle {
+public class ClientControle{
 	String transport;
 	GestionFichier sysFichiers;
 
@@ -57,6 +57,21 @@ public class ClientControle {
 				sysFichiers.AjouterFichier(simpleTel.getFichier());
 				ClientDonnees transfert = new ClientDonnees(sysFichiers, serveur);
 				transfert.Dowload(fichierDl, null);
+				if (sysFichiers.EtatFichier(nomFichier) != 1) {
+					System.out.println("Erreur lors du telechargement du fichier");
+					System.out.println("Nouvelle tentative");
+					transfert.Dowload(fichierDl, null);
+					if (sysFichiers.EtatFichier(nomFichier) != 1) {
+						System.out.println("Erreur lors du telechargement du fichier");
+						System.out.println("Impossible de télécharger le fichier");
+					} else {
+						System.out.println("Fichier téléchargé");
+					}
+				} else {
+					System.out.println("Fichier téléchargé");
+				}
+				simpleTel = new PDUControle("CTRL", "TSF", "FIN", null);
+				serveur.EnvoiePDU(simpleTel);
 				serveur.FermerSocket();
 			} else if (simpleTel.getFichier() == null) {
 				System.out.println(simpleTel.getDonnees());
@@ -69,23 +84,13 @@ public class ClientControle {
 
 	public void TelechargementParallele(String nomFichier, List<String> ip, List<Integer> port) {
 		int i;
-		for (i = 0; i > ip.size(); i++) {
+		for (i = 0; i < ip.size(); i++) {
 			ClientControleThread cct = new ClientControleThread(this.transport, this.sysFichiers, ip.get(i),
 					port.get(i), nomFichier);
 			Thread thread = new Thread(cct);
 			thread.start();
 		}
-		i=0;
-		while(sysFichiers.EtatFichier(nomFichier) != 1 && i != ip.size()) {
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			i++;
-		}
-		if(sysFichiers.EtatFichier(nomFichier) != 1) {
+		if (sysFichiers.EtatFichier(nomFichier) != 1) {
 			System.out.println("Erreur lors du téléchargement du fichier");
 		}
 		return;

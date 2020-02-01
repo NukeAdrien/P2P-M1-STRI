@@ -1,5 +1,6 @@
 package socket;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -11,7 +12,7 @@ import serveur.GestionProtocole;
  */
 
 public class GererClient implements Runnable {
-	
+
 	/* Déclaration de variables */
 	Socket sockClient = null;
 	Envoie envoieClient = null;
@@ -19,10 +20,10 @@ public class GererClient implements Runnable {
 	GestionProtocole gestion;
 	PDU requete, reponse;
 	Boolean quitter = false;
-	
+
 	/*
-	 * Constructeur GererClient --> Ce constructeur prend en paramètres un socket (UDP ou TCP) *
-	 * crée ainsi qu'un gestion de Protocole
+	 * Constructeur GererClient --> Ce constructeur prend en paramètres un socket
+	 * (UDP ou TCP) * crée ainsi qu'un gestion de Protocole
 	 */
 	public GererClient(Socket socket, GestionProtocole g) {
 		sockClient = socket;
@@ -38,12 +39,10 @@ public class GererClient implements Runnable {
 		Recevoir receptionClient = new Recevoir(sockClient);
 		/* Affichage d'un message de succès */
 		System.out.println("Reception du client");
+		requete = null;
+		requete = receptionClient.RecevoirPDU();
 		/* Tant que la connexion est toujours active */
 		while (quitter == false) {
-			/* Initialisation d'une requête */
-			requete = null;
-			/* On reçoit la PDU à partir de la variable précédemment crée*/
-			requete = receptionClient.RecevoirPDU();
 			/* Si il y a un problème lors de la réception */
 			if (requete == null) {
 				/* Affichage d'un message d'erreur */
@@ -57,12 +56,29 @@ public class GererClient implements Runnable {
 				}
 				return;
 			} else {
-				/* Si il n'y a pas de problèmes alors on va pouvoir gérer la requête*/
+				/* Si il n'y a pas de problèmes alors on va pouvoir gérer la requête */
 				reponse = gestion.gestionRequete(requete);
-				/* Après la gestion de la requete, on envoie la PDU au client pour une éventuelle réception */
+				/*
+				 * Après la gestion de la requete, on envoie la PDU au client pour une
+				 * éventuelle réception
+				 */
 				envoieClient.EnvoiePDU(reponse);
 			}
+			/* Initialisation d'une requête */
+			requete = null;
+			requete = receptionClient.RecevoirPDU();
+			if (requete.getDonnees().compareTo("FIN") == 0) {
+				quitter = true;
+			}
 		}
+		try {
+			sockClient.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return;
 
 	}
 

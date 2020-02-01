@@ -11,16 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.JFileChooser;
-
-import client.ClientControle;
-import client.ClientControleThread;
-import client.ClientDonnees;
-import client.ClientP2P;
-import serveur.ServeurControle;
-import serveur.ServeurDonnees;
-import socket.SocketClient;
-
 public class GestionFichier {
 	HashMap<String, Fichier> listFichier;
 	String chemin;
@@ -48,18 +38,12 @@ public class GestionFichier {
 		// Permet de parcourir une hash map de fichier
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			// Il faut comparer la cle de la has map avec le nom fichier si c'est bon alors
-			if(listFichier.getKey().contentEquals(nomFichier)) {
+			if(listFichier.getKey().compareTo(nomFichier) == 0) {
 				recherche = this.listFichier.get(nomFichier);
 				break;
-			} else {
-				System.out.println("Le fichier est inexistant dans la HashMap");
-			}
-			// on affecte a recherche le fichier correspondant
-			/*listFichier.getKey();// Renvoie le nom du fichier (index)
-			listFichier.getValue();// renvoie l'objet fichier rechercher*/
+			} 
 		}
 		this.FinRecherche();
-		notifyAll();
 		return recherche;
 	}
 
@@ -175,11 +159,13 @@ public class GestionFichier {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if(this.RechercheFichier(f.nomFichier) != null) {
+				return;
+			}
 		}
 		this.DebutAjout();
 		this.listFichier.put(f.getNomFichier(), f);
 		this.FinAjout();
-		notifyAll();
 	}
 
 	public String getChemin() {
@@ -216,11 +202,10 @@ public class GestionFichier {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
 		File f = new File(nomFichier);
 		Date d = new Date(f.lastModified());
-		System.out.println("Derni�re modification le : " + sdf.format(d));
 		return sdf.format(d);
 
 	}
-	@SuppressWarnings("unused")
+	
 	public Integer initGestionFichier() {
 		ArrayList<String> allFiles = new ArrayList<String>();
 		File f = new File(this.chemin);
@@ -237,12 +222,16 @@ public class GestionFichier {
 		}
 		
 		for (int i=0; i<allFiles.size(); i++) {
-			long taillFich = this.getTailleFichier(this.chemin+allFiles.get(i));
+			double taillFich = this.getTailleFichier(this.chemin+allFiles.get(i));
 			
 			String date = this.dateModifFichier(allFiles.get(i));
 			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin+allFiles.get(i), 
-					taillFich);
-			int nbBloc = Math.round((int) taillFich/4000);
+					(long) taillFich);
+			int nbBloc = (int) (taillFich/4000);
+			double tmp = taillFich/4000;
+			if(tmp > nbBloc) {
+				nbBloc++;
+			}
 			for (int j=0; j<nbBloc; j++) {
 				byte[] donnees = (byte[]) null;
 				donnees=this.Lire(fichier, j);
@@ -289,5 +278,6 @@ public class GestionFichier {
 		notifyAll();
 			
 		}
+	
 
 }

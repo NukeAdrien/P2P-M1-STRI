@@ -10,7 +10,7 @@ import systeme.fichiers.GestionFichier;
  * Classe ClientP2P --> Cette classe permet de créer un client P2P
  */
 
-public class ClientP2P extends Thread {
+public class ClientP2P implements Runnable {
 	/* Déclaration de variables */
 	GestionFichier sysFichiers;
 	
@@ -46,7 +46,12 @@ public class ClientP2P extends Thread {
 				System.out.println("5 - Voir la liste des fichiers disponible");
 				System.out.println("6 - Vos fichiers");
 				System.out.println("Entrez votre choix :");
-				choix = sc.nextInt();
+				if(sc.hasNextInt()){
+		            choix = sc.nextInt();
+		        }else{
+		            sc.nextLine();
+		            System.out.println("Entrer invalide");
+		        }
 				if (choix < 0 && choix > 6) {
 					System.out.println("Erreur saisie");
 				}
