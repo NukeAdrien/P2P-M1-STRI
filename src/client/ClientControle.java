@@ -7,91 +7,135 @@ import socket.SocketClient;
 import systeme.fichiers.Fichier;
 import systeme.fichiers.GestionFichier;
 
-public class ClientControle{
+/*
+ * Classe Client --> Classe permettant de crï¿½er un ClientControle
+ */
+
+public class ClientControle {
+	/* Dï¿½claration de variables */
 	String transport;
 	GestionFichier sysFichiers;
+
+	/*
+	 * Constructeur ClientControle --> Ce constructeur prend en paramï¿½tre le protocole de transport choisie et un GestionFichier
+	 * Ce constructeur permet de crï¿½er un nouveau ClientControle.
+	 */
 
 	public ClientControle(String t, GestionFichier g) {
 		transport = t;
 		sysFichiers = g;
 	}
 
-	// Permet de réaliser un simple téléchargement
+	/*
+	 * Mï¿½thode TelechargementSimple : Mï¿½thode permettant de rï¿½aliser un simple tï¿½lï¿½chargement
+	 * @param : le nom du fichier, l'adresse ip et le numï¿½ro de port
+	 */
+
 	public void TelechargementSimple(String nomFichier, String ip, int port) {
+		/* Dï¿½claration de variables */
 		Fichier fichierDl;
-		// Cree un objet PDU pour l'envoyer au serveur
+		/* Cree un objet PDU pour l'envoyer au serveur */
 		PDUControle simpleTel = new PDUControle("CTRL", "TSF", nomFichier, null);
-		// Cree le socket en indiquant le mode de transport (TCP ou UDP)
+		/* Cree le socket en indiquant le mode de transport (TCP ou UDP) */
 		SocketClient serveur = new SocketClient(transport);
-		// Initialise le socket avec l'adresse IP et le port du destinataire
+		/* Si il y a un problï¿½me avec l'initialisation avec le socket, l'adresse IP et le port du destinataire */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
+			/* Affichage d'un message d'erreur */
 			System.out.println("Impossible de joindre le serveur");
 			return;
 		}
-		// Envoie de la PDU au serveur
+		/* Si il y un problï¿½me avec l'envoie de la PDU au serveur */
 		if (serveur.EnvoiePDU(simpleTel) != 0) {
+			/* On ferme le socket */
 			serveur.FermerSocket();
+			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur lors de l'envoie de la requete");
 			return;
 		}
-		// initialise la variable
+		/* On initialise la variable */
 		PDU reponse = null;
-		// Recupere la PDU recu
+		/* On rï¿½cupï¿½re la PDU recu */
 		reponse = serveur.RecevoirPDU();
-		// Test si la PDU n'est pas null ou une autre PDU
+		/* Si la PDU est pas nulle*/
 		if (reponse == null) {
+			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur");
 			return;
+			/* Si la reponse est une instance de PDU controle */
 		} else if (reponse instanceof PDUControle) {
+			/* On rï¿½cupï¿½re la PDUControle */
 			simpleTel = (PDUControle) reponse;
 		} else {
+			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de PDU");
+			/* On ferme la socket */
 			serveur.FermerSocket();
 			return;
 		}
-		// Vérification de la reponse
+		/* On vï¿½rifie la reponse */
+		/* Si la commande correspond ï¿½ celle de TSF */
 		if (simpleTel.getCommande().compareTo("TSF") == 0) {
+			/* Si le fichier existe */
 			if (simpleTel.getFichier() != null) {
+				/* On rï¿½cupï¿½re le fichier */
 				fichierDl = simpleTel.getFichier();
+				/* On change l'emplacement du fichier pour le mettre avec les autres fichiers tï¿½lï¿½chargï¿½s */
 				fichierDl.setEmplacement(sysFichiers.getChemin() + fichierDl.getNomFichier());
+				/* On ajoute le fichier dans GestionFichier */
 				sysFichiers.AjouterFichier(simpleTel.getFichier());
+				/* On crï¿½e un objet ClientDonnees pour signaler le tï¿½lï¿½chargement */
 				ClientDonnees transfert = new ClientDonnees(sysFichiers, serveur);
+				/* On tï¿½lï¿½charge le fichier */
 				transfert.Dowload(fichierDl, null);
+				/* On ferme le socket */
 				if (sysFichiers.EtatFichier(nomFichier) != 1) {
 					System.out.println("Erreur lors du telechargement du fichier");
 					System.out.println("Nouvelle tentative");
 					transfert.Dowload(fichierDl, null);
 					if (sysFichiers.EtatFichier(nomFichier) != 1) {
 						System.out.println("Erreur lors du telechargement du fichier");
-						System.out.println("Impossible de télécharger le fichier");
+						System.out.println("Impossible de tï¿½lï¿½charger le fichier");
 					} else {
-						System.out.println("Fichier téléchargé");
+						System.out.println("Fichier tï¿½lï¿½chargï¿½");
 					}
 				} else {
-					System.out.println("Fichier téléchargé");
+					System.out.println("Fichier tï¿½lï¿½chargï¿½");
 				}
 				simpleTel = new PDUControle("CTRL", "TSF", "FIN", null);
 				serveur.EnvoiePDU(simpleTel);
 				serveur.FermerSocket();
+				/* Si le fichier n'existe pas */
 			} else if (simpleTel.getFichier() == null) {
+				/* On affiche les donnï¿½es */
 				System.out.println(simpleTel.getDonnees());
 			} else {
+				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur de commande");
 			}
 		}
 		return;
 	}
 
+	/*
+	 * Mï¿½thode TelechargementParallele : Mï¿½thode permettant de rï¿½aliser un tï¿½lï¿½chargement sur plusieurs serveurs
+	 * @param : le nom du fichier, les adresses ip's et les numï¿½ros de ports
+	 */
+	
 	public void TelechargementParallele(String nomFichier, List<String> ip, List<Integer> port) {
+		/* Dï¿½claration de variables */
 		int i;
+		/* On parourt la liste des adresses ip's */
 		for (i = 0; i < ip.size(); i++) {
+			/* On crï¿½e un objet ClientControleThread */
 			ClientControleThread cct = new ClientControleThread(this.transport, this.sysFichiers, ip.get(i),
 					port.get(i), nomFichier);
+			/* On crï¿½e un Thread */
 			Thread thread = new Thread(cct);
+			/* On lance un Thread */
 			thread.start();
 		}
 		if (sysFichiers.EtatFichier(nomFichier) != 1) {
-			System.out.println("Erreur lors du téléchargement du fichier");
+			System.out.println("Erreur lors du tï¿½lï¿½chargement du fichier");
 		}
 		return;
 	}

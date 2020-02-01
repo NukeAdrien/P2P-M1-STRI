@@ -3,38 +3,75 @@ package serveur;
 import envoie.reception.*;
 import systeme.fichiers.*;
 
+/*
+ * Classe ServeurControle --> Cette classe permet de dï¿½cider quel transfert de fichier est le mieux adaptï¿½
+ */
 public class ServeurControle {
+	
+	/* Dï¿½claration de variables */
 	GestionFichier gestionFichier;
 
+	
+	/*
+	 * Constructeur ServeuControle --> Ce constructeur prend en paramï¿½tre un gestion de fichier
+	 * Ce constructeur permet de crï¿½er un nouveau ServeurControle .
+	 */
 	public ServeurControle(GestionFichier gf) {
 		gestionFichier = gf;
 	}
 
+	/*
+	 * Mï¿½thode TSF (Transfert simple de fichier) : Mï¿½thode permettant de tï¿½lï¿½charger un fichier se trouvant sur un serveur
+	 * @param : la PDU ï¿½ traiter
+	 * @return : la PDU une fois traitï¿½e
+	 */
 	public PDU TSF(PDU requete) {
+		/* Dï¿½claration de variables */
 		PDU reponse = null;
 		Fichier fichier;
+		/* On recherche si les fichier existe mais plus prï¿½cisï¿½ment on regarde si le fichier contient des donnï¿½es*/
 		fichier = gestionFichier.RechercheFichier(requete.getDonnees());
+		/* Si le fichier n'existe pas */
 		if (fichier == null) {
+			/* On crï¿½e une nouvelle PDU en indiquant que le fichier n'existe pas */
 			reponse = new PDUControle("CTRL","TSF","Fichier introuvable",null);
 		}else {
+			/* Si le fichier existe */
 			if(gestionFichier.EtatFichier(requete.getDonnees()) == 1) {
+				/* On crï¿½e une nouvelle PDU en indiquant que le fichier est disponible */
 				reponse = new PDUControle("CTRL","TSF","Fichier disponible",fichier);
 			}else {
-				reponse = new PDUControle("CTRL","TSF","Fichier en cours de téléchargement sur le serveur",null);
+				/* Si le fichier existe mais n'est pas disponible */
+				/* On crï¿½e une nouvelle PDU en indiquant que le fichier n'est pas disponible */
+				reponse = new PDUControle("CTRL","TSF","Fichier en cours de tï¿½lï¿½chargement sur le serveur",null);
 			}
 		}
+		/* On retourne la PDU traitï¿½e */
 		return reponse;
 	}
 	
+	/*
+	 * Mï¿½thode TPF (Transfert Parallele de fichiers) : Mï¿½thode permettant de tï¿½lï¿½charger un fichier se trouvant sur plusieurs serveurs
+	 * @param : la PDU ï¿½ traiter
+	 * @return : la PDU une fois traitï¿½e
+	 */
+	
 	public PDU TPF(PDU requete) {
+		/* Dï¿½claration de variables */
 		PDU reponse = null;
 		Fichier fichier;
+		/* On recherche si les fichier existe mais plus prï¿½cisï¿½ment on regarde si le fichier contient des donnï¿½es*/
 		fichier = gestionFichier.RechercheFichier(requete.getDonnees());
+		/* Si le fichier n'existe pas */
 		if (fichier == null) {
+			/* On crï¿½e une nouvelle PDU en indiquant que le fichier n'existe pas */
 			reponse = new PDUControle("CTRL","TPF","Fichier introuvable",null);
 		}else {
+			/* Si le fichier existe */
+				/* On crï¿½e une nouvelle PDU en indiquant que le fichier est disponible */
 			reponse = new PDUControle("CTRL","TPF","Fichier disponible",fichier);
 		}
+		/* On retourne la PDU traitï¿½e */
 		return reponse;
 	}
 }
