@@ -10,51 +10,54 @@ import systeme.fichiers.Fichier;
 import systeme.fichiers.GestionFichier;
 import systeme.fichiers.HeaderBloc;
 
-
 /*
- * Classe ClientControleThread --> Classe permettant de crï¿½er un ClientControleThread
+ * Classe ClientControleThread --> Classe permettant de créer un ClientControleThread
  */
 
 public class ClientControleThread implements Runnable {
-	/* Dï¿½claration de variables */
+	/* Déclaration de variables */
 	String transport;
 	GestionFichier sysFichiers;
 	String nomFichier;
 	String ip;
 	int port;
-	
+
 	/*
-	 * Constructeur ClientControleThread --> Ce constructeur prend en paramï¿½tre le protocole de transport choisie 
-	 * un GestionFichier, le nom du fichier, l'adresse ip et le port
-	 * Ce constructeur permet de crï¿½er un nouveau ClientControleThread.
+	 * Constructeur ClientControleThread --> Ce constructeur prend en paramétre le
+	 * protocole de transport choisie un GestionFichier, le nom du fichier,
+	 * l'adresse ip et le port Ce constructeur permet de créer un nouveau
+	 * ClientControleThread.
 	 */
 
-	public ClientControleThread(String t, GestionFichier g,String i,int p,String nf) {
+	public ClientControleThread(String t, GestionFichier g, String i, int p, String nf) {
 		this.transport = t;
 		this.sysFichiers = g;
 		this.nomFichier = nf;
 		this.ip = i;
 		this.port = p;
 	}
-	
-	/* Mï¿½thode run : mï¿½thode d'exï¿½cution du thread */
+
+	/* Méthode run : méthode d'exécution du thread */
 
 	public void run() {
-		/* Dï¿½claration de variables */
+		/* Déclaration de variables */
 		Fichier fichierDl;
 		int nbBlocIndisp = 0;
 		// Cree un objet PDU pour l'envoyer au serveur
 		PDUControle requete = new PDUControle("CTRL", "TPF", nomFichier, null);
 		// Cree le socket en indiquant le mode de transport (TCP ou UDP)
 		SocketClient serveur = new SocketClient(transport);
-		/* Si il y a un problï¿½me avec l'initialisation du socket, l'adresse IP et le port du destinataire */
+		/*
+		 * Si il y a un probléme avec l'initialisation du socket, l'adresse IP et le
+		 * port du destinataire
+		 */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Impossible de joindre le serveur");
 			return;
 		}
-		/* Si il y un problï¿½me avec l'envoie de la PDU au serveur */
-		if(serveur.EnvoiePDU(requete) != 0) {
+		/* Si il y un probléme avec l'envoie de la PDU au serveur */
+		if (serveur.EnvoiePDU(requete) != 0) {
 			/* On ferme le socket */
 			serveur.FermerSocket();
 			/* Affichage d'un message d'erreur */
@@ -63,37 +66,40 @@ public class ClientControleThread implements Runnable {
 		}
 		/* On initialise la variable */
 		PDU reponse = null;
-		/* On rï¿½cupï¿½re la PDU recu */
-		reponse  = serveur.RecevoirPDU();
-		/* Si la PDU est pas nulle*/
+		/* On récupére la PDU recu */
+		reponse = serveur.RecevoirPDU();
+		/* Si la PDU est pas nulle */
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
-			System.out.println("Erreur de connexion avec le serveur "+this.ip+":"+this.port);
+			System.out.println("Erreur de connexion avec le serveur " + this.ip + ":" + this.port);
 			return;
 			/* Si la reponse est une instance de PDU controle */
-		}else if(reponse instanceof PDUControle) {
-			/* On rï¿½cupï¿½re la PDUControle */
+		} else if (reponse instanceof PDUControle) {
+			/* On récupére la PDUControle */
 			requete = (PDUControle) reponse;
-		}else {
+		} else {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de PDU");
 			/* On ferme la socket */
 			serveur.FermerSocket();
 			return;
 		}
-		/* Vï¿½rification de la reponse */
-		/* Si la commande correspond ï¿½ celle de TSF */
+		/* Vérification de la reponse */
+		/* Si la commande correspond é celle de TSF */
 
 		if (requete.getCommande().compareTo("TSF") == 0) {
 			/* Si le fichier existe */
-			if (requete.getFichier() != null) { 
-				/* On rï¿½cupï¿½re le fichier */
+			if (requete.getFichier() != null) {
+				/* On récupére le fichier */
 				fichierDl = requete.getFichier();
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
 					/* On ajoute le fichier dans GestionFichier */
 					sysFichiers.AjouterFichier(fichierDl);
-					/* On change l'emplacement du fichier pour le mettre avec les autres fichiers tï¿½lï¿½chargï¿½s */
+					/*
+					 * On change l'emplacement du fichier pour le mettre avec les autres fichiers
+					 * téléchargés
+					 */
 					sysFichiers.getListFichier().get(fichierDl.getNomFichier())
 							.setEmplacement(sysFichiers.getChemin() + fichierDl.getNomFichier());
 					/* On parcourt les headers blocs contenues dans le fichier */
@@ -102,60 +108,65 @@ public class ClientControleThread implements Runnable {
 								-1);
 					}
 				}
-				/* On crï¿½e une liste d'headers blocs */
+				/* On crée une liste d'headers blocs */
 				HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
-				/* On parcourt les headers blocs*/
+				/* On parcourt les headers blocs */
 				for (Map.Entry<Integer, HeaderBloc> headerbloc : sysFichiers.getListFichier().get(nomFichier)
 						.getListHeaderBlocs().entrySet()) {
-					if(headerbloc.getValue().getDisponible() == -1 && requete.getFichier().getListHeaderBlocs().get(headerbloc.getKey()).getDisponible() == 1) {
-					/* Si le bloc n'est pas disponible mais que le fichier contient des blocs qui sont disponibles */
-					if (sysFichiers.getListFichier().get(fichierDl.getNomFichier())
-							.getDisponible(headerbloc.getKey()) == -1
-							&& requete.getFichier().getListHeaderBlocs().get(headerbloc.getKey())
-									.getDisponible() == 1) {
-						sysFichiers.getListFichier().get(nomFichier).setDisponible(headerbloc.getKey(), 0);
-						listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					} else {
-						if (requete.getFichier().getDisponible(headerbloc.getKey()) == -1) {
-							nbBlocIndisp++;
+					if (headerbloc.getValue().getDisponible() == -1 && requete.getFichier().getListHeaderBlocs()
+							.get(headerbloc.getKey()).getDisponible() == 1) {
+						/*
+						 * Si le bloc n'est pas disponible mais que le fichier contient des blocs qui
+						 * sont disponibles
+						 */
+						if (sysFichiers.getListFichier().get(fichierDl.getNomFichier())
+								.getDisponible(headerbloc.getKey()) == -1
+								&& requete.getFichier().getListHeaderBlocs().get(headerbloc.getKey())
+										.getDisponible() == 1) {
+							sysFichiers.getListFichier().get(nomFichier).setDisponible(headerbloc.getKey(), 0);
+							listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} else {
+							if (requete.getFichier().getDisponible(headerbloc.getKey()) == -1) {
+								nbBlocIndisp++;
+							}
 						}
 					}
 				}
-				/*Si il n'y a pas de blocs */
+				/* Si il n'y a pas de blocs */
 				if (listHeaderBlocs.size() == 0) {
 					if (nbBlocIndisp == sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs()
 							.size()) {
-					/* Affichage d'un message d'erreur */
+						/* Affichage d'un message d'erreur */
 						System.out.println(ip + ":" + port + " Ne possede aucun bloc du fichier");
 					}
 					return;
 				}
-				/* Crï¿½ation d'un objet ClientDonnees */
+				/* Création d'un objet ClientDonnees */
 				ClientDonnees transfert = new ClientDonnees(sysFichiers, serveur);
-				/* Tï¿½lï¿½chargement du fichier */
+				/* Téléchargement du fichier */
 				transfert.Dowload(fichierDl, listHeaderBlocs);
-				System.out.println(ip + ":" + port+" | J'ai tï¿½lï¿½charger : "+listHeaderBlocs.size()+"/"+sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
+				System.out.println(ip + ":" + port + " | J'ai télécharger : " + listHeaderBlocs.size() + "/"
+						+ sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
 				/* Fermeture du socket */
 				requete = new PDUControle("CTRL", "TSF", "FIN", null);
 				serveur.EnvoiePDU(requete);
 				serveur.FermerSocket();
-				/*Si le fichier n'existe pas */
+				/* Si le fichier n'existe pas */
 			} else if (requete.getFichier() == null) {
-				/* On affiche les donnï¿½es du fichier */
+				/* On affiche les données du fichier */
 				System.out.println(requete.getDonnees());
 			} else {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur de commande");
 			}
 
+			return;
 		}
-
 	}
-
 }

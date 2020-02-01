@@ -3,26 +3,26 @@ package systeme.fichiers;
 import java.io.Serializable;
 
 /*
- * Classe HeaderBloc --> Classe permettant de crï¿½er et d'instancier un HeaderBloc
+ * Classe HeaderBloc --> Classe permettant de créer et d'instancier un HeaderBloc
  */
 
 public class HeaderBloc implements Serializable {
 	
-	/* Dï¿½claration de variables */
+	/* Déclaration de variables */
 	int disponible;
 	int nbrLecteurEnCours;
 	
 	/*
-	 * Constructeur HeaderBloc --> Ce constructeur prend en paramï¿½tre sa disponibilitï¿½. 
-	 * Ce constructeur permet de crï¿½er un nouvel HeaderBloc.
+	 * Constructeur HeaderBloc --> Ce constructeur prend en paramétre sa disponibilité. 
+	 * Ce constructeur permet de créer un nouvel HeaderBloc.
 	 */
 	public HeaderBloc(int disponible) {
 		this.disponible = disponible;
 	}
 	
 	/*
-	 * Mï¿½thode getDisponible : Mï¿½thode permettant de rï¿½cupï¿½rer la disponibilitï¿½ du bloc de fichier donnï¿½
-	 * @return : la disponibilitï¿½ du bloc de Fichier en Integer :  0 si le bloc est en cours de tï¿½lï¿½chargement,
+	 * Méthode getDisponible : Méthode permettant de récupérer la disponibilité du bloc de fichier donné
+	 * @return : la disponibilité du bloc de Fichier en Integer :  0 si le bloc est en cours de téléchargement,
 	 * -1 si le bloc n'existe pas et 1 si le bloc est disponible
 	 */
 	public int getDisponible() {
@@ -30,8 +30,8 @@ public class HeaderBloc implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode setDisponible : Mï¿½thode permettant de changer la disponibilitï¿½ du bloc de fichier donnï¿½
-	 * @param : la disponibilitï¿½ du bloc de Fichier en Integer :  0 si le bloc est en cours de tï¿½lï¿½chargement,
+	 * Méthode setDisponible : Méthode permettant de changer la disponibilité du bloc de fichier donné
+	 * @param : la disponibilité du bloc de Fichier en Integer :  0 si le bloc est en cours de téléchargement,
 	 * -1 si le bloc n'existe pas et 1 si le bloc est disponible
 	 */
 	public void setDisponible(int disponible) {
