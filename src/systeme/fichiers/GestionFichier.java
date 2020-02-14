@@ -10,12 +10,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
 /*
  * Classe GestionFichier --> Classe permettant de gérer un fichier (Lecture, Ecriture, etc ....)
  */
 public class GestionFichier {
-	
+
 	/* Déclaration de variables */
 	HashMap<String, Fichier> listFichier;
 	String chemin;
@@ -30,7 +31,7 @@ public class GestionFichier {
 		listFichier= new HashMap<String, Fichier>();
 	}
 
-	 
+
 	/*
 	 * Méthode RechercheFichier : Méthode permettant avec un nom de fichier de retouner l'objet fichier correspondant
 	 * @param : le type de PDU en String
@@ -105,7 +106,7 @@ public class GestionFichier {
 		FileInputStream fileis = null;
 		int taille = bloc.length;
 		long offset = taille * numBloc;
-		
+
 		/* On récupére l'emplacement du fichier */
 		File fle = new File(fichier.getEmplacement());
 		try {
@@ -190,7 +191,7 @@ public class GestionFichier {
 	 */
 	public void setListFichier(HashMap<String, Fichier> listFichier) {
 		this.listFichier = listFichier;
-	
+
 	}
 	/*
 	 * Méthode getDisponible : Méthode permettant de récupérer la disponibilité d'un bloc
@@ -244,7 +245,7 @@ public class GestionFichier {
 	 * Méthode getChemin : Méthode permettant de retourner le chemin pour un fichier donné
 	 * @return : le chemin du fichier
 	 */
-	
+
 	public String getChemin() {
 		return chemin;
 	}
@@ -257,7 +258,7 @@ public class GestionFichier {
 		this.chemin = chemin;
 	}
 
-/*	private HashMap<String, Fichier> getFilesRec() {
+	/*	private HashMap<String, Fichier> getFilesRec() {
 		File f = new File(nomFichier);
 		File[] listFiles = f.listFiles();
 		for (int i = 0; i < listFiles.length; i++) {
@@ -279,7 +280,7 @@ public class GestionFichier {
 	 * @param : Le nom du fichier
 	 * @return : la taille du fichier associée (en octets)
 	 */
-	
+
 	private Long getTailleFichier(String nomFichier) {
 		File f = new File(nomFichier);
 		return f.length();
@@ -290,7 +291,7 @@ public class GestionFichier {
 	 * @param : Le nom du fichier
 	 * @return : la date du fichier associée (en octets)
 	 */
-	
+
 	private String dateModifFichier(String nomFichier) {
 		/* On parse dans le format d'une date */
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
@@ -305,13 +306,13 @@ public class GestionFichier {
 	/*
 	 * Méthode initGestionFichier : Méthode permettant d'initialiser une gestion de fichier.
 	 * @return : 0 si éa s'est bien passée, 1 sinon*/
-	 
+
 	public Integer initGestionFichier() {
-		 /* Déclaration de variables */
+		/* Déclaration de variables */
 		ArrayList<String> allFiles = new ArrayList<String>();
 		File f = new File(this.chemin);
 		HeaderBloc blc =null;
-		
+
 		/* On liste les fichiers dans un tableau de fichier */
 		File[] listFiles = f.listFiles();
 		/* Si il n'y a pas de fichiers */
@@ -327,7 +328,7 @@ public class GestionFichier {
 				/* Ajout du fichier dans l'Array List*/
 				allFiles.add(listFiles[i].getName());
 		}
-		
+
 		/* On parcourt la liste de fichiers contenues dans l'ArrayList*/
 
 		for (int i=0; i<allFiles.size(); i++) {
@@ -360,15 +361,15 @@ public class GestionFichier {
 				}
 				/* On ajoute l'header bloc au fichier */
 				fichier.AjouterHeaderBloc(j, blc);
-				
+
 			}
 			/* On ajoute le fichier é la Hash Map */
 			this.listFichier.put(allFiles.get(i), fichier);
 		}
-		
+
 		return 0;
 	}
-	
+
 	public synchronized void DebutLire() {
 		nbrLireEnCours++;
 	}
@@ -376,10 +377,10 @@ public class GestionFichier {
 	public synchronized void FinLire() {
 		nbrLireEnCours--;	
 		notifyAll();
-			
-		}
-	
-	
+
+	}
+
+
 	public synchronized void DebutRecherche() {
 		nbrRechercheEnCours++;
 	}
@@ -387,8 +388,46 @@ public class GestionFichier {
 	public synchronized void FinRecherche() {
 		nbrRechercheEnCours--;	
 		notifyAll();
-			
+
+	}
+
+	public synchronized void supprimerFichier(Fichier f) {
+		for (int i=0; i<listFichier.size(); i++) {
+			if (listFichier.get(i).getNomFichier().equals(f.getNomFichier())) {
+				listFichier.remove(i, f);
+
+			}
 		}
-	
+	}
+
+	public void afficherDetailFichier(Fichier f) {
+		System.out.println("Nom du fichier" + f.getNomFichier());
+		System.out.println("Date du fichier" + f.getDate());
+		System.out.println("Emplacement du fichier" + f.getEmplacement());
+		System.out.println("Taille du fichier" + f.getTailleOctets());
+		System.out.println("Disponibilité du fichier" + this.EtatFichier(f.getNomFichier()));
+		System.out.println("List Header Blocs" + f.getListHeaderBlocs());
+
+	}
+
+	public synchronized void renommerFichier(Fichier f) {
+		Scanner sc = new Scanner(System.in);
+
+		for (int i=0; i<listFichier.size(); i++) {
+			if (listFichier.get(i).getNomFichier().equals(f.getNomFichier())) {
+				f.setNomFichier(sc.nextLine());
+
+			}
+		}
+	}
+	 
+	public void afficherFichierDisponible() {
+		for(int i=0; i<listFichier.size(); i++) {
+			if(this.EtatFichier(chemin)==0) {
+				System.out.println("Nom des fichiers disponibles" + listFichier.get(i).getNomFichier());
+			}
+		}
+	}
+
 
 }
