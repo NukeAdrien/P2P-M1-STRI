@@ -13,8 +13,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		/* Crée et instancie un GestionFichier client et un GestionFichier serveur */
-		GestionFichier sysFichiersServeur1 = new GestionFichier("./Upload/");
-		GestionFichier sysFichiersServeur2 = new GestionFichier("./Upload/");
+		GestionFichier sysFichiersServeur1 = new GestionFichier("./Upload/4444/");
+		GestionFichier sysFichiersServeur2 = new GestionFichier("./Upload/5555/");
 		sysFichiersServeur1.initGestionFichier();
 		sysFichiersServeur2.initGestionFichier();
 		GestionFichier sysFichiersClient = new GestionFichier("./Telechargment/");

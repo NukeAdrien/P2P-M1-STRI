@@ -12,18 +12,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /*
- * Classe GestionFichier --> Classe permettant de gï¿½rer un fichier (Lecture, Ecriture, etc ....)
+ * Classe GestionFichier --> Classe permettant de gérer un fichier (Lecture, Ecriture, etc ....)
  */
 public class GestionFichier {
 	
-	/* Dï¿½claration de variables */
+	/* Déclaration de variables */
 	HashMap<String, Fichier> listFichier;
 	String chemin;
 	int nbrLireEnCours,nbrRechercheEnCours,nbrAjoutEnCours;
 
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramï¿½tre un SocketClient et un gestion de fichier
-	 * Ce constructeur permet de crï¿½er un nouveau ClientDonnees.
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un SocketClient et un gestion de fichier
+	 * Ce constructeur permet de créer un nouveau ClientDonnees.
 	 */
 	public GestionFichier(String c) {
 		this.chemin = c;
@@ -32,28 +32,20 @@ public class GestionFichier {
 
 	 
 	/*
-	 * Mï¿½thode RechercheFichier : Mï¿½thode permettant avec un nom de fichier de retouner l'objet fichier correspondant
+	 * Méthode RechercheFichier : Méthode permettant avec un nom de fichier de retouner l'objet fichier correspondant
 	 * @param : le type de PDU en String
 	 * @return : l'objet Fichier du nom de fichier
 	 */
 
 	public Fichier RechercheFichier(String nomFichier) {
-		while(nbrAjoutEnCours != 0) {
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		this.DebutRecherche();
-		/* Dï¿½claration de fichiers */
+		/* Déclaration de fichiers */
 		Fichier recherche = null;
 		/* On parcourt une hash map de fichiers */
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
-			/* On compare la clï¿½ de la hash map avec le nom fichier */
+			/* On compare la clé de la hash map avec le nom fichier */
 			if(listFichier.getKey().compareTo(nomFichier) == 0) {
-				/* On rï¿½cupï¿½re le fichier */
+				/* On récupére le fichier */
 				recherche = this.listFichier.get(nomFichier);
 				break;
 			} 
@@ -64,15 +56,15 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Mï¿½thode EtatFichier : Mï¿½thode permettant de retourner l'ï¿½tat du fichier actuel
+	 * Méthode EtatFichier : Méthode permettant de retourner l'état du fichier actuel
 	 * @param : le nom du fichier
-	 * @return : -1 si non disponible, 0 si le fichier est en cours de tï¿½lï¿½chargement, 1 si le fichier est disponible
+	 * @return : -1 si non disponible, 0 si le fichier est en cours de téléchargement, 1 si le fichier est disponible
 	 */
 
 	public Integer EtatFichier(String nomFichier) {
-		/* Dï¿½claration de variables */
+		/* Déclaration de variables */
 		Fichier fichier = null;
-		/* On rï¿½cupï¿½re le nom de fichier (si il existe) */
+		/* On récupére le nom de fichier (si il existe) */
 		fichier = this.listFichier.get(nomFichier);
 		/* Si le fichier n'existe pas*/
 		if (fichier == null) {
@@ -91,7 +83,7 @@ public class GestionFichier {
 				/* Si la valeur du header bloc est a 0 */
 				if (headerbloc.getValue().getDisponible() == 0) {
 					/* Affichage d'un message */
-					System.out.println("Fichier en cours de tï¿½lï¿½chargement");
+					System.out.println("Fichier en cours de téléchargement");
 					return 0;
 				} 
 			}
@@ -101,20 +93,20 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Mï¿½thode Lire : Mï¿½thode permettant de lire un fichier
-	 * @param : le nom du fichier, le numï¿½ro de bloc ï¿½ lire
-	 * @return : le tableau d'octets correspondant aux donnï¿½es
+	 * Méthode Lire : Méthode permettant de lire un fichier
+	 * @param : le nom du fichier, le numéro de bloc é lire
+	 * @return : le tableau d'octets correspondant aux données
 	 */
 
 	public byte[] Lire(Fichier fichier, Integer numBloc) {
 		this.DebutLire();
-		/* Dï¿½claration de variables */
+		/* Déclaration de variables */
 		byte[] bloc = new byte[4000];
 		FileInputStream fileis = null;
 		int taille = bloc.length;
 		long offset = taille * numBloc;
 		
-		/* On rï¿½cupï¿½re l'emplacement du fichier */
+		/* On récupére l'emplacement du fichier */
 		File fle = new File(fichier.getEmplacement());
 		try {
 			/* On ouvre les flux */
@@ -136,9 +128,9 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Mï¿½thode Ecrire : Mï¿½thode permettant d'ï¿½crire dans un fichier
-	 * @param : le nom du fichier, le numï¿½ro de bloc dans lequel on ï¿½crira dans les donnï¿½es, et les donnï¿½es qui sont ï¿½crires
-	 * @return : 0 si ï¿½a s'est bien passï¿½e, 1 sinon
+	 * Méthode Ecrire : Méthode permettant d'écrire dans un fichier
+	 * @param : le nom du fichier, le numéro de bloc dans lequel on écrira dans les données, et les données qui sont écrires
+	 * @return : 0 si éa s'est bien passée, 1 sinon
 	 */
 	public synchronized Integer Ecrire(Fichier fichier, Integer numbloc, byte[] donnees) {
 		while(nbrLireEnCours != 0) {
@@ -149,30 +141,30 @@ public class GestionFichier {
 				e.printStackTrace();
 			}
 		}
-		/* On rï¿½cupï¿½re l'emplacement du fichier */
+		/* On récupére l'emplacement du fichier */
 		String file = fichier.getEmplacement();
-		/* Dï¿½claration d'un nouveau fichier */
+		/* Déclaration d'un nouveau fichier */
 		File fle = new File(file);
 		/* Si le fichier n'existe pas */
 		if (!fle.exists()) {
 			try {
-				/* On crï¿½e un nouveau fichier */
+				/* On crée un nouveau fichier */
 				fle.createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		/* Dï¿½claration de la taille */
+		/* Déclaration de la taille */
 		int taille = 4000;
-		/* Positionnement de l'offset en fonction des numï¿½ros de blocs */
+		/* Positionnement de l'offset en fonction des numéros de blocs */
 		long offset = taille * numbloc;
 		try {
-			/* Positionnement des flux pour l'ï¿½criture */
+			/* Positionnement des flux pour l'écriture */
 			FileOutputStream o = new FileOutputStream(fle, true);
 			/* Positionnement du curseur */
 			o.getChannel().position(offset);
-			/* Ecriture des donnï¿½es en fonction de la position du curseur */
+			/* Ecriture des données en fonction de la position du curseur */
 			o.write(donnees, 0, taille);
 			/* Fermeture des flux */
 			o.close();
@@ -185,7 +177,7 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Mï¿½thode getListFichier : Mï¿½thode permettant de rï¿½cupï¿½rer la liste des fichiers dans la HashMap d'un bloc
+	 * Méthode getListFichier : Méthode permettant de récupérer la liste des fichiers dans la HashMap d'un bloc
 	 * @return : la liste des fichiers
 	 */
 	public HashMap<String, Fichier> getListFichier() {
@@ -193,7 +185,7 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Mï¿½thode setListFichier : Mï¿½thode permettant de changer la liste des fichiers dans la HashMap d'un bloc
+	 * Méthode setListFichier : Méthode permettant de changer la liste des fichiers dans la HashMap d'un bloc
 	 * @return : la nouvelle liste des fichiers
 	 */
 	public void setListFichier(HashMap<String, Fichier> listFichier) {
@@ -201,29 +193,30 @@ public class GestionFichier {
 	
 	}
 	/*
-	 * Mï¿½thode getDisponible : Mï¿½thode permettant de rï¿½cupï¿½rer la disponibilitï¿½ d'un bloc
+	 * Méthode getDisponible : Méthode permettant de récupérer la disponibilité d'un bloc
 	 * @param : le nom du fichier, l'index du header bloc
-	 * @return : la disponibilitï¿½ du fichier : -1 si le fichier n'est dispo, 0 si le fichier est en cours de tï¿½lï¿½chargement et 1 si le fichier est disponible
+	 * @return : la disponibilité du fichier : -1 si le fichier n'est dispo, 0 si le fichier est en cours de téléchargement et 1 si le fichier est disponible
 	 */
 	public int getDisponible(String nom, Integer index) {
 		return this.listFichier.get(nom).getDisponible(index);
 	}
 
 	/*
-	 * Mï¿½thode setDisponible : Mï¿½thode permettant de changer la disponibilitï¿½ d'un bloc
-	 * @param : le nom du fichier, l'index du header bloc, la nouvelle disponibilitï¿½
-	 * @return : la nouvelle disponibilitï¿½ du fichier : -1 si le fichier n'est dispo, 0 si le fichier est en cours de tï¿½lï¿½chargement et 1 si le fichier est disponible
+	 * Méthode setDisponible : Méthode permettant de changer la disponibilité d'un bloc
+	 * @param : le nom du fichier, l'index du header bloc, la nouvelle disponibilité
+	 * @return : la nouvelle disponibilité du fichier : -1 si le fichier n'est dispo, 0 si le fichier est en cours de téléchargement et 1 si le fichier est disponible
 	 */
 	public void setDisponible(String nom, Integer index, int disponible) {
 		this.listFichier.get(nom).setDisponible(index, disponible);
 	}
 
 	/*
-	 * Mï¿½thode AjouterFichier : Mï¿½thode permettant d'ajouter un fichier ï¿½ la HashMap
-	 * @param : le fichier ï¿½ ajouter
+	 * Méthode AjouterFichier : Méthode permettant d'ajouter un fichier é la HashMap
+	 * @param : le fichier é ajouter
 	 */
-	public void AjouterFichier(Fichier f) {
-		while(nbrRechercheEnCours != 0 && nbrAjoutEnCours != 0) {
+	public synchronized void AjouterFichier(Fichier f) {
+		Fichier f2 = (Fichier)f.clone();
+		while(nbrRechercheEnCours != 0) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
@@ -234,13 +227,21 @@ public class GestionFichier {
 				return;
 			}
 		}
-		this.DebutAjout();
-		this.listFichier.put(f.getNomFichier(), f);
-		this.FinAjout();
+		this.listFichier.put(f2.getNomFichier(), f2);
+		/*
+		 * On change l'emplacement du fichier pour le mettre avec les autres fichiers
+		 * téléchargés
+		 */
+		this.listFichier.get(f2.getNomFichier()).setEmplacement(this.chemin+f2.getNomFichier());
+		/* On parcourt les headers blocs contenues dans le fichier */
+		for (Map.Entry<Integer, HeaderBloc> headerbloc : f2.getListHeaderBlocs().entrySet()) {
+			this.listFichier.get(f2.getNomFichier()).setDisponible(headerbloc.getKey(),-1);
+		}
+		notifyAll();
 	}
 
 	/*
-	 * Mï¿½thode getChemin : Mï¿½thode permettant de retourner le chemin pour un fichier donnï¿½
+	 * Méthode getChemin : Méthode permettant de retourner le chemin pour un fichier donné
 	 * @return : le chemin du fichier
 	 */
 	
@@ -249,7 +250,7 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Mï¿½thode getChemin : Mï¿½thode permettant de changer le chemin pour un fichier donnï¿½
+	 * Méthode getChemin : Méthode permettant de changer le chemin pour un fichier donné
 	 * @return : le nouveau chemin du fichier
 	 */
 	public void setChemin(String chemin) {
@@ -274,9 +275,9 @@ public class GestionFichier {
 	}*/
 
 	/*
-	 * Mï¿½thode getTailleFichier : Mï¿½thode permettant de rï¿½cpï¿½rer la taille du fichier.
+	 * Méthode getTailleFichier : Méthode permettant de récpérer la taille du fichier.
 	 * @param : Le nom du fichier
-	 * @return : la taille du fichier associï¿½e (en octets)
+	 * @return : la taille du fichier associée (en octets)
 	 */
 	
 	private Long getTailleFichier(String nomFichier) {
@@ -285,28 +286,28 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Mï¿½thode dateModifFichier : Mï¿½thode permettant de rï¿½cupï¿½rer la date de la derniï¿½re modification du fichier.
+	 * Méthode dateModifFichier : Méthode permettant de récupérer la date de la derniére modification du fichier.
 	 * @param : Le nom du fichier
-	 * @return : la date du fichier associï¿½e (en octets)
+	 * @return : la date du fichier associée (en octets)
 	 */
 	
 	private String dateModifFichier(String nomFichier) {
 		/* On parse dans le format d'une date */
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
-		/* Crï¿½ation nouveau fichier */
+		/* Création nouveau fichier */
 		File f = new File(nomFichier);
-		/* Fonction permettant de rï¿½cupï¿½rer la derniï¿½re date de modification */
+		/* Fonction permettant de récupérer la derniére date de modification */
 		Date d = new Date(f.lastModified());
 		/* Retour dans le format d'une date */
 		return sdf.format(d);
 
 	}
 	/*
-	 * Mï¿½thode initGestionFichier : Mï¿½thode permettant d'initialiser une gestion de fichier.
-	 * @return : 0 si ï¿½a s'est bien passï¿½e, 1 sinon*/
+	 * Méthode initGestionFichier : Méthode permettant d'initialiser une gestion de fichier.
+	 * @return : 0 si éa s'est bien passée, 1 sinon*/
 	 
 	public Integer initGestionFichier() {
-		 /* Dï¿½claration de variables */
+		 /* Déclaration de variables */
 		ArrayList<String> allFiles = new ArrayList<String>();
 		File f = new File(this.chemin);
 		HeaderBloc blc =null;
@@ -319,7 +320,7 @@ public class GestionFichier {
 		}
 		/* On parcourt la liste de fichiers*/
 		for (int i = 0; i < listFiles.length; i++) {
-			/* Si le fichier est un rï¿½pertoire */
+			/* Si le fichier est un répertoire */
 			if (listFiles[i].isDirectory()) {
 				//getFilesRec(allFiles, listFiles[i].toString());
 			} else
@@ -330,26 +331,26 @@ public class GestionFichier {
 		/* On parcourt la liste de fichiers contenues dans l'ArrayList*/
 
 		for (int i=0; i<allFiles.size(); i++) {
-			/* On rï¿½cupï¿½re la taille du fichier */
+			/* On récupére la taille du fichier */
 			double taillFich = this.getTailleFichier(this.chemin+allFiles.get(i));
-			/* On rï¿½cupï¿½re la derniï¿½re date de modification du fichier */
+			/* On récupére la derniére date de modification du fichier */
 			String date = this.dateModifFichier(allFiles.get(i));
-			/* On dï¿½claration un nouveau fichier */
+			/* On déclaration un nouveau fichier */
 			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin+allFiles.get(i), 
 					(long) taillFich);
-			/* On rï¿½cupï¿½re le nombre de blocs en fonction de la taille du fichier */
+			/* On récupére le nombre de blocs en fonction de la taille du fichier */
 			int nbBloc = (int) (taillFich/4000);
 			double tmp = taillFich/4000;
 			if(tmp > nbBloc) {
 				nbBloc++;
 			}
-			/* On parcourt les numï¿½ros du bloc */
+			/* On parcourt les numéros du bloc */
 			for (int j=0; j<nbBloc; j++) {
-				/* On initialise un tableau de bytes de donnï¿½es */
+				/* On initialise un tableau de bytes de données */
 				byte[] donnees = (byte[]) null;
-				/*On lit les donnï¿½es contenues dans le fichier */
+				/*On lit les données contenues dans le fichier */
 				donnees=this.Lire(fichier, j);
-				/* Si il n'y a pas de donnï¿½es */
+				/* Si il n'y a pas de données */
 				if (!(donnees != null)) {
 					/* Le bloc n'est pas disponible */
 					blc = new HeaderBloc(-1);
@@ -361,7 +362,7 @@ public class GestionFichier {
 				fichier.AjouterHeaderBloc(j, blc);
 				
 			}
-			/* On ajoute le fichier ï¿½ la Hash Map */
+			/* On ajoute le fichier é la Hash Map */
 			this.listFichier.put(allFiles.get(i), fichier);
 		}
 		
@@ -378,15 +379,6 @@ public class GestionFichier {
 			
 		}
 	
-	public synchronized void DebutAjout() {
-		nbrAjoutEnCours++;
-	}
-
-	public synchronized void FinAjout() {
-		nbrAjoutEnCours--;	
-		notifyAll();
-			
-		}
 	
 	public synchronized void DebutRecherche() {
 		nbrRechercheEnCours++;

@@ -2,12 +2,13 @@ package systeme.fichiers;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /*
  * Classe Fichier --> Classe permettant de créer et d'instancier un fichier
  */
 
-public class Fichier implements Serializable {
+public class Fichier implements Serializable,Cloneable {
 	
 	/* Déclaration de variables */
 	String nomFichier, auteur, date, emplacement;
@@ -167,4 +168,20 @@ public class Fichier implements Serializable {
 		this.listHeaderBlocs.put(index, hd);
 	}
 	
+	public Object clone() {
+		Fichier o = null;
+		try {
+			o = (Fichier) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		o.listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
+		for (Map.Entry<Integer, HeaderBloc> headerbloc : this.listHeaderBlocs.entrySet()) {
+			HeaderBloc t = new HeaderBloc(headerbloc.getValue().getDisponible());
+			HeaderBloc t2 = (HeaderBloc) t.clone();
+			o.listHeaderBlocs.put(headerbloc.getKey(),t);
+		}
+		return o;
+	}
 }

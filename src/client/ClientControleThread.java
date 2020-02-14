@@ -87,54 +87,38 @@ public class ClientControleThread implements Runnable {
 		/* Vérification de la reponse */
 		/* Si la commande correspond é celle de TSF */
 
-		if (requete.getCommande().compareTo("TSF") == 0) {
+		if (requete.getCommande().compareTo("TPF") == 0) {
 			/* Si le fichier existe */
 			if (requete.getFichier() != null) {
 				/* On récupére le fichier */
 				fichierDl = requete.getFichier();
+				System.out.println("Avant ajout");
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
 					/* On ajoute le fichier dans GestionFichier */
+					System.out.println("j'ajoute1");
 					sysFichiers.AjouterFichier(fichierDl);
-					/*
-					 * On change l'emplacement du fichier pour le mettre avec les autres fichiers
-					 * téléchargés
-					 */
-					sysFichiers.getListFichier().get(fichierDl.getNomFichier())
-							.setEmplacement(sysFichiers.getChemin() + fichierDl.getNomFichier());
-					/* On parcourt les headers blocs contenues dans le fichier */
-					for (Map.Entry<Integer, HeaderBloc> headerbloc : fichierDl.getListHeaderBlocs().entrySet()) {
-						sysFichiers.getListFichier().get(fichierDl.getNomFichier()).setDisponible(headerbloc.getKey(),
-								-1);
-					}
+					System.out.println("j'ajoute2");
 				}
+				System.out.println("apres ajout");
 				/* On crée une liste d'headers blocs */
 				HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
 				/* On parcourt les headers blocs */
 				for (Map.Entry<Integer, HeaderBloc> headerbloc : sysFichiers.getListFichier().get(nomFichier)
 						.getListHeaderBlocs().entrySet()) {
-					if (headerbloc.getValue().getDisponible() == -1 && requete.getFichier().getListHeaderBlocs()
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (headerbloc.getValue().getDisponible() == -1 && fichierDl.getListHeaderBlocs()
 							.get(headerbloc.getKey()).getDisponible() == 1) {
-						/*
-						 * Si le bloc n'est pas disponible mais que le fichier contient des blocs qui
-						 * sont disponibles
-						 */
-						if (sysFichiers.getListFichier().get(fichierDl.getNomFichier())
-								.getDisponible(headerbloc.getKey()) == -1
-								&& requete.getFichier().getListHeaderBlocs().get(headerbloc.getKey())
-										.getDisponible() == 1) {
-							sysFichiers.getListFichier().get(nomFichier).setDisponible(headerbloc.getKey(), 0);
-							listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
-							try {
-								Thread.sleep(10);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						} else {
-							if (requete.getFichier().getDisponible(headerbloc.getKey()) == -1) {
-								nbBlocIndisp++;
-							}
+						sysFichiers.getListFichier().get(nomFichier).setDisponible(headerbloc.getKey(), 0);
+						listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
+					} else {
+						if (requete.getFichier().getDisponible(headerbloc.getKey()) == -1) {
+							nbBlocIndisp++;
 						}
 					}
 				}
@@ -150,7 +134,8 @@ public class ClientControleThread implements Runnable {
 				/* Création d'un objet ClientDonnees */
 				ClientDonnees transfert = new ClientDonnees(sysFichiers, serveur);
 				/* Téléchargement du fichier */
-				transfert.Dowload(fichierDl, listHeaderBlocs);
+				System.out.println("Début du téléchargement des blocs pour" + ip + ":" + port);
+				transfert.Dowload(sysFichiers.getListFichier().get(fichierDl.getNomFichier()), listHeaderBlocs);
 				System.out.println(ip + ":" + port + " | J'ai télécharger : " + listHeaderBlocs.size() + "/"
 						+ sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
 				/* Fermeture du socket */
