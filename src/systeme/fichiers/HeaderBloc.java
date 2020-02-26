@@ -10,7 +10,6 @@ public class HeaderBloc implements Serializable, Cloneable {
 	
 	/* Déclaration de variables */
 	int disponible;
-	int nbrLecteurEnCours;
 	
 	/*
 	 * Constructeur HeaderBloc --> Ce constructeur prend en paramétre sa disponibilité. 
@@ -18,7 +17,6 @@ public class HeaderBloc implements Serializable, Cloneable {
 	 */
 	public HeaderBloc(int disponible) {
 		this.disponible = disponible;
-		this.nbrLecteurEnCours = 0;
 	}
 	
 	/*
@@ -35,21 +33,13 @@ public class HeaderBloc implements Serializable, Cloneable {
 	 * @param : la disponibilité du bloc de Fichier en Integer :  0 si le bloc est en cours de téléchargement,
 	 * -1 si le bloc n'existe pas et 1 si le bloc est disponible
 	 */
-	public synchronized void setDisponible(int disponible) {
+	public void setDisponible(int disponible) {
 
 		this.disponible = disponible;
 
 	}
 	
-	public synchronized void DebutLecture() {
-		nbrLecteurEnCours++;
-	}
-
-	public synchronized void FinLecture() {
-		nbrLecteurEnCours--;	
-		notifyAll();
-			
-		}
+	
 
 	public Object clone() {
 		HeaderBloc o = null;

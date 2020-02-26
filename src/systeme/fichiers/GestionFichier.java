@@ -20,21 +20,24 @@ public class GestionFichier {
 	/* Déclaration de variables */
 	HashMap<String, Fichier> listFichier;
 	String chemin;
-	int nbrLireEnCours,nbrRechercheEnCours,nbrAjoutEnCours;
+	int nbrLireEnCours, nbrRechercheEnCours, nbrAjoutEnCours, nbrLectureDispoEnCours = 0;
 
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un SocketClient et un gestion de fichier
-	 * Ce constructeur permet de créer un nouveau ClientDonnees.
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un
+	 * SocketClient et un gestion de fichier Ce constructeur permet de créer un
+	 * nouveau ClientDonnees.
 	 */
 	public GestionFichier(String c) {
 		this.chemin = c;
-		listFichier= new HashMap<String, Fichier>();
+		listFichier = new HashMap<String, Fichier>();
 	}
 
-
 	/*
-	 * Méthode RechercheFichier : Méthode permettant avec un nom de fichier de retouner l'objet fichier correspondant
+	 * Méthode RechercheFichier : Méthode permettant avec un nom de fichier de
+	 * retouner l'objet fichier correspondant
+	 * 
 	 * @param : le type de PDU en String
+	 * 
 	 * @return : l'objet Fichier du nom de fichier
 	 */
 
@@ -45,11 +48,11 @@ public class GestionFichier {
 		/* On parcourt une hash map de fichiers */
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			/* On compare la clé de la hash map avec le nom fichier */
-			if(listFichier.getKey().compareTo(nomFichier) == 0) {
+			if (listFichier.getKey().compareTo(nomFichier) == 0) {
 				/* On récupére le fichier */
 				recherche = this.listFichier.get(nomFichier);
 				break;
-			} 
+			}
 		}
 		this.FinRecherche();
 		/* On retourne le fichier */
@@ -57,9 +60,13 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Méthode EtatFichier : Méthode permettant de retourner l'état du fichier actuel
+	 * Méthode EtatFichier : Méthode permettant de retourner l'état du fichier
+	 * actuel
+	 * 
 	 * @param : le nom du fichier
-	 * @return : -1 si non disponible, 0 si le fichier est en cours de téléchargement, 1 si le fichier est disponible
+	 * 
+	 * @return : -1 si non disponible, 0 si le fichier est en cours de
+	 * téléchargement, 1 si le fichier est disponible
 	 */
 
 	public Integer EtatFichier(String nomFichier) {
@@ -67,7 +74,7 @@ public class GestionFichier {
 		Fichier fichier = null;
 		/* On récupére le nom de fichier (si il existe) */
 		fichier = this.listFichier.get(nomFichier);
-		/* Si le fichier n'existe pas*/
+		/* Si le fichier n'existe pas */
 		if (fichier == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Le fichier est inexistant ! ");
@@ -76,7 +83,7 @@ public class GestionFichier {
 		// On viens de parcourir la liste de Header Bloc contenue dans une HashMap
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.listHeaderBlocs.entrySet()) {
 			/* Si la valeur du header bloc est a -1 */
-			if(headerbloc.getValue().getDisponible() == -1) {
+			if (headerbloc.getValue().getDisponible() == -1) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Fichier inexistant");
 				return -1;
@@ -86,7 +93,7 @@ public class GestionFichier {
 					/* Affichage d'un message */
 					System.out.println("Fichier en cours de téléchargement");
 					return 0;
-				} 
+				}
 			}
 			/* Si on quitte la boucle for alors on retourne 1; */
 		}
@@ -95,7 +102,9 @@ public class GestionFichier {
 
 	/*
 	 * Méthode Lire : Méthode permettant de lire un fichier
+	 * 
 	 * @param : le nom du fichier, le numéro de bloc é lire
+	 * 
 	 * @return : le tableau d'octets correspondant aux données
 	 */
 
@@ -130,11 +139,14 @@ public class GestionFichier {
 
 	/*
 	 * Méthode Ecrire : Méthode permettant d'écrire dans un fichier
-	 * @param : le nom du fichier, le numéro de bloc dans lequel on écrira dans les données, et les données qui sont écrires
+	 * 
+	 * @param : le nom du fichier, le numéro de bloc dans lequel on écrira dans les
+	 * données, et les données qui sont écrires
+	 * 
 	 * @return : 0 si éa s'est bien passée, 1 sinon
 	 */
 	public synchronized Integer Ecrire(Fichier fichier, Integer numbloc, byte[] donnees) {
-		while(nbrLireEnCours != 0) {
+		while (nbrLireEnCours != 0) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
@@ -178,7 +190,9 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Méthode getListFichier : Méthode permettant de récupérer la liste des fichiers dans la HashMap d'un bloc
+	 * Méthode getListFichier : Méthode permettant de récupérer la liste des
+	 * fichiers dans la HashMap d'un bloc
+	 * 
 	 * @return : la liste des fichiers
 	 */
 	public HashMap<String, Fichier> getListFichier() {
@@ -186,45 +200,90 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Méthode setListFichier : Méthode permettant de changer la liste des fichiers dans la HashMap d'un bloc
+	 * Méthode setListFichier : Méthode permettant de changer la liste des fichiers
+	 * dans la HashMap d'un bloc
+	 * 
 	 * @return : la nouvelle liste des fichiers
 	 */
 	public void setListFichier(HashMap<String, Fichier> listFichier) {
 		this.listFichier = listFichier;
 
 	}
+
 	/*
-	 * Méthode getDisponible : Méthode permettant de récupérer la disponibilité d'un bloc
+	 * Méthode getDisponible : Méthode permettant de récupérer la disponibilité d'un
+	 * bloc
+	 * 
 	 * @param : le nom du fichier, l'index du header bloc
-	 * @return : la disponibilité du fichier : -1 si le fichier n'est dispo, 0 si le fichier est en cours de téléchargement et 1 si le fichier est disponible
+	 * 
+	 * @return : la disponibilité du fichier : -1 si le fichier n'est dispo, 0 si le
+	 * fichier est en cours de téléchargement et 1 si le fichier est disponible
 	 */
 	public int getDisponible(String nom, Integer index) {
-		return this.listFichier.get(nom).getDisponible(index);
+		int disp;
+		this.DebutLectureDispo();
+		disp = this.listFichier.get(nom).getDisponible(index);
+		this.FinLectureDispo();
+		return disp;
+
 	}
 
 	/*
-	 * Méthode setDisponible : Méthode permettant de changer la disponibilité d'un bloc
+	 * Méthode setDisponible : Méthode permettant de changer la disponibilité d'un
+	 * bloc
+	 * 
 	 * @param : le nom du fichier, l'index du header bloc, la nouvelle disponibilité
-	 * @return : la nouvelle disponibilité du fichier : -1 si le fichier n'est dispo, 0 si le fichier est en cours de téléchargement et 1 si le fichier est disponible
+	 * 
+	 * @return : la nouvelle disponibilité du fichier : -1 si le fichier n'est
+	 * dispo, 0 si le fichier est en cours de téléchargement et 1 si le fichier est
+	 * disponible
 	 */
-	public void setDisponible(String nom, Integer index, int disponible) {
-		this.listFichier.get(nom).setDisponible(index, disponible);
-	}
-
-	/*
-	 * Méthode AjouterFichier : Méthode permettant d'ajouter un fichier é la HashMap
-	 * @param : le fichier é ajouter
-	 */
-	public synchronized void AjouterFichier(Fichier f) {
-		Fichier f2 = (Fichier)f.clone();
-		while(nbrRechercheEnCours != 0) {
+	public synchronized void setDisponible(String nom, Integer index, int disponible) {
+		while (nbrLectureDispoEnCours != 0) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(this.RechercheFichier(f.nomFichier) != null) {
+		}
+		this.listFichier.get(nom).setDisponible(index, disponible);
+		notifyAll();
+	}
+
+	public synchronized int setReserver(String nom, Integer index) {
+		while (nbrLectureDispoEnCours > 0 && this.getDisponible(nom, index) == -1) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (this.getDisponible(nom, index) == 0 || this.getDisponible(nom, index) == 1) {
+			notifyAll();
+			return 1;
+		}
+		this.listFichier.get(nom).setDisponible(index, 0);
+		notifyAll();
+		return 0;
+	}
+
+	/*
+	 * Méthode AjouterFichier : Méthode permettant d'ajouter un fichier et la HashMap
+	 * 
+	 * @param : le fichier et ajouter
+	 */
+	public synchronized void AjouterFichier(Fichier f) {
+		Fichier f2 = (Fichier) f.clone();
+		while (nbrRechercheEnCours != 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (this.RechercheFichier(f.nomFichier) != null) {
 				return;
 			}
 		}
@@ -233,16 +292,18 @@ public class GestionFichier {
 		 * On change l'emplacement du fichier pour le mettre avec les autres fichiers
 		 * téléchargés
 		 */
-		this.listFichier.get(f2.getNomFichier()).setEmplacement(this.chemin+f2.getNomFichier());
+		this.listFichier.get(f2.getNomFichier()).setEmplacement(this.chemin + f2.getNomFichier());
 		/* On parcourt les headers blocs contenues dans le fichier */
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : f2.getListHeaderBlocs().entrySet()) {
-			this.listFichier.get(f2.getNomFichier()).setDisponible(headerbloc.getKey(),-1);
+			this.listFichier.get(f2.getNomFichier()).setDisponible(headerbloc.getKey(), -1);
 		}
 		notifyAll();
 	}
 
 	/*
-	 * Méthode getChemin : Méthode permettant de retourner le chemin pour un fichier donné
+	 * Méthode getChemin : Méthode permettant de retourner le chemin pour un fichier
+	 * donné
+	 * 
 	 * @return : le chemin du fichier
 	 */
 
@@ -251,33 +312,33 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Méthode getChemin : Méthode permettant de changer le chemin pour un fichier donné
+	 * Méthode getChemin : Méthode permettant de changer le chemin pour un fichier
+	 * donné
+	 * 
 	 * @return : le nouveau chemin du fichier
 	 */
 	public void setChemin(String chemin) {
 		this.chemin = chemin;
 	}
 
-	/*	private HashMap<String, Fichier> getFilesRec() {
-		File f = new File(nomFichier);
-		File[] listFiles = f.listFiles();
-		for (int i = 0; i < listFiles.length; i++) {
-			if (listFiles[i].isDirectory()) {
-				//getFilesRec(allFiles, listFiles[i].toString());
-			} else
-				allFiles.add(listFiles[i].toString());
-		}
-		for (int i=0; i<allFiles.size(); i++) {
-			this.getTailleFichier(nomFichier);
-			Fichier fichier = new Fichier(allFiles.get(i), this.dateModifFichier(nomFichier), this.chemin+allFiles.get(i), 
-					this.getTailleFichier(nomFichier));
-			this.listFichier.add(nomFichier, fichier);
-		}
-	}*/
+	/*
+	 * private HashMap<String, Fichier> getFilesRec() { File f = new
+	 * File(nomFichier); File[] listFiles = f.listFiles(); for (int i = 0; i <
+	 * listFiles.length; i++) { if (listFiles[i].isDirectory()) {
+	 * //getFilesRec(allFiles, listFiles[i].toString()); } else
+	 * allFiles.add(listFiles[i].toString()); } for (int i=0; i<allFiles.size();
+	 * i++) { this.getTailleFichier(nomFichier); Fichier fichier = new
+	 * Fichier(allFiles.get(i), this.dateModifFichier(nomFichier),
+	 * this.chemin+allFiles.get(i), this.getTailleFichier(nomFichier));
+	 * this.listFichier.add(nomFichier, fichier); } }
+	 */
 
 	/*
-	 * Méthode getTailleFichier : Méthode permettant de récpérer la taille du fichier.
+	 * Méthode getTailleFichier : Méthode permettant de récpérer la taille du
+	 * fichier.
+	 * 
 	 * @param : Le nom du fichier
+	 * 
 	 * @return : la taille du fichier associée (en octets)
 	 */
 
@@ -287,8 +348,11 @@ public class GestionFichier {
 	}
 
 	/*
-	 * Méthode dateModifFichier : Méthode permettant de récupérer la date de la derniére modification du fichier.
+	 * Méthode dateModifFichier : Méthode permettant de récupérer la date de la
+	 * derniére modification du fichier.
+	 * 
 	 * @param : Le nom du fichier
+	 * 
 	 * @return : la date du fichier associée (en octets)
 	 */
 
@@ -304,14 +368,17 @@ public class GestionFichier {
 
 	}
 	/*
-	 * Méthode initGestionFichier : Méthode permettant d'initialiser une gestion de fichier.
-	 * @return : 0 si éa s'est bien passée, 1 sinon*/
+	 * Méthode initGestionFichier : Méthode permettant d'initialiser une gestion de
+	 * fichier.
+	 * 
+	 * @return : 0 si éa s'est bien passée, 1 sinon
+	 */
 
 	public Integer initGestionFichier() {
 		/* Déclaration de variables */
 		ArrayList<String> allFiles = new ArrayList<String>();
 		File f = new File(this.chemin);
-		HeaderBloc blc =null;
+		HeaderBloc blc = null;
 
 		/* On liste les fichiers dans un tableau de fichier */
 		File[] listFiles = f.listFiles();
@@ -319,43 +386,42 @@ public class GestionFichier {
 		if (!(listFiles != null)) {
 			return -1;
 		}
-		/* On parcourt la liste de fichiers*/
+		/* On parcourt la liste de fichiers */
 		for (int i = 0; i < listFiles.length; i++) {
 			/* Si le fichier est un répertoire */
 			if (listFiles[i].isDirectory()) {
-				//getFilesRec(allFiles, listFiles[i].toString());
+				// getFilesRec(allFiles, listFiles[i].toString());
 			} else
-				/* Ajout du fichier dans l'Array List*/
+				/* Ajout du fichier dans l'Array List */
 				allFiles.add(listFiles[i].getName());
 		}
 
-		/* On parcourt la liste de fichiers contenues dans l'ArrayList*/
+		/* On parcourt la liste de fichiers contenues dans l'ArrayList */
 
-		for (int i=0; i<allFiles.size(); i++) {
+		for (int i = 0; i < allFiles.size(); i++) {
 			/* On récupére la taille du fichier */
-			double taillFich = this.getTailleFichier(this.chemin+allFiles.get(i));
+			double taillFich = this.getTailleFichier(this.chemin + allFiles.get(i));
 			/* On récupére la derniére date de modification du fichier */
 			String date = this.dateModifFichier(allFiles.get(i));
 			/* On déclaration un nouveau fichier */
-			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin+allFiles.get(i), 
-					(long) taillFich);
+			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin + allFiles.get(i), (long) taillFich);
 			/* On récupére le nombre de blocs en fonction de la taille du fichier */
-			int nbBloc = (int) (taillFich/4000);
-			double tmp = taillFich/4000;
-			if(tmp > nbBloc) {
+			int nbBloc = (int) (taillFich / 4000);
+			double tmp = taillFich / 4000;
+			if (tmp > nbBloc) {
 				nbBloc++;
 			}
 			/* On parcourt les numéros du bloc */
-			for (int j=0; j<nbBloc; j++) {
+			for (int j = 0; j < nbBloc; j++) {
 				/* On initialise un tableau de bytes de données */
 				byte[] donnees = (byte[]) null;
-				/*On lit les données contenues dans le fichier */
-				donnees=this.Lire(fichier, j);
+				/* On lit les données contenues dans le fichier */
+				donnees = this.Lire(fichier, j);
 				/* Si il n'y a pas de données */
 				if (!(donnees != null)) {
 					/* Le bloc n'est pas disponible */
 					blc = new HeaderBloc(-1);
-				}else {
+				} else {
 					/* Le bloc est disponible */
 					blc = new HeaderBloc(1);
 				}
@@ -375,24 +441,23 @@ public class GestionFichier {
 	}
 
 	public synchronized void FinLire() {
-		nbrLireEnCours--;	
+		nbrLireEnCours--;
 		notifyAll();
 
 	}
-
 
 	public synchronized void DebutRecherche() {
 		nbrRechercheEnCours++;
 	}
 
 	public synchronized void FinRecherche() {
-		nbrRechercheEnCours--;	
+		nbrRechercheEnCours--;
 		notifyAll();
 
 	}
 
 	public synchronized void supprimerFichier(Fichier f) {
-		for (int i=0; i<listFichier.size(); i++) {
+		for (int i = 0; i < listFichier.size(); i++) {
 			if (listFichier.get(i).getNomFichier().equals(f.getNomFichier())) {
 				listFichier.remove(i, f);
 
@@ -413,21 +478,30 @@ public class GestionFichier {
 	public synchronized void renommerFichier(Fichier f) {
 		Scanner sc = new Scanner(System.in);
 
-		for (int i=0; i<listFichier.size(); i++) {
+		for (int i = 0; i < listFichier.size(); i++) {
 			if (listFichier.get(i).getNomFichier().equals(f.getNomFichier())) {
 				f.setNomFichier(sc.nextLine());
 
 			}
 		}
 	}
-	 
+
 	public void afficherFichierDisponible() {
-		for(int i=0; i<listFichier.size(); i++) {
-			if(this.EtatFichier(chemin)==0) {
+		for (int i = 0; i < listFichier.size(); i++) {
+			if (this.EtatFichier(chemin) == 0) {
 				System.out.println("Nom des fichiers disponibles" + listFichier.get(i).getNomFichier());
 			}
 		}
 	}
 
+	public synchronized void DebutLectureDispo() {
+		nbrLectureDispoEnCours++;
+	}
+
+	public synchronized void FinLectureDispo() {
+		nbrLectureDispoEnCours--;
+		notifyAll();
+
+	}
 
 }

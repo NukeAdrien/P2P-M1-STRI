@@ -92,15 +92,11 @@ public class ClientControleThread implements Runnable {
 			if (requete.getFichier() != null) {
 				/* On récupére le fichier */
 				fichierDl = requete.getFichier();
-				System.out.println("Avant ajout");
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
 					/* On ajoute le fichier dans GestionFichier */
-					System.out.println("j'ajoute1");
 					sysFichiers.AjouterFichier(fichierDl);
-					System.out.println("j'ajoute2");
-				}
-				System.out.println("apres ajout");
+				} 
 				/* On crée une liste d'headers blocs */
 				HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
 				/* On parcourt les headers blocs */
@@ -112,10 +108,11 @@ public class ClientControleThread implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if (headerbloc.getValue().getDisponible() == -1 && fichierDl.getListHeaderBlocs()
-							.get(headerbloc.getKey()).getDisponible() == 1) {
-						sysFichiers.getListFichier().get(nomFichier).setDisponible(headerbloc.getKey(), 0);
-						listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
+					if (sysFichiers.getDisponible(fichierDl.getNomFichier(), headerbloc.getKey()) == -1
+							&& fichierDl.getListHeaderBlocs().get(headerbloc.getKey()).getDisponible() == 1) {
+						if (sysFichiers.setReserver(fichierDl.getNomFichier(), headerbloc.getKey()) == 0) {
+							listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
+						}
 					} else {
 						if (requete.getFichier().getDisponible(headerbloc.getKey()) == -1) {
 							nbBlocIndisp++;
@@ -153,5 +150,6 @@ public class ClientControleThread implements Runnable {
 
 			return;
 		}
+		
 	}
 }

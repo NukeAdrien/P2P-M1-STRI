@@ -135,11 +135,7 @@ public class Fichier implements Serializable,Cloneable {
 	 */
 	
 	public int getDisponible(Integer index) {
-		int disp;
-		this.listHeaderBlocs.get(index).DebutLecture();
-		disp =this.listHeaderBlocs.get(index).getDisponible();
-		this.listHeaderBlocs.get(index).FinLecture();
-		return disp;
+		return this.listHeaderBlocs.get(index).getDisponible();
 	}
 	
 	/*
@@ -148,7 +144,7 @@ public class Fichier implements Serializable,Cloneable {
 	 * @param : Le nouvel index d'un des blocs constituant la PDU et sa nouvelle disponibilité
 	 */
 	
-	public synchronized void setDisponible(Integer index, int disponible) {
+	public void setDisponible(Integer index, int disponible) {
 		this.listHeaderBlocs.get(index).setDisponible(disponible);
 	}
 	
