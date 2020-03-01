@@ -17,8 +17,9 @@ public class ClientControle {
 	GestionFichier sysFichiers;
 
 	/*
-	 * Constructeur ClientControle --> Ce constructeur prend en paramétre le protocole de transport choisie et un GestionFichier
-	 * Ce constructeur permet de créer un nouveau ClientControle.
+	 * Constructeur ClientControle --> Ce constructeur prend en paramétre le
+	 * protocole de transport choisie et un GestionFichier Ce constructeur permet de
+	 * créer un nouveau ClientControle.
 	 */
 
 	public ClientControle(String t, GestionFichier g) {
@@ -27,7 +28,9 @@ public class ClientControle {
 	}
 
 	/*
-	 * Méthode TelechargementSimple : Méthode permettant de réaliser un simple téléchargement
+	 * Méthode TelechargementSimple : Méthode permettant de réaliser un simple
+	 * téléchargement
+	 * 
 	 * @param : le nom du fichier, l'adresse ip et le numéro de port
 	 */
 
@@ -38,7 +41,10 @@ public class ClientControle {
 		PDUControle simpleTel = new PDUControle("CTRL", "TSF", nomFichier, null);
 		/* Cree le socket en indiquant le mode de transport (TCP ou UDP) */
 		SocketClient serveur = new SocketClient(transport);
-		/* Si il y a un probléme avec l'initialisation avec le socket, l'adresse IP et le port du destinataire */
+		/*
+		 * Si il y a un probléme avec l'initialisation avec le socket, l'adresse IP et
+		 * le port du destinataire
+		 */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Impossible de joindre le serveur");
@@ -56,7 +62,7 @@ public class ClientControle {
 		PDU reponse = null;
 		/* On récupére la PDU recu */
 		reponse = serveur.RecevoirPDU();
-		/* Si la PDU est pas nulle*/
+		/* Si la PDU est pas nulle */
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur");
@@ -79,7 +85,10 @@ public class ClientControle {
 			if (simpleTel.getFichier() != null) {
 				/* On récupére le fichier */
 				fichierDl = simpleTel.getFichier();
-				/* On change l'emplacement du fichier pour le mettre avec les autres fichiers téléchargés */
+				/*
+				 * On change l'emplacement du fichier pour le mettre avec les autres fichiers
+				 * téléchargés
+				 */
 				fichierDl.setEmplacement(sysFichiers.getChemin() + fichierDl.getNomFichier());
 				/* On ajoute le fichier dans GestionFichier */
 				sysFichiers.AjouterFichier(simpleTel.getFichier());
@@ -117,10 +126,12 @@ public class ClientControle {
 	}
 
 	/*
-	 * Méthode TelechargementParallele : Méthode permettant de réaliser un téléchargement sur plusieurs serveurs
+	 * Méthode TelechargementParallele : Méthode permettant de réaliser un
+	 * téléchargement sur plusieurs serveurs
+	 * 
 	 * @param : le nom du fichier, les adresses ip's et les numéros de ports
 	 */
-	
+
 	public void TelechargementParallele(String nomFichier, List<String> ip, List<Integer> port) {
 		/* Déclaration de variables */
 		int i;
@@ -132,7 +143,12 @@ public class ClientControle {
 			/* On crée un Thread */
 			Thread thread = new Thread(cct);
 			/* On lance un Thread */
-			thread.start();
+			if (i == ip.size() - 1) {
+				thread.run();
+			} else {
+				thread.start();
+			}
+
 		}
 		return;
 	}

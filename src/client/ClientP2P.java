@@ -33,7 +33,6 @@ public class ClientP2P implements Runnable {
 		
 		/* Déclaration d'une varibale de type Scanner*/
 		Scanner sc = new Scanner(System.in);
-		
 		/* On laisse le choix à l'utilisateur*/
 		while (fin == false) {
 			choix = -1;
