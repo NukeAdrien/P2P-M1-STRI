@@ -456,40 +456,71 @@ public class GestionFichier {
 
 	}
 
-	public synchronized void supprimerFichier(Fichier f) {
-		for (int i = 0; i < listFichier.size(); i++) {
-			if (listFichier.get(i).getNomFichier().equals(f.getNomFichier())) {
-				listFichier.remove(i, f);
-
+	public synchronized void supprimerFichier(Fichier f2) {
+		try {
+			File f = new File(this.chemin+f2.getNomFichier());
+			while (nbrRechercheEnCours != 0) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (this.RechercheFichier(f2.nomFichier) != null) {
+					return;
+				}
 			}
+			this.listFichier.remove(f2.getNomFichier());
+			f.delete();
+			notifyAll();
+		} catch (Exception e) {
+			System.out.println("Fichier introuvable");
 		}
 	}
 
-	public void afficherDetailFichier(Fichier f) {
-		System.out.println("Nom du fichier" + f.getNomFichier());
-		System.out.println("Date du fichier" + f.getDate());
-		System.out.println("Emplacement du fichier" + f.getEmplacement());
-		System.out.println("Taille du fichier" + f.getTailleOctets());
-		System.out.println("Disponibilité du fichier" + this.EtatFichier(f.getNomFichier()));
-		System.out.println("List Header Blocs" + f.getListHeaderBlocs());
+	public void afficherDetailFichier(String c) {
+		Fichier f = this.RechercheFichier(c);
+		try {
+			System.out.println("Nom du fichier : " + f.getNomFichier());
+			System.out.println("Date du fichier : " + f.getDate());
+			System.out.println("Emplacement du fichier : " + f.getEmplacement());
+			System.out.println("Taille du fichier : " + f.getTailleOctets() + " octets");
+			System.out.println("Disponibilité du fichier : " + this.EtatFichier(f.getNomFichier()));
+			System.out.println("List Header Blocs : " + f.getListHeaderBlocs().toString());
+		}	catch (Exception e) {
+			System.out.println("Fichier introuvable");
+		}
 
 	}
+	public synchronized void renommerFichier(Fichier f2, String nom) {
+		try {
+			File f = new File(this.chemin+f2.getNomFichier());
+			File f1 = new File(this.chemin+nom);
 
-	public synchronized void renommerFichier(Fichier f) {
-		Scanner sc = new Scanner(System.in);
-
-		for (int i = 0; i < listFichier.size(); i++) {
-			if (listFichier.get(i).getNomFichier().equals(f.getNomFichier())) {
-				f.setNomFichier(sc.nextLine());
-
+			while (nbrRechercheEnCours != 0) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (this.RechercheFichier(f2.nomFichier) != null) {
+					return;
+				}
 			}
+			this.listFichier.replace(nom,f2);
+			f2.setNomFichier(f1.getName());
+			f.renameTo(f1);
+			notifyAll();
+		} catch (Exception e) {
+			System.out.println("Fichier introuvable");
 		}
 	}
 
 	public void afficherFichierDisponible() {
-		for (int i = 0; i < listFichier.size(); i++) {
-			if (this.EtatFichier(chemin) == 0) {
-				System.out.println("Nom des fichiers disponibles" + listFichier.get(i).getNomFichier());
+		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
+			if (this.EtatFichier(listFichier.getKey()) == 0) {
+				System.out.println("Ce fichier est disponible : " + listFichier.getKey());
 			}
 		}
 	}
