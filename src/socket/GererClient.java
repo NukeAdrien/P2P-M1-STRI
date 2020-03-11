@@ -20,6 +20,7 @@ public class GererClient implements Runnable {
 	GestionProtocole gestion;
 	PDU requete, reponse;
 	Boolean quitter = false;
+	String adresse;
 
 	/*
 	 * Constructeur GererClient --> Ce constructeur prend en paramètres un socket
@@ -57,7 +58,10 @@ public class GererClient implements Runnable {
 				return;
 			} else {
 				/* Si il n'y a pas de problèmes alors on va pouvoir gérer la requête */
-				reponse = gestion.gestionRequete(requete);
+				adresse = sockClient.getInetAddress().toString();
+				adresse = adresse + ":";
+				adresse = adresse + sockClient.getPort();
+				reponse = gestion.gestionRequete(requete, adresse);
 				/*
 				 * Après la gestion de la requete, on envoie la PDU au client pour une
 				 * éventuelle réception

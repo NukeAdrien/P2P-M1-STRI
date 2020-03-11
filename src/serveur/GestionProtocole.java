@@ -9,6 +9,7 @@ import envoie.reception.*;
 
 public class GestionProtocole {
 	/* Déclaration de variables */
+	ServeurAnnuaire annuaire;
 	ServeurControle controle;
 	ServeurDonnees donnees;
 	PDU reponse;
@@ -22,13 +23,23 @@ public class GestionProtocole {
 		donnees = sd;
 	}
 	
+	/*
+	 * Constructeur GestionProtocole --> Ce constructeur prend en paramètre un ServeurControle et ServeurDonnees
+	 * Ce constructeur permet de créer un nouveau GestionProtocole.
+	 */
+	public GestionProtocole(ServeurControle sc, ServeurDonnees sd, ServeurAnnuaire sa) {
+		annuaire = sa;
+		controle = sc;
+		donnees = sd;
+	}
+	
 	
 	/*
 	 * Méthode gestionRequete : Méthode permettant de gérer la requête traitée
 	 * @param : la requête PDU à traiter
 	 * @return : la PDU une fois la requête traitée
 	 */
-	public PDU gestionRequete(PDU requetePDU) {
+	public PDU gestionRequete(PDU requetePDU, String adresse) {
 		/* Si la variable requetePDU est une instance de PDUControle*/
 		if (requetePDU instanceof PDUControle) {
 			/* On caste la variable en PDUControle*/
@@ -54,7 +65,30 @@ public class GestionProtocole {
 			PDUDonnees requete = (PDUDonnees )requetePDU;
 			/*On retourne les donnees lues*/
 			return donnees.Upload(requete);
-		} else {
+			
+		} else if (requetePDU instanceof PDUAnnuaire) {
+			/* On caste la variable en PDUDonnees*/
+			PDUAnnuaire requete = (PDUAnnuaire)requetePDU;
+			/* Suivant la commande contenue dans la variable requete, casté en PDUControle*/
+			switch (requete.getType()) {
+			/* Si c'est TSF */
+			case "REGISTRATION":
+				/* Alors on applique la méthode TSF indiquant que les blocs sont disponibles*/
+				reponse = annuaire.Registration(requete,adresse);
+				return reponse;
+			case "SEARCH":
+				reponse = annuaire.Search(requete);
+				return reponse;
+			case "DOWLOAD":
+				reponse = annuaire.Dowload(requete);
+				return reponse;
+			default:
+				/*Affichage d'un message d'erreur*/
+				System.out.println("Erreur requete inexistante");
+				return null;
+			}
+			
+		}else {
 			return null;
 		}
 	}

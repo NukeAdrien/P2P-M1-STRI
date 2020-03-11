@@ -40,8 +40,7 @@ public class ClientP2P implements Runnable {
 			while (choix < 0 || choix > 4) {
 				System.out.println("1 - Télécharger un simple fichier");
 				System.out.println("2 - Télécharger un fichier depuis plusieur serveur");
-				System.out.println("3 - Télécharger en P2P depuis plusieur serveur");
-				System.out.println("4 - Télécharger en P2P");
+				System.out.println("3 - Télécharger en P2P");
 				System.out.println("5 - Voir la liste des fichiers disponible");
 				System.out.println("6 - Vos fichiers");
 				System.out.println("Entrez votre choix :");
