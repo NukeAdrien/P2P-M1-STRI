@@ -2,8 +2,10 @@ package client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import systeme.fichiers.Fichier;
 import systeme.fichiers.GestionFichier;
 
 /*
@@ -13,7 +15,7 @@ import systeme.fichiers.GestionFichier;
 public class ClientP2P implements Runnable {
 	/* Déclaration de variables */
 	GestionFichier sysFichiers;
-	
+
 	/*
 	 * Constructeur ClientP2P --> Ce constructeur prend en paramètre un gestion de fichier
 	 * Ce constructeur permet de créer un nouveau ClientP2P.
@@ -21,7 +23,7 @@ public class ClientP2P implements Runnable {
 	public ClientP2P(GestionFichier g ) {
 		sysFichiers = g;
 	}
-	
+
 	/* Méthode run : méthode d'exécution du thread */
 	public void run() {
 		/* Déclaration de variables */
@@ -30,26 +32,29 @@ public class ClientP2P implements Runnable {
 		boolean fin= false;
 		String nomFichier,ip;
 		ClientControle controle = new ClientControle("TCP",sysFichiers);
-		
+
 		/* Déclaration d'une varibale de type Scanner*/
 		Scanner sc = new Scanner(System.in);
+		Scanner scan = new Scanner(System.in);
+
 		/* On laisse le choix à l'utilisateur*/
 		while (fin == false) {
 			choix = -1;
 			System.out.println("Menu : ");
-			while (choix < 0 || choix > 4) {
+			while (choix < 0 || choix > 6) {
 				System.out.println("1 - Télécharger un simple fichier");
 				System.out.println("2 - Télécharger un fichier depuis plusieur serveur");
 				System.out.println("3 - Télécharger en P2P");
 				System.out.println("5 - Voir la liste des fichiers disponible");
 				System.out.println("6 - Vos fichiers");
+
 				System.out.println("Entrez votre choix :");
 				if(sc.hasNextInt()){
-		            choix = sc.nextInt();
-		        }else{
-		            sc.nextLine();
-		            System.out.println("Entrer invalide");
-		        }
+					choix = sc.nextInt();
+				}else{
+					sc.nextLine();
+					System.out.println("Entrer invalide");
+				}
 				if (choix < 0 && choix > 6) {
 					System.out.println("Erreur saisie");
 				}
@@ -103,6 +108,90 @@ public class ClientP2P implements Runnable {
 				break;
 			case 4:
 				break;
+			case 5:
+				sysFichiers=new GestionFichier("./Telechargment/");		
+				this.sysFichiers.initGestionFichier();
+				this.sysFichiers.afficherFichierDisponible();
+				break;
+			case 6:
+				/* Déclaration d'une varibale de type Scanner*/
+				sc = new Scanner(System.in);
+				/* On laisse le choix à l'utilisateur*/
+				while (fin == false) {
+					choix = -1;
+					System.out.println("Menu : ");
+					while (choix < 0 || choix > 3) {
+						System.out.println("1 - Afficher les details du fichier");
+						System.out.println("2 - Supprimer un fichier");
+						System.out.println("3 - Renommer un fichier");
+						System.out.println("Entrez votre choix :");
+						if(sc.hasNextInt()){
+							choix = sc.nextInt();
+						}else{
+							sc.nextLine();
+							System.out.println("Entrer invalide");
+						}
+						if (choix < 0 && choix > 3) {
+							System.out.println("Erreur saisie");
+						}
+					}
+					switch (choix) {
+					case 1:
+						String res = null;
+						try {
+							System.out.println("Veuillez entrer le nom du fichier : ");
+							sysFichiers=new GestionFichier("./Telechargment/");		
+							res=scan.next();
+							this.sysFichiers.initGestionFichier();
+							this.sysFichiers.afficherDetailFichier(res);
+						}
+						catch (NoSuchElementException e) {
+							System.out.println("Aucune entrée trouvée");
+							e.printStackTrace();
+						}
+						break;
+					case 2: 
+						res = null;
+						try {
+							System.out.println("Veuillez entrer le nom du fichier : ");
+							sysFichiers=new GestionFichier("./Telechargment/");		
+							res=scan.next();
+							this.sysFichiers.initGestionFichier();
+							Fichier red = this.sysFichiers.RechercheFichier(res);
+							this.sysFichiers.supprimerFichier(red);
+							System.out.println(this.sysFichiers.getListFichier());
+						}
+						catch (NoSuchElementException e) {
+							System.out.println("Aucune entrée trouvée");
+							e.printStackTrace();
+						}
+						break;
+					case 3:
+						res = null;
+						try {
+							System.out.println("Veuillez entrer le nom du fichier à renommer : ");
+							sysFichiers=new GestionFichier("./Telechargment/");		
+							res=scan.next();
+							this.sysFichiers.initGestionFichier();
+							Fichier red = this.sysFichiers.RechercheFichier(res);
+							res = null;
+							System.out.println("Veuillez entrer le nouveau nom du fichier : ");
+							res=scan.next();
+							this.sysFichiers.renommerFichier(red, res);
+							System.out.println(this.sysFichiers.getListFichier());
+							this.sysFichiers.afficherDetailFichier(res);
+						}
+						catch (NoSuchElementException e) {
+							System.out.println("Aucune entrée trouvée");
+							e.printStackTrace();
+						}
+						break;
+					default :
+						System.out.println("Erreur saisie");
+						break;
+					}
+				}
+
 			default:
 				/* Sinon il y a une erreur de saisie */
 				System.out.println(choix);
@@ -110,7 +199,7 @@ public class ClientP2P implements Runnable {
 				return;
 			}
 
-			
+
 
 		}
 		/* On ferme le scanner */
