@@ -1,7 +1,3 @@
-/systeme/
-/client/
-/envoie/
-/main/
 /serveur/
-/socket/
-/annuaire/
+/envoie/
+/client/

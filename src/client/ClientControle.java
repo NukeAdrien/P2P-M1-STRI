@@ -152,17 +152,14 @@ public class ClientControle {
 		}
 		return;
 	}
-	
+
 	/*
-	 * Méthode 
+	 * Méthode
 	 * 
 	 * 
-	 * @param : 
+	 * @param :
 	 */
 
-	public void TelechargementAnnuaire(String nomFichier, List<String> ip, List<Integer> port) {
-
-		return;
-	}
 	
+
 }

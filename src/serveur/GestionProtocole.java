@@ -54,6 +54,8 @@ public class GestionProtocole {
 			case "TPF":
 				reponse = controle.TPF(requete);
 				return reponse;
+			case "PING":
+				return reponse = new PDUControle("CTRL", "PING", null, null);
 			default:
 				/*Affichage d'un message d'erreur*/
 				System.out.println("Erreur requete inexistante");
@@ -74,7 +76,7 @@ public class GestionProtocole {
 			/* Si c'est TSF */
 			case "REGISTRATION":
 				/* Alors on applique la méthode TSF indiquant que les blocs sont disponibles*/
-				reponse = annuaire.Registration(requete,adresse);
+				reponse = annuaire.Inscription(requete,adresse);
 				return reponse;
 			case "SEARCH":
 				reponse = annuaire.Search(requete);

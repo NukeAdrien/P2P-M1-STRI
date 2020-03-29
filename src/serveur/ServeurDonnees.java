@@ -37,6 +37,7 @@ public class ServeurDonnees {
 		if (bloc != null) {
 			/*On encapsule les données lues dans une PDUDonnees pour pouvoir les envoyer par la suite */
 			reponse = new PDUDonnees("DATA",null, requete.getIndex(), bloc);
+			sysFichier.getNbUpload();
 		}else {
 			/* Affichage d'une requête d'erreur */
 			reponse = new PDUDonnees("ERR","Erreur lors de la lecture du bloc : "+requete.getIndex(), requete.getIndex(),null);

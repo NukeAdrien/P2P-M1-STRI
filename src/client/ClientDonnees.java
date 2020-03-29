@@ -106,6 +106,8 @@ public class ClientDonnees {
 				}
 				/* Si il y a pas eu de problèmes, on indique que ce bloc est disponible*/
 				sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), 1);
+				/*Incrémente le nombre de téléchargement*/
+				sysFichiers.nbDowloadInc();
 			/* Si la variable reponse a un type de PDU correspondant à ERR */
 			} else if (reponse.getType().compareTo("ERR") == 0) {
 				/* On récupère les données qu'elle a pu recevoir */

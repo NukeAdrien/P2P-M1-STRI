@@ -21,7 +21,8 @@ public class GestionFichier {
 	HashMap<String, Fichier> listFichier;
 	String chemin;
 	int nbrLireEnCours, nbrRechercheEnCours, nbrAjoutEnCours, nbrLectureDispoEnCours = 0;
-
+	int nbDowload;
+	int nbUpload;
 	/*
 	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un
 	 * SocketClient et un gestion de fichier Ce constructeur permet de créer un
@@ -30,6 +31,8 @@ public class GestionFichier {
 	public GestionFichier(String c) {
 		this.chemin = c;
 		listFichier = new HashMap<String, Fichier>();
+		this.nbDowload = 0;
+		this.nbUpload = 0;
 	}
 
 	/*
@@ -80,6 +83,27 @@ public class GestionFichier {
 			System.out.println("Le fichier est inexistant ! ");
 			return -1;
 		}
+		// On viens de parcourir la liste de Header Bloc contenue dans une HashMap
+		for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.listHeaderBlocs.entrySet()) {
+			/* Si la valeur du header bloc est a -1 */
+			if (headerbloc.getValue().getDisponible() == -1) {
+				/* Affichage d'un message d'erreur */
+				System.out.println("Fichier inexistant");
+				return -1;
+			} else {
+				/* Si la valeur du header bloc est a 0 */
+				if (headerbloc.getValue().getDisponible() == 0) {
+					/* Affichage d'un message */
+					System.out.println("Fichier en cours de téléchargement");
+					return 0;
+				}
+			}
+			/* Si on quitte la boucle for alors on retourne 1; */
+		}
+		return 1;
+	}
+	
+	public Integer EtatFichier(Fichier fichier) {
 		// On viens de parcourir la liste de Header Bloc contenue dans une HashMap
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.listHeaderBlocs.entrySet()) {
 			/* Si la valeur du header bloc est a -1 */
@@ -534,5 +558,31 @@ public class GestionFichier {
 		notifyAll();
 
 	}
+	
+	public synchronized void nbDowloadInc() {
+		this.nbDowload++;
+	}
+	
+	public synchronized void nbUploadInc() {
+		this.nbUpload++;
+	}
+
+	public synchronized int getNbDowload() {
+		return nbDowload;
+	}
+
+	public synchronized int getNbUpload() {
+		return nbUpload;
+	}
+
+	public void setNbDowload(int nbDowload) {
+		this.nbDowload = nbDowload;
+	}
+
+	public void setNbUpload(int nbUpload) {
+		this.nbUpload = nbUpload;
+	}
+	
+	
 
 }
