@@ -38,8 +38,6 @@ public class GererClient implements Runnable {
 		Envoie envoieClient = new Envoie(sockClient);
 		/* On reçoit la PDU du client */
 		Recevoir receptionClient = new Recevoir(sockClient);
-		/* Affichage d'un message de succès */
-		System.out.println("Reception du client");
 		requete = null;
 		requete = receptionClient.RecevoirPDU();
 		/* Tant que la connexion est toujours active */
@@ -59,8 +57,7 @@ public class GererClient implements Runnable {
 			} else {
 				/* Si il n'y a pas de problèmes alors on va pouvoir gérer la requête */
 				adresse = sockClient.getInetAddress().toString();
-				adresse = adresse + ":";
-				adresse = adresse + sockClient.getPort();
+				adresse = adresse.substring(1);
 				reponse = gestion.gestionRequete(requete, adresse);
 				/*
 				 * Après la gestion de la requete, on envoie la PDU au client pour une

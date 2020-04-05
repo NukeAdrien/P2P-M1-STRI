@@ -72,7 +72,7 @@ public class GestionProtocole {
 			/* On caste la variable en PDUDonnees*/
 			PDUAnnuaire requete = (PDUAnnuaire)requetePDU;
 			/* Suivant la commande contenue dans la variable requete, casté en PDUControle*/
-			switch (requete.getType()) {
+			switch (requete.getMethode()) {
 			/* Si c'est TSF */
 			case "REGISTRATION":
 				/* Alors on applique la méthode TSF indiquant que les blocs sont disponibles*/

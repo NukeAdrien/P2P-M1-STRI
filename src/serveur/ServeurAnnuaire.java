@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import envoie.reception.PDU;
 import envoie.reception.PDUAnnuaire;
-import envoie.reception.PDUControle;
 import systeme.fichiers.Fichier;
 import systeme.fichiers.GestionFichier;
 import systeme.fichiers.HeaderBloc;
@@ -24,20 +22,21 @@ public class ServeurAnnuaire {
 	 */
 	public ServeurAnnuaire(GestionFichier gf) {
 		gestionFichier = gf;
+		listServeurs = new HashMap<String, GestionFichier>();
 	}
 
 	public PDUAnnuaire Inscription(PDUAnnuaire pdu, String adresse) {
-		GestionFichier t;
+		adresse = adresse+":"+pdu.getDonnees();
 		if (listServeurs.get(adresse) == null) {
-			t = listServeurs.put(adresse, pdu.getSysFichiers());
-			if (t == null) {
-				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "NOK",null);
+			listServeurs.put(adresse, pdu.getSysFichiers());
+			if (listServeurs.get(adresse) == null) {
+				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "NOK", null);
 			} else {
-				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "OK",null);
+				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "OK", null);
 			}
 		} else {
 			listServeurs.get(adresse).setListFichier(pdu.getSysFichiers().getListFichier());
-			reponse = new PDUAnnuaire("ANN", "REGISTRATION", this.listServeurs.get(adresse), "MAJ",null);
+			reponse = new PDUAnnuaire("ANN", "REGISTRATION", this.listServeurs.get(adresse), "MAJ", null);
 		}
 		return reponse;
 	}
@@ -50,7 +49,6 @@ public class ServeurAnnuaire {
 	public PDUAnnuaire Dowload(PDUAnnuaire pdu) {
 		/* Déclaration de variables */
 		PDUAnnuaire reponse = null;
-		String nomFichier;
 		int i = 0;
 		Fichier fichier = null;
 		Fichier fichierFinal = null;
@@ -62,15 +60,13 @@ public class ServeurAnnuaire {
 			if (fichier != null) {
 				if (fichierFinal == null) {
 					fichierFinal = (Fichier) fichier.clone();
-				} else {
-					for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.getListHeaderBlocs().entrySet()) {
-						if (headerbloc.getValue().getDisponible() == 1) {
-							fichierFinal.getListHeaderBlocs().get(headerbloc.getKey()).setDisponible(1);
-							i++;
-						}
+				}
+				for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.getListHeaderBlocs().entrySet()) {
+					if (headerbloc.getValue().getDisponible() == 1) {
+						fichierFinal.getListHeaderBlocs().get(headerbloc.getKey()).setDisponible(1);
+						i++;
 					}
 				}
-
 			}
 			if (i != 0) {
 				listServeurDispo.add(listServeur.getKey());
@@ -78,11 +74,13 @@ public class ServeurAnnuaire {
 			fichier = null;
 			i = 0;
 		}
-		if(gestionFichier.EtatFichier(fichierFinal)==1) {
-			reponse = new PDUAnnuaire("ANN", "TELECHARGEMENT", null, "OK",listServeurDispo);
+		if(fichierFinal == null) {
+			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Fichier inconnu des autre serveurs", null);
 		}
-		else {
-			reponse = new PDUAnnuaire("ANN", "TELECHARGEMENT", null, "Impossible de télécharger le fichier en entier",null);
+		else if (gestionFichier.EtatFichier(fichierFinal) == 1) {
+			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge", listServeurDispo);
+		} else {
+			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Impossible de télécharger le fichier en entier", null);
 		}
 		/* On retourne la PDU traitée */
 		return reponse;

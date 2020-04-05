@@ -27,7 +27,7 @@ public class ClientAnnuaire {
 		sysFichiers = g;
 	}
 
-	public void Inscription(String ip, int port) {
+	public void Inscription(String ip, int port, int portServeur) {
 		/* Déclaration de variables */
 
 		/* Cree le socket en indiquant le mode de transport (TCP ou UDP) */
@@ -41,7 +41,7 @@ public class ClientAnnuaire {
 			System.out.println("Impossible de joindre le serveur");
 			return;
 		}
-		PDUAnnuaire register = new PDUAnnuaire("ANN", "REGISTRATION", this.sysFichiers,"PLZ Register",null);
+		PDUAnnuaire register = new PDUAnnuaire("ANN", "REGISTRATION", this.sysFichiers,Integer.toString(portServeur) ,null);
 
 		/* Si il y un probléme avec l'envoie de la PDU au serveur */
 		if (serveur.EnvoiePDU(register) != 0) {
@@ -61,7 +61,7 @@ public class ClientAnnuaire {
 			System.out.println("Erreur de connexion avec le serveur");
 			return;
 			/* Si la reponse est une instance de PDU controle */
-		} else if (reponse instanceof PDUControle) {
+		} else if (reponse instanceof PDUAnnuaire) {
 			/* On récupére la PDUControle */
 			register = (PDUAnnuaire) reponse;
 		} else {
@@ -101,7 +101,7 @@ public class ClientAnnuaire {
 		return;
 	}
 	
-	public void Telechargement(String nomFichier,List<String> listIP,List<Integer> listPort) {
+	public int Telechargement(String nomFichier,List<String> listIP,List<Integer> listPort) {
 		/* Déclaration de variables */
 
 		/* Cree le socket en indiquant le mode de transport (TCP ou UDP) */
@@ -113,9 +113,9 @@ public class ClientAnnuaire {
 		if (serveur.InitialisationSocket(ip, port) != 0) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Impossible de joindre le serveur");
-			return;
+			return 1;
 		}
-		PDUAnnuaire dowload = new PDUAnnuaire("ANN", "TELECHARGEMENT", this.sysFichiers,nomFichier,null);
+		PDUAnnuaire dowload = new PDUAnnuaire("ANN", "DOWLOAD", this.sysFichiers,nomFichier,null);
 
 		/* Si il y un probléme avec l'envoie de la PDU au serveur */
 		if (serveur.EnvoiePDU(dowload) != 0) {
@@ -123,7 +123,7 @@ public class ClientAnnuaire {
 			serveur.FermerSocket();
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur lors de l'envoie de la requete");
-			return;
+			return 1;
 		}
 		/* On initialise la variable */
 		PDU reponse = null;
@@ -133,9 +133,9 @@ public class ClientAnnuaire {
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur");
-			return;
+			return 1;
 			/* Si la reponse est une instance de PDU controle */
-		} else if (reponse instanceof PDUControle) {
+		} else if (reponse instanceof PDUAnnuaire) {
 			/* On récupére la PDUControle */
 			dowload = (PDUAnnuaire) reponse;
 		} else {
@@ -143,7 +143,7 @@ public class ClientAnnuaire {
 			System.out.println("Erreur de PDU");
 			/* On ferme la socket */
 			serveur.FermerSocket();
-			return;
+			return 1;
 		}
 		/* On vérifie la reponse */
 		/* Si la commande correspond é celle de TSF */
@@ -168,7 +168,7 @@ public class ClientAnnuaire {
 		PDUControle fin = new PDUControle(null, null, "FIN", null);
 		serveur.EnvoiePDU(fin);
 		serveur.FermerSocket();
-		return;
+		return 0;
 	}
 
 }

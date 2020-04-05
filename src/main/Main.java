@@ -20,7 +20,7 @@ public class Main {
 		GestionFichier sysFichiersClient = new GestionFichier("./Telechargment/");
 		sysFichiersClient.initGestionFichier();
 		/* Crée et instancie un client P2P */
-		ClientP2P client = new ClientP2P(sysFichiersClient);
+		ClientP2P client = new ClientP2P(sysFichiersClient,4444);
 		/* Crée et instancie un ServeurControle et un ServeurDonnees */
 		ServeurControle sc1 = new ServeurControle(sysFichiersServeur1);
 		ServeurDonnees sd1 = new ServeurDonnees(sysFichiersServeur1);

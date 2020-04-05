@@ -15,17 +15,19 @@ import systeme.fichiers.GestionFichier;
 public class ClientP2P implements Runnable {
 	/* Déclaration de variables */
 	GestionFichier sysFichiers;
-	ClientAnnuaire annuaire =null;
-
+	ClientAnnuaire annuaire = null;
+	int portServeur;
 	/*
 	 * Constructeur ClientP2P --> Ce constructeur prend en paramètre un gestion de
 	 * fichier Ce constructeur permet de créer un nouveau ClientP2P.
 	 */
-	public ClientP2P(GestionFichier g) {
-		sysFichiers = g;
+	public ClientP2P(GestionFichier g, int p) {
+		this.sysFichiers = g;
+		this.portServeur = p;
 	}
 
 	/* Méthode run : méthode d'exécution du thread */
+	@SuppressWarnings("resource")
 	public void run() {
 		/* Déclaration de variables */
 		int choix = -1;
@@ -33,13 +35,14 @@ public class ClientP2P implements Runnable {
 		boolean fin = false;
 		String nomFichier, ip;
 		String N4;
-		
+
 		/* Déclaration d'une varibale de type Scanner */
 		Scanner sc = new Scanner(System.in);
+		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Entrez TCP ou UDP: ");
 		N4 = sc.nextLine();
-		if(N4 != "TCP" && N4 != "UDP") {
+		if (N4.compareTo("TCP") == 0 && N4.compareTo("UDP") == 0) {
 			return;
 		}
 		ClientControle controle = new ClientControle(N4, sysFichiers);
@@ -129,16 +132,16 @@ public class ClientP2P implements Runnable {
 				boolean menuAnnuaire = false;
 				String adresseIP;
 				int numeroPort;
-				if(this.annuaire == null) {
+				if (this.annuaire == null) {
 					System.out.println("Entrez l'IP du serveur : ");
 					adresseIP = sc.nextLine();
 					System.out.println("Entrez le port du serveur : ");
 					numeroPort = sc.nextInt();
 					sc.nextLine();
 					annuaire = new ClientAnnuaire(N4, sysFichiers);
-					annuaire.Inscription(adresseIP, numeroPort);
+					annuaire.Inscription(adresseIP, numeroPort,this.portServeur);
 				}
-				while (menuAnnuaire = false) {
+				while (menuAnnuaire == false) {
 					choix = -1;
 					/* On laisse le choix à l'utilisateur */
 					System.out.println("Menu-Annuaire : ");
@@ -168,20 +171,30 @@ public class ClientP2P implements Runnable {
 						System.out.println("Entrez le port du serveur : ");
 						numeroPort = sc.nextInt();
 						sc.nextLine();
-						annuaire.Inscription(adresseIP, numeroPort);
+						annuaire.Inscription(adresseIP, numeroPort,this.portServeur);
 						break;
 					case 2:
-						
+
 						break;
 					case 3:
 						/*
-						 * On le laisse entrer le nom de fichier*/
+						 * On le laisse entrer le nom de fichier
+						 */
 						System.out.println("Entrez le nom du fichier a télécharger : ");
 						nomFichier = sc.nextLine();
 						/*
-						 * On peut donc télécharger le fichier avec comme paramètre le nom de fichier */
-						annuaire.Telechargement(nomFichier,listIP,listPort);
-						controle.TelechargementParallele(nomFichier, listIP, listPort);
+						 * On peut donc télécharger le fichier avec comme paramètre le nom de fichier
+						 */
+						if(annuaire.Telechargement(nomFichier, listIP, listPort)==0) {
+							controle.TelechargementParallele(nomFichier, listIP, listPort);
+						}
+						else {
+							System.out.println("Le fichier n'a pas pu etre téléchargé");
+						}
+						/* On rénitialise une liste d'adresses IP */
+						listIP = new ArrayList<String>();
+						/* On rénitialise une liste de ports */
+						listPort = new ArrayList<Integer>();
 						break;
 					case 4:
 						menuAnnuaire = true;
@@ -192,6 +205,7 @@ public class ClientP2P implements Runnable {
 						System.out.println("Erreur choix");
 					}
 				}
+				break;
 			case 4:
 				System.out.println("Entrer le chemin du dossier :");
 				String chemin = sc.nextLine();

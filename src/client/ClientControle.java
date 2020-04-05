@@ -137,15 +137,21 @@ public class ClientControle {
 		int i;
 		/* On parourt la liste des adresses ip's */
 		for (i = 0; i < ip.size(); i++) {
-			/* On crée un objet ClientControleThread */
-			ClientControleThread cct = new ClientControleThread(this.transport, this.sysFichiers, ip.get(i),
-					port.get(i), nomFichier);
-			/* On crée un Thread */
-			Thread thread = new Thread(cct);
-			/* On lance un Thread */
 			if (i == ip.size() - 1) {
+				/* On crée un objet ClientControleThread */
+				ClientControleThread cct = new ClientControleThread(this.transport, this.sysFichiers, ip.get(i),
+						port.get(i), nomFichier,1);
+				/* On crée un Thread */
+				Thread thread = new Thread(cct);
+				/* On lance un Thread */
 				thread.run();
 			} else {
+				/* On crée un objet ClientControleThread */
+				ClientControleThread cct = new ClientControleThread(this.transport, this.sysFichiers, ip.get(i),
+						port.get(i), nomFichier);
+				/* On crée un Thread */
+				Thread thread = new Thread(cct);
+				/* On lance un Thread */
 				thread.start();
 			}
 
@@ -159,7 +165,5 @@ public class ClientControle {
 	 * 
 	 * @param :
 	 */
-
-	
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Scanner;
 /*
  * Classe GestionFichier --> Classe permettant de gérer un fichier (Lecture, Ecriture, etc ....)
  */
-public class GestionFichier {
+public class GestionFichier implements Serializable {
 
 	/* Déclaration de variables */
 	HashMap<String, Fichier> listFichier;
@@ -73,6 +74,7 @@ public class GestionFichier {
 	 */
 
 	public Integer EtatFichier(String nomFichier) {
+		this.DebutRecherche();
 		/* Déclaration de variables */
 		Fichier fichier = null;
 		/* On récupére le nom de fichier (si il existe) */
@@ -100,10 +102,12 @@ public class GestionFichier {
 			}
 			/* Si on quitte la boucle for alors on retourne 1; */
 		}
+		this.FinRecherche();
 		return 1;
 	}
 	
 	public Integer EtatFichier(Fichier fichier) {
+		this.DebutRecherche();
 		// On viens de parcourir la liste de Header Bloc contenue dans une HashMap
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.listHeaderBlocs.entrySet()) {
 			/* Si la valeur du header bloc est a -1 */
@@ -121,6 +125,7 @@ public class GestionFichier {
 			}
 			/* Si on quitte la boucle for alors on retourne 1; */
 		}
+		this.FinRecherche();
 		return 1;
 	}
 
@@ -582,7 +587,6 @@ public class GestionFichier {
 	public void setNbUpload(int nbUpload) {
 		this.nbUpload = nbUpload;
 	}
-	
 	
 
 }

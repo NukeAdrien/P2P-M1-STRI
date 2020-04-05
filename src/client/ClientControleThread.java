@@ -21,6 +21,7 @@ public class ClientControleThread implements Runnable {
 	String nomFichier;
 	String ip;
 	int port;
+	int main;
 
 	/*
 	 * Constructeur ClientControleThread --> Ce constructeur prend en paramétre le
@@ -35,6 +36,16 @@ public class ClientControleThread implements Runnable {
 		this.nomFichier = nf;
 		this.ip = i;
 		this.port = p;
+		main = 0;
+	}
+	
+	public ClientControleThread(String t, GestionFichier g, String i, int p, String nf, int m) {
+		this.transport = t;
+		this.sysFichiers = g;
+		this.nomFichier = nf;
+		this.ip = i;
+		this.port = p;
+		main = m;
 	}
 
 	/* Méthode run : méthode d'exécution du thread */
@@ -112,6 +123,7 @@ public class ClientControleThread implements Runnable {
 							&& fichierDl.getListHeaderBlocs().get(headerbloc.getKey()).getDisponible() == 1) {
 						if (sysFichiers.setReserver(fichierDl.getNomFichier(), headerbloc.getKey()) == 0) {
 							listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
+							
 						}
 					} else {
 						if (requete.getFichier().getDisponible(headerbloc.getKey()) == -1) {
@@ -128,6 +140,8 @@ public class ClientControleThread implements Runnable {
 					}
 					return;
 				}
+				System.out.println("" + ip + ":" + port+" dispose de "+ listHeaderBlocs.size() + "/"
+						+ sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
 				/* Création d'un objet ClientDonnees */
 				ClientDonnees transfert = new ClientDonnees(sysFichiers, serveur);
 				/* Téléchargement du fichier */
@@ -136,10 +150,15 @@ public class ClientControleThread implements Runnable {
 				System.out.println(ip + ":" + port + " | J'ai télécharger : " + listHeaderBlocs.size() + "/"
 						+ sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
 				/* Fermeture du socket */
-				requete = new PDUControle("CTRL", "TSF", "FIN", null);
+				requete = new PDUControle(null, null, "FIN", null);
 				serveur.EnvoiePDU(requete);
 				serveur.FermerSocket();
-				/* Si le fichier n'existe pas */
+				if(this.main == 1) {
+					while(sysFichiers.EtatFichier(fichierDl.getNomFichier())!= 1){
+						
+					}
+				}
+			/* Si le fichier n'existe pas */
 			} else if (requete.getFichier() == null) {
 				/* On affiche les données du fichier */
 				System.out.println(requete.getDonnees());
