@@ -101,33 +101,41 @@ public class ClientControleThread implements Runnable {
 		if (requete.getCommande().compareTo("TPF") == 0) {
 			/* Si le fichier existe */
 			if (requete.getFichier() != null) {
+				System.out.println(ip+":"+port+" a le fichier");
 				/* On récupére le fichier */
 				fichierDl = requete.getFichier();
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
 					/* On ajoute le fichier dans GestionFichier */
 					sysFichiers.AjouterFichier(fichierDl);
+					System.out.println(ip+":"+port+" cree le fichier");
 				} 
+				System.out.println(ip+":"+port+" je ne suis pas coincé");
 				/* On crée une liste d'headers blocs */
 				HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
 				/* On parcourt les headers blocs */
 				for (Map.Entry<Integer, HeaderBloc> headerbloc : sysFichiers.getListFichier().get(nomFichier)
 						.getListHeaderBlocs().entrySet()) {
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					if (sysFichiers.getDisponible(fichierDl.getNomFichier(), headerbloc.getKey()) == -1
 							&& fichierDl.getListHeaderBlocs().get(headerbloc.getKey()).getDisponible() == 1) {
 						if (sysFichiers.setReserver(fichierDl.getNomFichier(), headerbloc.getKey()) == 0) {
 							listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
-							
+							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey());
+							try {
+								Thread.sleep(20);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else {
+							System.out.println(ip+":"+port+"je n'ai pas reussi a réserver "+headerbloc.getKey());
 						}
 					} else {
-						if (requete.getFichier().getDisponible(headerbloc.getKey()) == -1) {
+						if (fichierDl.getDisponible(headerbloc.getKey()) == -1) {
+							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"ne possede pas le bloque");
 							nbBlocIndisp++;
+						}else {
+							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"bloque deja réservé ou dl");
 						}
 					}
 				}
@@ -138,6 +146,10 @@ public class ClientControleThread implements Runnable {
 						/* Affichage d'un message d'erreur */
 						System.out.println(ip + ":" + port + " Ne possede aucun bloc du fichier");
 					}
+					/* Fermeture du socket */
+					requete = new PDUControle(null, null, "FIN", null);
+					serveur.EnvoiePDU(requete);
+					serveur.FermerSocket();
 					return;
 				}
 				System.out.println("" + ip + ":" + port+" dispose de "+ listHeaderBlocs.size() + "/"
@@ -162,9 +174,17 @@ public class ClientControleThread implements Runnable {
 			} else if (requete.getFichier() == null) {
 				/* On affiche les données du fichier */
 				System.out.println(requete.getDonnees());
+				/* Fermeture du socket */
+				requete = new PDUControle(null, null, "FIN", null);
+				serveur.EnvoiePDU(requete);
+				serveur.FermerSocket();
 			} else {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur de commande");
+				/* Fermeture du socket */
+				requete = new PDUControle(null, null, "FIN", null);
+				serveur.EnvoiePDU(requete);
+				serveur.FermerSocket();
 			}
 
 			return;

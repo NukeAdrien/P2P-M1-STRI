@@ -305,7 +305,7 @@ public class GestionFichier implements Serializable {
 	 */
 	public synchronized void AjouterFichier(Fichier f) {
 		Fichier f2 = (Fichier) f.clone();
-		while (nbrRechercheEnCours != 0) {
+		while (nbrRechercheEnCours > 0) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
@@ -313,6 +313,7 @@ public class GestionFichier implements Serializable {
 				e.printStackTrace();
 			}
 			if (this.RechercheFichier(f.nomFichier) != null) {
+				notifyAll();
 				return;
 			}
 		}
@@ -327,6 +328,7 @@ public class GestionFichier implements Serializable {
 			this.listFichier.get(f2.getNomFichier()).setDisponible(headerbloc.getKey(), -1);
 		}
 		notifyAll();
+		return;
 	}
 
 	/*
