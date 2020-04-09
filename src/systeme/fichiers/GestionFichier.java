@@ -2,9 +2,13 @@ package systeme.fichiers;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -186,12 +190,18 @@ public class GestionFichier implements Serializable {
 		/* On récupére l'emplacement du fichier */
 		String file = fichier.getEmplacement();
 		/* Déclaration d'un nouveau fichier */
+		RandomAccessFile ecriture = null;
 		File fle = new File(file);
+		try {
+			ecriture = new RandomAccessFile(file, "rw");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/* Si le fichier n'existe pas */
 		if (!fle.exists()) {
 			try {
-				/* On crée un nouveau fichier */
-				fle.createNewFile();
+				 ecriture.setLength(fichier.getTailleOctets());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -202,14 +212,12 @@ public class GestionFichier implements Serializable {
 		/* Positionnement de l'offset en fonction des numéros de blocs */
 		long offset = taille * numbloc;
 		try {
-			/* Positionnement des flux pour l'écriture */
-			FileOutputStream o = new FileOutputStream(fle, true);
 			/* Positionnement du curseur */
-			o.getChannel().position(offset);
+			ecriture.seek(offset);
 			/* Ecriture des données en fonction de la position du curseur */
-			o.write(donnees, 0, taille);
+			ecriture.write(donnees, 0, taille);
 			/* Fermeture des flux */
-			o.close();
+			ecriture.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
