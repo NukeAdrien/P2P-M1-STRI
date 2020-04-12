@@ -135,6 +135,7 @@ public class ClientControle {
 	public void TelechargementParallele(String nomFichier, List<String> ip, List<Integer> port) {
 		/* Déclaration de variables */
 		int i;
+		sysFichiers.renitialisation();
 		/* On parourt la liste des adresses ip's */
 		for (i = 0; i < ip.size(); i++) {
 			if (i == ip.size() - 1) {

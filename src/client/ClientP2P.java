@@ -185,7 +185,7 @@ public class ClientP2P implements Runnable {
 						/*
 						 * On peut donc télécharger le fichier avec comme paramètre le nom de fichier
 						 */
-						if(annuaire.Telechargement(nomFichier, listIP, listPort)==0) {
+						if(annuaire.Telechargement(nomFichier, listIP, listPort, this.portServeur)==0) {
 							controle.TelechargementParallele(nomFichier, listIP, listPort);
 						}
 						else {

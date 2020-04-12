@@ -46,13 +46,27 @@ public class ServeurAnnuaire {
 		return null;
 	}
 
-	public PDUAnnuaire Dowload(PDUAnnuaire pdu) {
+	public PDUAnnuaire Dowload(PDUAnnuaire pdu, String adresse) {
+		adresse = adresse+":"+pdu.getListServeurs().get(0);
 		/* Déclaration de variables */
 		PDUAnnuaire reponse = null;
 		int i = 0;
 		Fichier fichier = null;
 		Fichier fichierFinal = null;
-		/* On parourt la liste des adresses ip's */
+		double ratio;
+		double nbU,nbD;
+		nbD = this.listServeurs.get(adresse).getNbDowload();
+		if(nbD > pdu.getSysFichiers().getNbDowload()) {
+			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Vous trichez !", null);
+			return reponse;
+		}else {
+			listServeurs.get(adresse).setListFichier(pdu.getSysFichiers().getListFichier());
+			nbU = pdu.getSysFichiers().getNbUpload();
+			nbD = pdu.getSysFichiers().getNbDowload();
+			this.listServeurs.get(adresse).setNbUpload((int)nbU);
+			this.listServeurs.get(adresse).setNbDowload((int)nbD);
+		}
+		/* On parcourt la liste des adresses ip's */
 		List<String> listServeurDispo = new ArrayList<String>();
 		/* On parcourt les headers blocs */
 		for (Map.Entry<String, GestionFichier> listServeur : listServeurs.entrySet()) {
@@ -78,7 +92,16 @@ public class ServeurAnnuaire {
 			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Fichier inconnu des autre serveurs", null);
 		}
 		else if (gestionFichier.EtatFichier(fichierFinal) == 1) {
-			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge", listServeurDispo);
+			ratio  = ((nbU+625)/nbD)*100;
+			if(ratio >= 50) {
+				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge", listServeurDispo);
+			}
+			else if (ratio >= 25) {
+				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge dans 30 secondes", listServeurDispo);
+			}
+			else {
+				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Vous ne pouvez pas téléchargé pour l'instant car votre ratio de Uplaod/Téléchargement est inferieur a 25% ", null);
+			}
 		} else {
 			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Impossible de télécharger le fichier en entier", null);
 		}

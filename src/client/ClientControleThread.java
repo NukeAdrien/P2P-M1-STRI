@@ -107,8 +107,9 @@ public class ClientControleThread implements Runnable {
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
 					/* On ajoute le fichier dans GestionFichier */
-					sysFichiers.AjouterFichier(fichierDl);
 					System.out.println(ip+":"+port+" cree le fichier");
+					sysFichiers.AjouterFichier(fichierDl);
+					System.out.println(ip+":"+port+" a cree le fichier");
 				} 
 				System.out.println(ip+":"+port+" je ne suis pas coincé");
 				/* On crée une liste d'headers blocs */

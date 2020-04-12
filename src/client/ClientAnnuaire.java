@@ -28,8 +28,6 @@ public class ClientAnnuaire {
 	}
 
 	public void Inscription(String ip, int port, int portServeur) {
-		/* Déclaration de variables */
-
 		/* Cree le socket en indiquant le mode de transport (TCP ou UDP) */
 		SocketClient serveur = new SocketClient(transport);
 		/*
@@ -41,7 +39,8 @@ public class ClientAnnuaire {
 			System.out.println("Impossible de joindre le serveur");
 			return;
 		}
-		PDUAnnuaire register = new PDUAnnuaire("ANN", "REGISTRATION", this.sysFichiers,Integer.toString(portServeur) ,null);
+		PDUAnnuaire register = new PDUAnnuaire("ANN", "REGISTRATION", this.sysFichiers, Integer.toString(portServeur),
+				null);
 
 		/* Si il y un probléme avec l'envoie de la PDU au serveur */
 		if (serveur.EnvoiePDU(register) != 0) {
@@ -79,15 +78,13 @@ public class ClientAnnuaire {
 				System.out.println("Vous pouvez rechercher des fichier depuis l'annuaire !");
 				this.ip = ip;
 				this.port = port;
-			} 
-			else if(register.getDonnees().compareTo("MAJ") == 0) {
+			} else if (register.getDonnees().compareTo("MAJ") == 0) {
 				System.out.println("Vous pouvez rechercher des fichier depuis l'annuaire !");
 				this.ip = ip;
 				this.port = port;
 				this.sysFichiers.setNbDowload(register.getSysFichiers().getNbDowload());
 				this.sysFichiers.setNbUpload(register.getSysFichiers().getNbUpload());
-			}
-			else {
+			} else {
 				System.out.println("Une erreur est survenue lors de l'inscription");
 			}
 
@@ -100,10 +97,13 @@ public class ClientAnnuaire {
 		serveur.FermerSocket();
 		return;
 	}
-	
-	public int Telechargement(String nomFichier,List<String> listIP,List<Integer> listPort) {
-		/* Déclaration de variables */
 
+	public int Telechargement(String nomFichier, List<String> listIP, List<Integer> listPort,int pS) {
+		/* Déclaration de variables */
+		List<String> portServeur = new ArrayList<String>(); 
+		String tmp =Integer.toString(pS);
+		portServeur.add(0, tmp);
+		sysFichiers.renitialisation();
 		/* Cree le socket en indiquant le mode de transport (TCP ou UDP) */
 		SocketClient serveur = new SocketClient(transport);
 		/*
@@ -115,7 +115,7 @@ public class ClientAnnuaire {
 			System.out.println("Impossible de joindre le serveur");
 			return 1;
 		}
-		PDUAnnuaire dowload = new PDUAnnuaire("ANN", "DOWLOAD", this.sysFichiers,nomFichier,null);
+		PDUAnnuaire dowload = new PDUAnnuaire("ANN", "DOWLOAD", this.sysFichiers, nomFichier, portServeur);
 
 		/* Si il y un probléme avec l'envoie de la PDU au serveur */
 		if (serveur.EnvoiePDU(dowload) != 0) {
@@ -151,19 +151,39 @@ public class ClientAnnuaire {
 			/* Si le fichier existe */
 			if (dowload.getListServeurs() != null) {
 				System.out.println(dowload.getDonnees());
-				for(int i =0; i < dowload.getListServeurs().size();i++) {
-					String[] temp = dowload.getListServeurs().get(i).split(":");
-					listIP.add(i,temp[0]);
-					listPort.add(i,Integer.parseInt(temp[1]));
+				if (dowload.getDonnees().compareTo("Le fichier va etre telecharge dans 30 secondes") == 0) {
+					int t = 31;
+					while (t > 0) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						t--;
+						System.out.println(t);
+					}
 				}
-			} 
-			else {
+				for (int i = 0; i < dowload.getListServeurs().size(); i++) {
+					String[] temp = dowload.getListServeurs().get(i).split(":");
+					listIP.add(i, temp[0]);
+					listPort.add(i, Integer.parseInt(temp[1]));
+				}
+			} else {
 				System.out.println(dowload.getDonnees());
+				PDUControle fin = new PDUControle(null, null, "FIN", null);
+				serveur.EnvoiePDU(fin);
+				serveur.FermerSocket();
+				return 1;
 			}
 
 		} else {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de commande");
+			PDUControle fin = new PDUControle(null, null, "FIN", null);
+			serveur.EnvoiePDU(fin);
+			serveur.FermerSocket();
+			return 1;
 		}
 		PDUControle fin = new PDUControle(null, null, "FIN", null);
 		serveur.EnvoiePDU(fin);

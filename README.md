@@ -52,6 +52,5 @@ Options :
 
     Permettre la recherche de fichiers à partir de leur nom ou de toute autre caractéristique. A l'issu de la recherche on devra pouvoir connaître un ensemble d'application possédant le fichier et commencer le téléchargement.
 
-    Gérer le protocole d'une application de téléchargement P2P existante (bittorrent, emule ou autre).
 
 Note : toute fonctionnalité supplémentaire ne sera prise en compte dans la notation que si toutes les étapes ont été correctement traitées.

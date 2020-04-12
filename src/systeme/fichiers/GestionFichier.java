@@ -25,7 +25,8 @@ public class GestionFichier implements Serializable {
 	/* Déclaration de variables */
 	HashMap<String, Fichier> listFichier;
 	String chemin;
-	int nbrLireEnCours, nbrRechercheEnCours, nbrAjoutEnCours, nbrLectureDispoEnCours = 0;
+	int nbrLireEnCours= 0, nbrRechercheEnCours= 0, nbrAjoutEnCours= 0, nbrLectureDispoEnCours = 0;
+	int nbLectureDowload= 0,nbLectureUpload = 0;
 	int nbDowload;
 	int nbUpload;
 	/*
@@ -36,8 +37,8 @@ public class GestionFichier implements Serializable {
 	public GestionFichier(String c) {
 		this.chemin = c;
 		listFichier = new HashMap<String, Fichier>();
-		this.nbDowload = 0;
-		this.nbUpload = 0;
+		this.nbDowload = 1;
+		this.nbUpload = 1;
 	}
 
 	/*
@@ -183,7 +184,7 @@ public class GestionFichier implements Serializable {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -195,7 +196,7 @@ public class GestionFichier implements Serializable {
 		try {
 			ecriture = new RandomAccessFile(file, "rw");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		/* Si le fichier n'existe pas */
@@ -203,7 +204,7 @@ public class GestionFichier implements Serializable {
 			try {
 				 ecriture.setLength(fichier.getTailleOctets());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -219,7 +220,7 @@ public class GestionFichier implements Serializable {
 			/* Fermeture des flux */
 			ecriture.close();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		notifyAll();
@@ -280,7 +281,7 @@ public class GestionFichier implements Serializable {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -293,7 +294,7 @@ public class GestionFichier implements Serializable {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -313,15 +314,21 @@ public class GestionFichier implements Serializable {
 	 */
 	public synchronized void AjouterFichier(Fichier f) {
 		Fichier f2 = (Fichier) f.clone();
-		while (nbrRechercheEnCours > 0) {
+		System.out.println(nbrRechercheEnCours);
+		System.out.println("Entrer dans la creation du fichier");
+		while (nbrRechercheEnCours != 0) {
+			System.out.println(nbrRechercheEnCours);
 			try {
+				System.out.println("J'attend");
 				this.wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
+			System.out.println("Je suis coince");
 			if (this.RechercheFichier(f.nomFichier) != null) {
 				notifyAll();
+				System.out.println("Quitte sans cree le fichier");
 				return;
 			}
 		}
@@ -335,6 +342,7 @@ public class GestionFichier implements Serializable {
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : f2.getListHeaderBlocs().entrySet()) {
 			this.listFichier.get(f2.getNomFichier()).setDisponible(headerbloc.getKey(), -1);
 		}
+		System.out.println("Quitte en creeant le fichier");
 		notifyAll();
 		return;
 	}
@@ -502,10 +510,11 @@ public class GestionFichier implements Serializable {
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				if (this.RechercheFichier(f2.nomFichier) != null) {
+					notifyAll();
 					return;
 				}
 			}
@@ -540,10 +549,11 @@ public class GestionFichier implements Serializable {
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				if (this.RechercheFichier(f2.nomFichier) != null) {
+					notifyAll();
 					return;
 				}
 			}
@@ -574,28 +584,101 @@ public class GestionFichier implements Serializable {
 
 	}
 	
+	public synchronized void DebutLectureUpload() {
+		nbLectureUpload++;
+	}
+
+	public synchronized void FinLectureUpload() {
+		nbLectureUpload--;
+		notifyAll();
+
+	}
+	
+	public synchronized void DebutLectureDowload() {
+		nbLectureDowload++;
+	}
+
+	public synchronized void FinLectureDowload() {
+		nbLectureDowload--;
+		notifyAll();
+	}
+
+	/* Etape 5*/
+	public int getNbDowload() {
+		int nb;
+		DebutLectureDowload();
+		nb = this.nbDowload;
+		FinLectureDowload();
+		return nb; 
+	}
+
+	public int getNbUpload() {
+		int nb;
+		DebutLectureUpload();
+		nb = this.nbUpload;
+		FinLectureUpload();
+		return nb; 
+	}
+	
 	public synchronized void nbDowloadInc() {
+		while (nbLectureDowload > 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+		}
 		this.nbDowload++;
+		notifyAll();
 	}
 	
 	public synchronized void nbUploadInc() {
+		while (nbLectureUpload > 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+		}
 		this.nbUpload++;
+		notifyAll();
 	}
 
-	public synchronized int getNbDowload() {
-		return nbDowload;
-	}
-
-	public synchronized int getNbUpload() {
-		return nbUpload;
-	}
-
-	public void setNbDowload(int nbDowload) {
+	public synchronized void setNbDowload(int nbDowload) {
+		while (nbLectureDowload > 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+		}
 		this.nbDowload = nbDowload;
+		notifyAll();
 	}
 
-	public void setNbUpload(int nbUpload) {
+	public synchronized void setNbUpload(int nbUpload) {
+		while (nbLectureUpload > 0) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+		}
 		this.nbUpload = nbUpload;
+		notifyAll();
+		
+	}
+	
+	public void renitialisation () {
+		this.nbrAjoutEnCours=0;
+		this.nbrLireEnCours=0;
+		this.nbrRechercheEnCours=0;
+		this.nbLectureDowload=0;
+		this.nbLectureUpload=0;
 	}
 	
 

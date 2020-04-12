@@ -82,7 +82,7 @@ public class GestionProtocole {
 				reponse = annuaire.Search(requete);
 				return reponse;
 			case "DOWLOAD":
-				reponse = annuaire.Dowload(requete);
+				reponse = annuaire.Dowload(requete,adresse);
 				return reponse;
 			default:
 				/*Affichage d'un message d'erreur*/
