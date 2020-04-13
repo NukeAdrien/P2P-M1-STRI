@@ -35,12 +35,13 @@ public class Envoie {
 	 * Constructeur Envoie --> Ce constructeur prend en paramètre un socket UDP crée et déjà instancié
 	 */
 
+
 	public Envoie(DatagramSocket s) {
 		this.sockClientUDP = s;
 	}
 
 	/*
-	 * Méthode EnvoiePDU.. Cette méthode permet d'envoyer une PDU.
+	 * Méthode EnvoiePDU : Cette méthode permet d'envoyer une PDU.
 	 * @param : Prend en paramètre une PDU à envoyer
 	 * @return : Retourne 0 si ça s'est bien passée,  sinon 1  
 	 */
@@ -48,13 +49,13 @@ public class Envoie {
 		/* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
 		if (sockClientTCP != null) {
 			try {
-				/*On écrit dans la PDU et qui sera envoyé a travers le flux OutputSreaù*/
+				/*On écrit dans la PDU et qui sera envoyé a travers le flux OutputStream*/
 				envoiPDU.writeObject(requete);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return 1;
 			}
-			/* Si le socket UDP crée n'est pas nulle... Autrement si le socket UDP a bien été créée*/
+			/* Si le socket UDP crée n'est pas nulle... Autrement dit si le socket UDP a bien été créée*/
 		} else if (sockClientUDP != null) {
 			// TODO Auto-generated method stub
 		} else {
@@ -70,19 +71,19 @@ public class Envoie {
 	 * @param : Prend en paramètre une PDU à envoyer
 	 * @return : Retourne 0 si ça s'est bien passée,  sinon 1  
 	 */
-	public Integer EnvoieByte(PDU requete) {
-		/* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
-		if (sockClientTCP != null) {
+	//public Integer EnvoieByte(PDU requete) {
+	//	/* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
+		//if (sockClientTCP != null) {
 
 			/* Si le socket UDP crée n'est pas nulle... Autrement si le socket UDP a bien été créée*/
-		} else if (sockClientUDP != null) {
+		//} else if (sockClientUDP != null) {
 
-		} else {
+		//} else {
 			/* Affichage d'un message d'erreur*/
-			System.out.println("Erreur d'initialisation du socket");
-			return 1;
-		}
-		return 0;
-	}
+			//System.out.println("Erreur d'initialisation du socket");
+			//return 1;
+		//}
+		//return 0;
+	//}
 
 }

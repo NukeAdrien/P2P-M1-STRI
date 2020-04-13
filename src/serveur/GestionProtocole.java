@@ -24,7 +24,7 @@ public class GestionProtocole {
 	}
 	
 	/*
-	 * Constructeur GestionProtocole --> Ce constructeur prend en paramètre un ServeurControle et ServeurDonnees
+	 * Constructeur GestionProtocole --> Ce constructeur prend en paramètre un ServeurControle, un ServeurDonnees
 	 * Ce constructeur permet de créer un nouveau GestionProtocole.
 	 */
 	public GestionProtocole(ServeurControle sc, ServeurDonnees sd, ServeurAnnuaire sa) {
@@ -36,7 +36,7 @@ public class GestionProtocole {
 	
 	/*
 	 * Méthode gestionRequete : Méthode permettant de gérer la requête traitée
-	 * @param : la requête PDU à traiter
+	 * @param : la requête PDU à traiter et l'adresse Ip provenant de la PDU
 	 * @return : la PDU une fois la requête traitée
 	 */
 	public PDU gestionRequete(PDU requetePDU, String adresse) {
@@ -51,14 +51,17 @@ public class GestionProtocole {
 				/* Alors on applique la méthode TSF indiquant que les blocs sont disponibles*/
 				reponse = controle.TSF(requete);
 				return reponse;
+				/* Si c'est TPF */
 			case "TPF":
+				/* Alors on applique la méthode TPF indiquant que les blocs sont disponibles*/
 				reponse = controle.TPF(requete);
 				return reponse;
 			case "PING":
+				/* On crée une PDU permettant de faire le PING */
 				return reponse = new PDUControle("CTRL", "PING", null, null);
 			default:
 				/*Affichage d'un message d'erreur*/
-				System.out.println("Erreur requete inexistante");
+				System.out.println("Erreur requête inexistante");
 				return null;
 			}
 			/* Si la variable requetePDU est une instance de PDUDonnees*/
@@ -73,20 +76,24 @@ public class GestionProtocole {
 			PDUAnnuaire requete = (PDUAnnuaire)requetePDU;
 			/* Suivant la commande contenue dans la variable requete, casté en PDUControle*/
 			switch (requete.getMethode()) {
-			/* Si c'est TSF */
+			/* Si c'est REGISTRATION */
 			case "REGISTRATION":
-				/* Alors on applique la méthode TSF indiquant que les blocs sont disponibles*/
+				/* Alors on applique méthode Inscription permettant l'ajout d'un nouveau serveur dans l'annuaire */
 				reponse = annuaire.Inscription(requete,adresse);
 				return reponse;
+				/* Si c'est SEARCH */
 			case "SEARCH":
+				/* Alors on applique méthode Search permettant la recherche d'un élément dans l'annuaire */
 				reponse = annuaire.Search(requete);
 				return reponse;
+				/* Si c'est DOWLOAD */
 			case "DOWLOAD":
-				reponse = annuaire.Dowload(requete);
+				/* Alors on applique méthode Dowload permettant le téléchargement d'un élément depuis plusieurs serveurs dans l'annuaire */
+				reponse = annuaire.Dowload(requete, adresse);
 				return reponse;
 			default:
 				/*Affichage d'un message d'erreur*/
-				System.out.println("Erreur requete inexistante");
+				System.out.println("Erreur requête inexistante");
 				return null;
 			}
 			

@@ -18,7 +18,7 @@ public class SocketServeurTCP extends Thread {
 
 	/*
 	 * Constructeur SocketServeurTCP --> Ce constructeur prend en paramètre un gestion de protocole
-	 * Ce constructeur permet de créer un nouveau socketClient.
+	 * Ce constructeur permet de créer un nouveau SocketServeurTCP.
 	 */
 	public SocketServeurTCP (GestionProtocole g,int p) {
 		gestion = g;
@@ -47,12 +47,12 @@ public class SocketServeurTCP extends Thread {
 				}
 			} catch (IOException ioe) {
 				/* Affichage d'un message d'erreur */
-				System.out.println("Erreur de accept : " + ioe.getMessage());
+				System.out.println("Erreur d'accept : " + ioe.getMessage());
 			}
 
 		} catch (IOException ioe) {
 			/* Affichage d'un message d'erreur */
-			System.out.println("Erreur de création du server socket: " + ioe.getMessage());
+			System.out.println("Erreur de création du Server Socket: " + ioe.getMessage());
 		}
 		return;
 	}

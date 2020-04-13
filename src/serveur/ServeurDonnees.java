@@ -12,7 +12,7 @@ public class ServeurDonnees {
 	GestionFichier sysFichier;
 
 	/*
-	 * Constructeur ServeurDonnees --> Ce constructeur prend en paramètre un gestion de fichier
+	 * Constructeur ServeurDonnees --> Ce constructeur prend en paramètre un gestionnaire de fichiers
 	 * Ce constructeur permet de créer un nouveau ServeurDonnees.
 	 */
 	public ServeurDonnees(GestionFichier g) {
@@ -31,13 +31,14 @@ public class ServeurDonnees {
 		
 		/*On recupère les données du fichier */
 		Fichier fichier = sysFichier.getListFichier().get(requete.getDonnees());
-		/* On charge les donneés du fichier dans un des blocs de la PDU*/
+		/* On charge les données du fichier dans un des blocs de la PDU*/
 		bloc = sysFichier.Lire(fichier, requete.getIndex());
 		/* Si la variable bloc est nulle */
 		if (bloc != null) {
 			/*On encapsule les données lues dans une PDUDonnees pour pouvoir les envoyer par la suite */
 			reponse = new PDUDonnees("DATA",null, requete.getIndex(), bloc);
-			/*sysFichier.getNbUpload();*/
+			/* On incrémente le nombre d'upload */
+			sysFichier.nbUploadInc();
 		}else {
 			/* Affichage d'une requête d'erreur */
 			reponse = new PDUDonnees("ERR","Erreur lors de la lecture du bloc : "+requete.getIndex(), requete.getIndex(),null);

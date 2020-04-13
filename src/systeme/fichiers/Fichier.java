@@ -16,7 +16,7 @@ public class Fichier implements Serializable,Cloneable {
 	HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>(); 
 
 	/*
-	 * Constructeur Fichier --> Ce constructeur prend en paramétre le nom du fichier, l'auteur, la date, l'emplacement,
+	 * Constructeur Fichier --> Ce constructeur prend en paramètres le nom du fichier, l'auteur, la date, l'emplacement,
 	 * et la taille en octets. Ce constructeur permet de créer un nouveau fichier.
 	 */
 	
@@ -38,8 +38,8 @@ public class Fichier implements Serializable,Cloneable {
 	}
 
 	/*
-	 * Méthode getDate : Méthode permettant de récupérer la derniére date de modification du fichier
-	 * @return : la derniére date de modification du fichier en String
+	 * Méthode getDate : Méthode permettant de récupérer la dernière date de modification du fichier
+	 * @return : la dernière date de modification du fichier en String
 	 */
 	
 	public String getDate() {
@@ -47,8 +47,8 @@ public class Fichier implements Serializable,Cloneable {
 	}
 
 	/*
-	 * Méthode setDate : Méthode permettant de changer la derniére date de modification du fichier
-	 * @param : la nouvelle derniére date de modification du fichier en String
+	 * Méthode setDate : Méthode permettant de changer la dernière date de modification du fichier
+	 * @param : la nouvelle dernière date de modification du fichier en String
 	 */
 	
 	public void setDate(String date) {
@@ -85,7 +85,7 @@ public class Fichier implements Serializable,Cloneable {
 	/*
 	 * Méthode getListHeaderBlocs : Méthode permettant de récuperer tous les HeaderBlocs d'un fichier
 	 * @return : la liste de tous les HeaderBlocs du fichier stockées dans une HashMap (avec comme clé l'index, et en valeur
-	 * l'HeaderBloc). Pour plus d'informations se référer é la classe HeaderBloc.java
+	 * l'HeaderBloc). Pour plus d'informations se référer à la classe HeaderBloc.java
 	 */
 	
 	public HashMap<Integer, HeaderBloc> getListHeaderBlocs() {
@@ -95,7 +95,7 @@ public class Fichier implements Serializable,Cloneable {
 	/*
 	 * Méthode setListHeaderBlocs : Méthode permettant de changer les HeaderBlocs d'un fichier
 	 * @param : la nouvelle liste des HeaderBlocs du fichier stockées dans une HashMap (avec comme clé l'index, et en valeur
-	 * l'HeaderBloc). Pour plus d'informations se référer é la classe HeaderBloc.java
+	 * l'HeaderBloc). Pour plus d'informations se référer à la classe HeaderBloc.java
 	 */
 	public void setListHeaderBlocs(HashMap<Integer, HeaderBloc> listHeaderBlocs) {
 		this.listHeaderBlocs = listHeaderBlocs;
@@ -164,7 +164,13 @@ public class Fichier implements Serializable,Cloneable {
 		this.listHeaderBlocs.put(index, hd);
 	}
 	
+	/*
+	 * Méthode clone() : Permet de cloner un élément
+	 * @return : L'objet cloné
+	 */
+	
 	public Object clone() {
+		/* Déclaration de variables */
 		Fichier o = null;
 		try {
 			o = (Fichier) super.clone();
@@ -173,9 +179,11 @@ public class Fichier implements Serializable,Cloneable {
 			e.printStackTrace();
 		}
 		o.listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
+		/* On parcourt la list des headers Blocs */
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : this.listHeaderBlocs.entrySet()) {
 			HeaderBloc t = new HeaderBloc(headerbloc.getValue().getDisponible());
 			HeaderBloc t2 = (HeaderBloc) t.clone();
+			/* On ajoute son clone dans la liste des HeadersBlocs */
 			o.listHeaderBlocs.put(headerbloc.getKey(),t);
 		}
 		return o;

@@ -6,7 +6,7 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 
 /*
- * Classe Envoie --> Classe permettant de recevoir une PDU et le contenu de la PDU
+ * Classe Recevoir --> Classe permettant de recevoir une PDU et le contenu de la PDU associé
  */
 
 public class Recevoir {
@@ -31,14 +31,13 @@ public class Recevoir {
 
 	/*
 	 * Constructeur Recevoir --> Ce constructeur prend en paramètre un socket UDP instancié
-	 * Ce constructeur instancie aussi un flux OutputStream travaillant avec le socket UDP instancié
 	 */
 	public Recevoir(DatagramSocket s) {
 		this.sockClientUDP = s;
 	}
 
 	/*
-	 * Méthode EnvoiePDU.. Cette méthode permet d'envoyer une PDU.
+	 * Méthode EnvoiePDU : Cette méthode permet d'envoyer une PDU.
 	 * @return : Retourne la PDU reçu  
 	 */
 	public PDU RecevoirPDU() {
@@ -63,7 +62,7 @@ public class Recevoir {
 				/* Sinon on retourne null */
 				return null;
 			}
-			/* Si le socket UDP crée n'est pas nulle... Autrement si le socket UDP a bien été créée*/
+			/* Si le socket UDP crée n'est pas nulle... Autrement dit si le socket UDP a bien été créée*/
 		} else if (sockClientUDP != null) {
 			// TODO Auto-generated method stu
 
@@ -82,18 +81,18 @@ public class Recevoir {
 	 * @param : Prend en paramètre une PDU à recevoir
 	 * @return : Retourne 0 si ça s'est bien passée,  sinon 1  
 	 */
-	public Integer RecevoirByte(PDU requete) {
-		/* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
-		if (sockClientTCP != null) {
+	// Integer RecevoirByte(PDU requete) {
+		///* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
+		//if (sockClientTCP != null) {
 
 			/* Si le socket UDP crée n'est pas nulle... Autrement si le socket UDP a bien été créée*/
-		} else if (sockClientUDP != null) {
+		//} else if (sockClientUDP != null) {
 
 			/* Affichage d'un message d'erreur*/
-		} else {
-			System.out.println("Erreur d'initialisation du socket");
-			return 1;
-		}
-		return 0;
-	}
+		//} else {
+			//System.out.println("Erreur d'initialisation du socket");
+			//return 1;
+		//}/
+		//return 0;
+	//}
 }

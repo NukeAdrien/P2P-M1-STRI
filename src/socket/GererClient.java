@@ -11,6 +11,7 @@ import serveur.GestionProtocole;
  * Classe GererClient --> Classe permettant de gérer un client
  */
 
+
 public class GererClient implements Runnable {
 
 	/* Déclaration de variables */
@@ -38,7 +39,9 @@ public class GererClient implements Runnable {
 		Envoie envoieClient = new Envoie(sockClient);
 		/* On reçoit la PDU du client */
 		Recevoir receptionClient = new Recevoir(sockClient);
+		/* On initialise la variable requete */
 		requete = null;
+		/* On reçoit la PDU du client */
 		requete = receptionClient.RecevoirPDU();
 		/* Tant que la connexion est toujours active */
 		while (quitter == false) {
@@ -61,18 +64,22 @@ public class GererClient implements Runnable {
 				reponse = gestion.gestionRequete(requete, adresse);
 				/*
 				 * Après la gestion de la requete, on envoie la PDU au client pour une
-				 * éventuelle réception
+				 * réception
 				 */
 				envoieClient.EnvoiePDU(reponse);
 			}
 			/* Initialisation d'une requête */
 			requete = null;
+			/* On reçoit la PDU du client */
 			requete = receptionClient.RecevoirPDU();
+			/* Si tous les données ont été transmises */
 			if (requete.getDonnees().compareTo("FIN") == 0) {
+				/* On peut fermer la connexion */
 				quitter = true;
 			}
 		}
 		try {
+			/* On ferme le socket */
 			sockClient.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -83,7 +90,7 @@ public class GererClient implements Runnable {
 
 	}
 
-	public Boolean FinSocket(PDU reponse) {
+/*	public Boolean FinSocket(PDU reponse) {
 		return false;
-	}
+	}*/
 }

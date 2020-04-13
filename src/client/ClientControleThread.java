@@ -11,7 +11,7 @@ import systeme.fichiers.GestionFichier;
 import systeme.fichiers.HeaderBloc;
 
 /*
- * Classe ClientControleThread --> Classe permettant de créer un ClientControleThread
+ * Classe ClientControleThread --> Permet de créer un ClientControleThread
  */
 
 public class ClientControleThread implements Runnable {
@@ -24,7 +24,7 @@ public class ClientControleThread implements Runnable {
 	int main;
 
 	/*
-	 * Constructeur ClientControleThread --> Ce constructeur prend en paramétre le
+	 * Constructeur ClientControleThread --> Ce constructeur prend en paramètre le
 	 * protocole de transport choisie un GestionFichier, le nom du fichier,
 	 * l'adresse ip et le port Ce constructeur permet de créer un nouveau
 	 * ClientControleThread.
@@ -54,12 +54,12 @@ public class ClientControleThread implements Runnable {
 		/* Déclaration de variables */
 		Fichier fichierDl;
 		int nbBlocIndisp = 0;
-		// Cree un objet PDU pour l'envoyer au serveur
+		// Crée un objet PDU pour l'envoyer au serveur
 		PDUControle requete = new PDUControle("CTRL", "TPF", nomFichier, null);
-		// Cree le socket en indiquant le mode de transport (TCP ou UDP)
+		// Crée le socket en indiquant le mode de transport (TCP ou UDP)
 		SocketClient serveur = new SocketClient(transport);
 		/*
-		 * Si il y a un probléme avec l'initialisation du socket, l'adresse IP et le
+		 * Si il y a un problème avec l'initialisation du socket, l'adresse IP et le
 		 * port du destinataire
 		 */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
@@ -67,26 +67,26 @@ public class ClientControleThread implements Runnable {
 			System.out.println("Impossible de joindre le serveur");
 			return;
 		}
-		/* Si il y un probléme avec l'envoie de la PDU au serveur */
+		/* Si il y un problème avec l'envoie de la PDU au serveur */
 		if (serveur.EnvoiePDU(requete) != 0) {
 			/* On ferme le socket */
 			serveur.FermerSocket();
 			/* Affichage d'un message d'erreur */
-			System.out.println("Erreur lors de l'envoie de la requete");
+			System.out.println("Erreur lors de l'envoi de la requête");
 			return;
 		}
 		/* On initialise la variable */
 		PDU reponse = null;
-		/* On récupére la PDU recu */
+		/* On récupère la PDU recu */
 		reponse = serveur.RecevoirPDU();
-		/* Si la PDU est pas nulle */
+		/* Si la PDU n'est pas nulle */
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur " + this.ip + ":" + this.port);
 			return;
-			/* Si la reponse est une instance de PDU controle */
+			/* Si la réponse est une instance de PDU contrôle */
 		} else if (reponse instanceof PDUControle) {
-			/* On récupére la PDUControle */
+			/* On récupère la PDUContrôle */
 			requete = (PDUControle) reponse;
 		} else {
 			/* Affichage d'un message d'erreur */
@@ -95,20 +95,21 @@ public class ClientControleThread implements Runnable {
 			serveur.FermerSocket();
 			return;
 		}
-		/* Vérification de la reponse */
-		/* Si la commande correspond é celle de TSF */
+		/* Vérification de la réponse */
+		/* Si la commande correspond à celle de TPF */
 
 		if (requete.getCommande().compareTo("TPF") == 0) {
 			/* Si le fichier existe */
 			if (requete.getFichier() != null) {
 				System.out.println(ip+":"+port+" a le fichier");
-				/* On récupére le fichier */
+				/* On récupère le fichier */
 				fichierDl = requete.getFichier();
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
 					/* On ajoute le fichier dans GestionFichier */
+					System.out.println(ip+":"+port+" crée le fichier");
 					sysFichiers.AjouterFichier(fichierDl);
-					System.out.println(ip+":"+port+" cree le fichier");
+					System.out.println(ip+":"+port+" a crée le fichier");
 				} 
 				System.out.println(ip+":"+port+" je ne suis pas coincé");
 				/* On crée une liste d'headers blocs */
@@ -116,9 +117,12 @@ public class ClientControleThread implements Runnable {
 				/* On parcourt les headers blocs */
 				for (Map.Entry<Integer, HeaderBloc> headerbloc : sysFichiers.getListFichier().get(nomFichier)
 						.getListHeaderBlocs().entrySet()) {
+					/*Si le fichier est disponible */
 					if (sysFichiers.getDisponible(fichierDl.getNomFichier(), headerbloc.getKey()) == -1
 							&& fichierDl.getListHeaderBlocs().get(headerbloc.getKey()).getDisponible() == 1) {
+						/* Si le bloc n'est pas réservé */
 						if (sysFichiers.setReserver(fichierDl.getNomFichier(), headerbloc.getKey()) == 0) {
+							/*On ajoute le bloc dans la HashMap*/
 							listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
 							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey());
 							try {
@@ -131,11 +135,12 @@ public class ClientControleThread implements Runnable {
 							System.out.println(ip+":"+port+"je n'ai pas reussi a réserver "+headerbloc.getKey());
 						}
 					} else {
+						/* Si le bloc n'est pas disponible, on incrémente le nombre de blocs indisponible*/
 						if (fichierDl.getDisponible(headerbloc.getKey()) == -1) {
-							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"ne possede pas le bloque");
+							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"ne possède pas le bloc");
 							nbBlocIndisp++;
 						}else {
-							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"bloque deja réservé ou dl");
+							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"bloc déjà réservé ou dl");
 						}
 					}
 				}
@@ -144,7 +149,7 @@ public class ClientControleThread implements Runnable {
 					if (nbBlocIndisp == sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs()
 							.size()) {
 						/* Affichage d'un message d'erreur */
-						System.out.println(ip + ":" + port + " Ne possede aucun bloc du fichier");
+						System.out.println(ip + ":" + port + " Ne possède aucun bloc du fichier");
 					}
 					/* Fermeture du socket */
 					requete = new PDUControle(null, null, "FIN", null);
@@ -159,11 +164,13 @@ public class ClientControleThread implements Runnable {
 				/* Téléchargement du fichier */
 				System.out.println("Début du téléchargement des blocs pour" + ip + ":" + port);
 				transfert.Dowload(sysFichiers.getListFichier().get(fichierDl.getNomFichier()), listHeaderBlocs);
-				System.out.println(ip + ":" + port + " | J'ai télécharger : " + listHeaderBlocs.size() + "/"
+				System.out.println(ip + ":" + port + " | J'ai téléchargé : " + listHeaderBlocs.size() + "/"
 						+ sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
-				/* Fermeture du socket */
+				/* On crée la PDU de fin de téléchargement */
 				requete = new PDUControle(null, null, "FIN", null);
+				/* On envoie la PDU */
 				serveur.EnvoiePDU(requete);
+				/* On ferme le socket */
 				serveur.FermerSocket();
 				if(this.main == 1) {
 					while(sysFichiers.EtatFichier(fichierDl.getNomFichier())!= 1){
@@ -174,16 +181,20 @@ public class ClientControleThread implements Runnable {
 			} else if (requete.getFichier() == null) {
 				/* On affiche les données du fichier */
 				System.out.println(requete.getDonnees());
-				/* Fermeture du socket */
+				/* On crée la PDU de fin de téléchargement */
 				requete = new PDUControle(null, null, "FIN", null);
+				/* On envoie la PDU */
 				serveur.EnvoiePDU(requete);
+				/* On ferme le socket */
 				serveur.FermerSocket();
 			} else {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur de commande");
-				/* Fermeture du socket */
+				/* On crée la PDU de fin de téléchargement */
 				requete = new PDUControle(null, null, "FIN", null);
+				/* On envoie la PDU */
 				serveur.EnvoiePDU(requete);
+				/* On ferme le socket */
 				serveur.FermerSocket();
 			}
 

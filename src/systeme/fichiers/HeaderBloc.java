@@ -2,6 +2,7 @@ package systeme.fichiers;
 
 import java.io.Serializable;
 
+
 /*
  * Classe HeaderBloc --> Classe permettant de créer et d'instancier un HeaderBloc
  */
@@ -12,7 +13,7 @@ public class HeaderBloc implements Serializable, Cloneable {
 	int disponible;
 	
 	/*
-	 * Constructeur HeaderBloc --> Ce constructeur prend en paramétre sa disponibilité. 
+	 * Constructeur HeaderBloc --> Ce constructeur prend en paramètre sa disponibilité. 
 	 * Ce constructeur permet de créer un nouvel HeaderBloc.
 	 */
 	public HeaderBloc(int disponible) {
@@ -39,9 +40,13 @@ public class HeaderBloc implements Serializable, Cloneable {
 
 	}
 	
+	/*
+	 * Méthode clone() : Permet de cloner un élément
+	 * @return : L'objet cloné
+	 */
 	
-
 	public Object clone() {
+		/* Déclaration de variables*/ 
 		HeaderBloc o = null;
 		try {
 			o = (HeaderBloc) super.clone();

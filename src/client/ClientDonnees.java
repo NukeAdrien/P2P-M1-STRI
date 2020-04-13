@@ -73,13 +73,13 @@ public class ClientDonnees {
 				/*On ferme la Socket*/
 				serveur.FermerSocket();
 				/*Affichage d'un message d'erreur*/
-				System.out.println("Erreur lors de l'envoie de la requete");
+				System.out.println("Erreur lors de l'envoi de la requête");
 				return 1;
 			}
 			/* Déclaration de variables de type PDU et de PDUDonnees */
 			PDU reponsePDU = null;
 			PDUDonnees reponse = null;
-			/* On Recupere la PDU recu */
+			/* On Récupère la PDU recu */
 			reponsePDU = serveur.RecevoirPDU();
 			/* Si il y a un problème lors de la réception de la PDU */
 			if (reponsePDU == null) {
@@ -106,8 +106,8 @@ public class ClientDonnees {
 				}
 				/* Si il y a pas eu de problèmes, on indique que ce bloc est disponible*/
 				sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), 1);
-				/*Incrémente le nombre de téléchargement*/
-				/*sysFichiers.nbDowloadInc();*/
+				/* On Incrémente le nombre de téléchargement*/
+				sysFichiers.nbDowloadInc();
 			/* Si la variable reponse a un type de PDU correspondant à ERR */
 			} else if (reponse.getType().compareTo("ERR") == 0) {
 				/* On récupère les données qu'elle a pu recevoir */

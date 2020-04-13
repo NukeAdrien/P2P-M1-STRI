@@ -14,7 +14,7 @@ import systeme.fichiers.GestionFichier;
 public class P2P {
 
 	public static void main(String[] args) {
-		/* Déclaration d'une varibale de type Scanner*/
+		/* Déclaration des variables*/
 		String chemin,annuaire;
 		int port;
 		SocketServeurTCP serveurTCP;
@@ -22,32 +22,42 @@ public class P2P {
 		/* Déclaration d'une varibale de type Scanner*/
 		@SuppressWarnings("resource")
 		Scanner c = new Scanner(System.in);
+		
+		/* On laisse l'utilisateur entrer le port du serveur, le chemin du dossier ainsi qu'un potentiel ajout du module annuaire */
 		System.out.println("Application P2P");
-		System.out.println("Entrer le port du serveur :");
+		System.out.println("Entrez le port du serveur :");
 		port= c.nextInt();
 		c.nextLine();
-		System.out.println("Entrer le chemin du dossier :");
+		System.out.println("Entrez le chemin du dossier :");
 		chemin = c.nextLine();
-		System.out.println("Voulez ajouter le module annuaire : (OUI)");
+		System.out.println("Voulez-vous ajouter le module annuaire : (OUI)");
 		annuaire = c.nextLine();
-		/* Crée et instancie un GestionFichier client et un GestionFichier serveur */
+		
+		/* Crée et initialise un GestionFichier client et un GestionFichier serveur */
 		GestionFichier sysFichiers = new GestionFichier(chemin);
 		sysFichiers.initGestionFichier();
-		/* Crée et instancie un client P2P */
+	
+		/* Crée et initialise un client P2P */
 		ClientP2P client = new ClientP2P(sysFichiers,port);
-		/* Crée et instancie un ServeurControle et un ServeurDonnees */
+		
+		/* Crée et initialise un ServeurControle et un ServeurDonnees */
 		ServeurControle sc = new ServeurControle(sysFichiers);
 		ServeurDonnees sd = new ServeurDonnees(sysFichiers);
-		/*Crée et instancie un serveurAnnuaire*/
+		
+		/*Si l'utilisateur a choisi d'un module annuaire*/
 		if(annuaire.compareTo("OUI")==0) {
-			System.out.println("Entrer une adresse IP pour le serveur d'annuaire");
+			/* On laisse l'utilisateur entrer l'adresse IP pour le serveur d'annuaire*/
+			System.out.println("Entrez une adresse IP pour le serveur d'annuaire");
 			String ip = c.nextLine();
+			/* Crée et instancie un ServeurAnnuaire pour ajouter l'adresse IP précedemment entré */
 			ServeurAnnuaire sa = new ServeurAnnuaire(sysFichiers);
 			/* Crée et instancie un GestionProtocole */
 			protocole = new GestionProtocole(sc,sd,sa);
 			/* Crée et instancie un SocketServeurTCP */
 			serveurTCP = new SocketServeurTCP(protocole,port);
+			/*On crée une PDU indiquant la volonté d'ajouter l'adresse IP précédemment ajouté */
 			PDUAnnuaire init = new PDUAnnuaire("ANN", "REGISTRATION", sysFichiers,Integer.toString(port),null);
+			/*On procède à l'inscription */
 			sa.Inscription(init, ip);
 		}
 		else {
