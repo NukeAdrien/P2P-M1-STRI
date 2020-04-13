@@ -7,6 +7,7 @@ import java.io.Serializable;
  * Classe HeaderBloc --> Classe permettant de créer et d'instancier un HeaderBloc
  */
 
+@SuppressWarnings("serial")
 public class HeaderBloc implements Serializable, Cloneable {
 	
 	/* Déclaration de variables */

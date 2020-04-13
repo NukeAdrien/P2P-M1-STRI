@@ -8,6 +8,7 @@ import systeme.fichiers.Fichier;
  */
 
 
+@SuppressWarnings("serial")
 public class PDUControle extends PDU {
 	/* Déclaration de variables */
 	String commande;

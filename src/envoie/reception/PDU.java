@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Classe PDU --> Classe permettant de gérér une PDU
  */
 
+@SuppressWarnings("serial")
 public class PDU implements Serializable {
 	
 	/*Déclaration de variables*/

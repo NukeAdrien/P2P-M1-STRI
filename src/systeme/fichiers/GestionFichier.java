@@ -3,12 +3,9 @@ package systeme.fichiers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +27,7 @@ import java.util.Scanner;
 /*
  * Classe Client --> Classe permettant de créer un ClientControle
  */
+@SuppressWarnings("serial")
 public class GestionFichier implements Serializable {
 
 	/* Déclaration de variables */
@@ -888,7 +886,6 @@ public class GestionFichier implements Serializable {
 		try {
 			owner = ownerAttributeView.getOwner();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String [] str =  owner.getName().split("\\\\");
@@ -990,7 +987,6 @@ public class GestionFichier implements Serializable {
 		try {
 			owner = ownerAttributeView.getOwner();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String [] str =  owner.getName().split("\\\\");

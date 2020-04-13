@@ -1,6 +1,5 @@
 package socket;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -53,7 +52,6 @@ public class GererClient implements Runnable {
 					/* On ferme le socket */
 					sockClient.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return;
@@ -82,7 +80,6 @@ public class GererClient implements Runnable {
 			/* On ferme le socket */
 			sockClient.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}

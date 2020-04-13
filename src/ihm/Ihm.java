@@ -3,10 +3,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import client.ClientControle;
-import serveur.GestionProtocole;
-import serveur.ServeurControle;
-import serveur.ServeurDonnees;
-import socket.SocketServeurTCP;
 import systeme.fichiers.GestionFichier;
 
 import java.awt.Color;

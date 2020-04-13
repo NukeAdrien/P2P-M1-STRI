@@ -18,12 +18,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import client.ClientControle;
-import client.ClientP2P;
-import serveur.GestionProtocole;
-import serveur.ServeurControle;
-import serveur.ServeurDonnees;
-import socket.SocketServeurTCP;
-import systeme.fichiers.GestionFichier;
 
 /*
  * Classe TelechargementSimpleIHM : Génère la fenêtre JFrame destinée au TéléchargementSimple.

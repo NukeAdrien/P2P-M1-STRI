@@ -8,6 +8,7 @@ import java.util.Map;
  * Classe Fichier --> Classe permettant de créer et d'instancier un fichier
  */
 
+@SuppressWarnings("serial")
 public class Fichier implements Serializable,Cloneable {
 	
 	/* Déclaration de variables */
@@ -182,6 +183,7 @@ public class Fichier implements Serializable,Cloneable {
 		/* On parcourt la list des headers Blocs */
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : this.listHeaderBlocs.entrySet()) {
 			HeaderBloc t = new HeaderBloc(headerbloc.getValue().getDisponible());
+			@SuppressWarnings("unused")
 			HeaderBloc t2 = (HeaderBloc) t.clone();
 			/* On ajoute son clone dans la liste des HeadersBlocs */
 			o.listHeaderBlocs.put(headerbloc.getKey(),t);

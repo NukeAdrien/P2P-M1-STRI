@@ -20,7 +20,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import client.ClientControle;
-import systeme.fichiers.GestionFichier;
 
 /*
  * Classe TelechargementParalleleIHM : Génère la fenêtre JFrame destinée au TéléchargementParallèle.

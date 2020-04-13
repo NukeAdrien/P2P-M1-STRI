@@ -7,6 +7,7 @@ import systeme.fichiers.GestionFichier;
 /*
  * Classe PDUAnnuaire : Permet de gérer les PDU provenant de l'annuaire, hérite de la classe PDU
  */
+@SuppressWarnings("serial")
 public class PDUAnnuaire extends PDU {
 	/* Déclaration de variables */
 

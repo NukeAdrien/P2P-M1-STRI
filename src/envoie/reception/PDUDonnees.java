@@ -4,6 +4,7 @@ package envoie.reception;
  * Classe PDUDonnees --> Classe permettant d'intéragir avec les blocs de données d'une PDU ... Hérite de la classe PDU
  */
 
+@SuppressWarnings("serial")
 public class PDUDonnees extends PDU {
 	
 	/* Déclaration de variables */
