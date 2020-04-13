@@ -75,7 +75,7 @@ public class Fichier implements Serializable,Cloneable {
 	/*
 	 * Méthode setlistHeaderBlocs : Méthode permettant de changer les HeaderBlocs d'un fichier
 	 * @param : la nouvelle liste des HeaderBlocs du fichier stockées dans une HashMap (avec comme clé l'index, et en valeur
-	 * l'HeaderBloc). Pour plus d'informations se référer é la classe HeaderBloc.java
+	 * l'HeaderBloc). Pour plus d'informations se référer à la classe HeaderBloc.java
 	 */
 	/*public void setlistHeaderBlocs(HashMap<Integer, HeaderBloc> listHeaderBlocs) {
 		this.listHeaderBlocs = listHeaderBlocs;

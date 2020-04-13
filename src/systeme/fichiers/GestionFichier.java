@@ -23,18 +23,16 @@ import java.util.Map.Entry;
 
 import javax.swing.JOptionPane;
 
+import ihm.*;
+
 import java.util.Scanner;
 
-import uml.UmlRechercheAuteur;
-import uml.UmlRechercheDate;
-import uml.UmlRechercheNom;
-
 /*
- * Classe Client --> Classe permettant de crï¿½er un ClientControle
+ * Classe Client --> Classe permettant de créer un ClientControle
  */
 public class GestionFichier implements Serializable {
 
-	/* Dï¿½claration de variables */
+	/* Déclaration de variables */
 	HashMap<String, Fichier> listFichier;
 	String chemin;
 	int nbrLireEnCours= 0, nbrRechercheEnCours= 0, nbrAjoutEnCours= 0, nbrLectureDispoEnCours = 0;
@@ -42,8 +40,8 @@ public class GestionFichier implements Serializable {
 	int nbDowload;
 	int nbUpload;
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramï¿½tre un
-	 * SocketClient et un gestion de fichier Ce constructeur permet de crï¿½er un
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un
+	 * SocketClient et un gestion de fichier Ce constructeur permet de créer un
 	 * nouveau ClientDonnees.
 	 */
 	public GestionFichier(String c) {
@@ -54,7 +52,7 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode RechercheFichier : Mï¿½thode permettant avec un nom de fichier de
+	 * Méthode RechercheFichier : Méthode permettant avec un nom de fichier de
 	 * retouner l'objet fichier correspondant
 	 * 
 	 * @param : le type de PDU en String
@@ -65,13 +63,13 @@ public class GestionFichier implements Serializable {
 
 	public Fichier RechercheFichier(String nomFichier) {
 		this.DebutRecherche();
-		/* Dï¿½claration de fichiers */
+		/* Déclaration de fichiers */
 		Fichier recherche = null;
 		/* On parcourt une hash map de fichiers */
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
-			/* On compare la clï¿½ de la hash map avec le nom fichier */
+			/* On compare la clé de la hash map avec le nom fichier */
 			if (listFichier.getKey().compareTo(nomFichier) == 0) {
-				/* On rï¿½cupï¿½re le fichier */
+				/* On récupére le fichier */
 				recherche = this.listFichier.get(nomFichier);
 				break;
 			}
@@ -82,20 +80,20 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode EtatFichier : Mï¿½thode permettant de retourner l'ï¿½tat du fichier
+	 * Méthode EtatFichier : Méthode permettant de retourner l'état du fichier
 	 * actuel
 	 * 
 	 * @param : le nom du fichier
 	 * 
 	 * @return : -1 si non disponible, 0 si le fichier est en cours de
-	 * tï¿½lï¿½chargement, 1 si le fichier est disponible
+	 * téléchargement, 1 si le fichier est disponible
 	 */
 
 	public Integer EtatFichier(String nomFichier) {
 		this.DebutRecherche();
-		/* Dï¿½claration de variables */
+		/* Déclaration de variables */
 		Fichier fichier = null;
-		/* On rï¿½cupï¿½re le nom de fichier (si il existe) */
+		/* On récupére le nom de fichier (si il existe) */
 		fichier = this.listFichier.get(nomFichier);
 		/* Si le fichier n'existe pas */
 		if (fichier == null) {
@@ -114,7 +112,7 @@ public class GestionFichier implements Serializable {
 				/* Si la valeur du header bloc est a 0 */
 				if (headerbloc.getValue().getDisponible() == 0) {
 					/* Affichage d'un message */
-					System.out.println("Fichier en cours de tï¿½lï¿½chargement");
+					System.out.println("Fichier en cours de téléchargement");
 					return 0;
 				}
 			}
@@ -125,13 +123,13 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode EtatFichier : Mï¿½thode permettant de retourner l'ï¿½tat du fichier
+	 * Méthode EtatFichier : Méthode permettant de retourner l'état du fichier
 	 * actuel
 	 * 
 	 * @param : le fichier
 	 * 
 	 * @return : -1 si non disponible, 0 si le fichier est en cours de
-	 * tï¿½lï¿½chargement, 1 si le fichier est disponible
+	 * téléchargement, 1 si le fichier est disponible
 	 */
 
 
@@ -148,7 +146,7 @@ public class GestionFichier implements Serializable {
 				/* Si la valeur du header bloc est a 0 */
 				if (headerbloc.getValue().getDisponible() == 0) {
 					/* Affichage d'un message */
-					System.out.println("Fichier en cours de tï¿½lï¿½chargement");
+					System.out.println("Fichier en cours de téléchargement");
 					return 0;
 				}
 			}
@@ -159,22 +157,22 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode Lire : Mï¿½thode permettant de lire un fichier
+	 * Méthode Lire : Méthode permettant de lire un fichier
 	 * 
-	 * @param : le nom du fichier, le numï¿½ro de bloc ï¿½ lire
+	 * @param : le nom du fichier, le numéro de bloc à lire
 	 * 
-	 * @return : le tableau d'octets correspondant aux donnï¿½es
+	 * @return : le tableau d'octets correspondant aux données
 	 */
 
 	public byte[] Lire(Fichier fichier, Integer numBloc) {
 		this.DebutLire();
-		/* Dï¿½claration de variables */
+		/* Déclaration de variables */
 		byte[] bloc = new byte[4000];
 		FileInputStream fileis = null;
 		int taille = bloc.length;
 		long offset = taille * numBloc;
 
-		/* On rï¿½cupï¿½re l'emplacement du fichier */		
+		/* On récupére l'emplacement du fichier */		
 		File fle = new File(fichier.getEmplacement());
 		try {
 			/* On ouvre les flux */
@@ -196,12 +194,12 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode Ecrire : Mï¿½thode permettant d'ï¿½crire dans un fichier
+	 * Méthode Ecrire : Méthode permettant d'écrire dans un fichier
 	 * 
-	 * @param : le nom du fichier, le numï¿½ro de bloc dans lequel on ï¿½crira dans les
-	 * donnï¿½es, et les donnï¿½es qui sont ï¿½crites
+	 * @param : le nom du fichier, le numéro de bloc dans lequel on écrira dans les
+	 * données, et les données qui sont écrites
 	 * 
-	 * @return : 0 si ï¿½a s'est bien passï¿½e, 1 sinon
+	 * @return : 0 si éa s'est bien passée, 1 sinon
 	 */
 	public synchronized Integer Ecrire(Fichier fichier, Integer numbloc, byte[] donnees) {
 		while (nbrLireEnCours != 0) {
@@ -212,9 +210,9 @@ public class GestionFichier implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		/* On rï¿½cupï¿½re l'emplacement du fichier */
+		/* On récupére l'emplacement du fichier */
 		String file = fichier.getEmplacement();
-		/* Dï¿½claration d'un nouveau fichier */
+		/* Déclaration d'un nouveau fichier */
 		RandomAccessFile ecriture = null;
 		File fle = new File(file);
 		/* Si le fichier n'existe pas */
@@ -233,14 +231,14 @@ public class GestionFichier implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		/* Dï¿½claration de la taille */
+		/* Déclaration de la taille */
 		int taille = 4000;
-		/* Positionnement de l'offset en fonction des numï¿½ros de blocs */
+		/* Positionnement de l'offset en fonction des numéros de blocs */
 		long offset = taille * numbloc;
 		try {
 			/* Positionnement du curseur */
 			ecriture.seek(offset);
-			/* Ecriture des donnï¿½es en fonction de la position du curseur */
+			/* Ecriture des données en fonction de la position du curseur */
 			ecriture.write(donnees, 0, taille);
 			/* Fermeture des flux */
 			ecriture.close();
@@ -254,7 +252,7 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode getListFichier : Mï¿½thode permettant de rï¿½cupï¿½rer la liste des
+	 * Méthode getListFichier : Méthode permettant de récupérer la liste des
 	 * fichiers dans la HashMap d'un bloc
 	 * 
 	 * @return : la liste des fichiers
@@ -264,7 +262,7 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode setListFichier : Mï¿½thode permettant de changer la liste des fichiers
+	 * Méthode setListFichier : Méthode permettant de changer la liste des fichiers
 	 * dans la HashMap d'un bloc
 	 * 
 	 * @return : la nouvelle liste des fichiers
@@ -275,13 +273,13 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode getDisponible : Mï¿½thode permettant de rï¿½cupï¿½rer la disponibilitï¿½ d'un
+	 * Méthode getDisponible : Méthode permettant de récupérer la disponibilité d'un
 	 * bloc
 	 * 
 	 * @param : le nom du fichier, l'index du header bloc
 	 * 
-	 * @return : la disponibilitï¿½ du fichier : -1 si le fichier n'est dispo, 0 si le
-	 * fichier est en cours de tï¿½lï¿½chargement et 1 si le fichier est disponible
+	 * @return : la disponibilité du fichier : -1 si le fichier n'est dispo, 0 si le
+	 * fichier est en cours de téléchargement et 1 si le fichier est disponible
 	 */
 	public int getDisponible(String nom, Integer index) {
 		int disp;
@@ -293,13 +291,13 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode setDisponible : Mï¿½thode permettant de changer la disponibilitï¿½ d'un
+	 * Méthode setDisponible : Méthode permettant de changer la disponibilité d'un
 	 * bloc
 	 * 
-	 * @param : le nom du fichier, l'index du header bloc, la nouvelle disponibilitï¿½
+	 * @param : le nom du fichier, l'index du header bloc, la nouvelle disponibilité
 	 * 
-	 * @return : la nouvelle disponibilitï¿½ du fichier : -1 si le fichier n'est
-	 * dispo, 0 si le fichier est en cours de tï¿½lï¿½chargement et 1 si le fichier est
+	 * @return : la nouvelle disponibilité du fichier : -1 si le fichier n'est
+	 * dispo, 0 si le fichier est en cours de téléchargement et 1 si le fichier est
 	 * disponible
 	 */
 	public synchronized void setDisponible(String nom, Integer index, int disponible) {
@@ -311,14 +309,14 @@ public class GestionFichier implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		/* On modifie la disponibilitï¿½ du fichier */
+		/* On modifie la disponibilité du fichier */
 		this.listFichier.get(nom).setDisponible(index, disponible);
 		notifyAll();
 	}
 	/*
-	 * Mï¿½thode setReserver : Permet de modifier la rï¿½servation du bloc de fichier.
-	 * @param : Le nom de fichier ainsi que son numï¿½ro de bloc
-	 * @return : 0 si ï¿½a s'est bien passï¿½e, 1 sinon  
+	 * Méthode setReserver : Permet de modifier la réservation du bloc de fichier.
+	 * @param : Le nom de fichier ainsi que son numéro de bloc
+	 * @return : 0 si éa s'est bien passée, 1 sinon  
 	 */
 	public synchronized int setReserver(String nom, Integer index) {
 		/* Si le bloc n'est pas disponible */
@@ -331,12 +329,12 @@ public class GestionFichier implements Serializable {
 			}
 		}
 
-		/*Si le bloc est indisponible ou en cours de tï¿½lï¿½chargement */
+		/*Si le bloc est indisponible ou en cours de téléchargement */
 		if (this.getDisponible(nom, index) == 0 || this.getDisponible(nom, index) == 1) {
 			notifyAll();
 			return 1;
 		}	
-		/* On modifie la disponibilitï¿½ du bloc */
+		/* On modifie la disponibilité du bloc */
 		this.listFichier.get(nom).setDisponible(index, 0);
 		/* On notifie la modification */
 		notifyAll();
@@ -344,7 +342,7 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode AjouterFichier : Mï¿½thode permettant d'ajouter un fichier et la HashMap
+	 * Méthode AjouterFichier : Méthode permettant d'ajouter un fichier et la HashMap
 	 * 
 	 * @param : le fichier et ajouter
 	 */
@@ -361,7 +359,7 @@ public class GestionFichier implements Serializable {
 				
 				e.printStackTrace();
 			}
-			System.out.println("Je suis coincï¿½");
+			System.out.println("Je suis coincé");
 			if (this.RechercheFichier(f.nomFichier) != null) {
 				notifyAll();
 				System.out.println("Quitte sans cree le fichier");
@@ -371,21 +369,21 @@ public class GestionFichier implements Serializable {
 		this.listFichier.put(f2.getNomFichier(), f2);
 		/*
 		 * On change l'emplacement du fichier pour le mettre avec les autres fichiers
-		 * tï¿½lï¿½chargï¿½s
+		 * téléchargés
 		 */
 		this.listFichier.get(f2.getNomFichier()).setEmplacement(this.chemin + f2.getNomFichier());
 		/* On parcourt les headers blocs contenues dans le fichier */
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : f2.getListHeaderBlocs().entrySet()) {
 			this.listFichier.get(f2.getNomFichier()).setDisponible(headerbloc.getKey(), -1);
 		}
-		System.out.println("Quitte en crï¿½ant le fichier");
+		System.out.println("Quitte en créant le fichier");
 		notifyAll();
 		return;
 	}
 
 	/*
-	 * Mï¿½thode getChemin : Mï¿½thode permettant de retourner le chemin pour un fichier
-	 * donnï¿½
+	 * Méthode getChemin : Méthode permettant de retourner le chemin pour un fichier
+	 * donné
 	 * 
 	 * @return : le chemin du fichier
 	 */
@@ -395,8 +393,8 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode setChemin : Mï¿½thode permettant de changer le chemin pour un fichier
-	 * donnï¿½
+	 * Méthode setChemin : Méthode permettant de changer le chemin pour un fichier
+	 * donné
 	 * 
 	 * @return : le nouveau chemin du fichier
 	 */
@@ -417,12 +415,12 @@ public class GestionFichier implements Serializable {
 	 */
 
 	/*
-	 * Mï¿½thode getTailleFichier : Mï¿½thode permettant de rï¿½cpï¿½rer la taille du
+	 * Méthode getTailleFichier : Méthode permettant de récpérer la taille du
 	 * fichier.
 	 * 
 	 * @param : Le nom du fichier
 	 * 
-	 * @return : la taille du fichier associï¿½e (en octets)
+	 * @return : la taille du fichier associée (en octets)
 	 */
 
 	private Long getTailleFichier(String nomFichier) {
@@ -431,34 +429,34 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode dateModifFichier : Mï¿½thode permettant de rï¿½cupï¿½rer la date de la
-	 * derniï¿½re modification du fichier.
+	 * Méthode dateModifFichier : Méthode permettant de récupérer la date de la
+	 * derniére modification du fichier.
 	 * 
 	 * @param : Le nom du fichier
 	 * 
-	 * @return : la date du fichier associï¿½e (en octets)
+	 * @return : la date du fichier associée (en octets)
 	 */
 
 	private String dateModifFichier(String nomFichier) {
 		/* On parse dans le format d'une date */
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
-		/* Crï¿½ation nouveau fichier */
+		/* Création nouveau fichier */
 		File f = new File(nomFichier);
-		/* Fonction permettant de rï¿½cupï¿½rer la derniï¿½re date de modification */
+		/* Fonction permettant de récupérer la derniére date de modification */
 		Date d = new Date(f.lastModified());
 		/* Retour dans le format d'une date */
 		return sdf.format(d);
 
 	}
 	/*
-	 * Mï¿½thode initGestionFichier : Mï¿½thode permettant d'initialiser une gestion de
+	 * Méthode initGestionFichier : Méthode permettant d'initialiser une gestion de
 	 * fichier.
 	 * 
-	 * @return : 0 si ï¿½a s'est bien passï¿½e, 1 sinon
+	 * @return : 0 si éa s'est bien passée, 1 sinon
 	 */
 
 	public Integer initGestionFichier() {
-		/* Dï¿½claration de variables */
+		/* Déclaration de variables */
 		ArrayList<String> allFiles = new ArrayList<String>();
 		File f = new File(this.chemin);
 		HeaderBloc blc = null;
@@ -471,7 +469,7 @@ public class GestionFichier implements Serializable {
 		}
 		/* On parcourt la liste de fichiers */
 		for (int i = 0; i < listFiles.length; i++) {
-			/* Si le fichier est un rï¿½pertoire */
+			/* Si le fichier est un répertoire */
 			if (listFiles[i].isDirectory()) {
 				// getFilesRec(allFiles, listFiles[i].toString());
 			} else
@@ -482,13 +480,13 @@ public class GestionFichier implements Serializable {
 		/* On parcourt la liste de fichiers contenues dans l'ArrayList */
 
 		for (int i = 0; i < allFiles.size(); i++) {
-			/* On rï¿½cupï¿½re la taille du fichier */
+			/* On récupére la taille du fichier */
 			double taillFich = this.getTailleFichier(this.chemin + allFiles.get(i));
-			/* On rï¿½cupï¿½re la derniï¿½re date de modification du fichier */
+			/* On récupére la derniére date de modification du fichier */
 			String date = this.dateModifFichier(allFiles.get(i));
-			/* On dï¿½clare un nouveau fichier */
+			/* On déclare un nouveau fichier */
 			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin + allFiles.get(i), (long) taillFich);
-			/* On dï¿½coupe en nombre de blocs en fonction de la taille du fichier */
+			/* On découpe en nombre de blocs en fonction de la taille du fichier */
 			int nbBloc = (int) (taillFich / 4000);
 			double tmp = taillFich / 4000;
 			if (tmp > nbBloc) {
@@ -496,11 +494,11 @@ public class GestionFichier implements Serializable {
 			}
 			/* On parcourt les blocs */
 			for (int j = 0; j < nbBloc; j++) {
-				/* On initialise un tableau de bytes de donnï¿½es */
+				/* On initialise un tableau de bytes de données */
 				byte[] donnees = (byte[]) null;
-				/* On lit les donnï¿½es contenues dans le fichier */
+				/* On lit les données contenues dans le fichier */
 				donnees = this.Lire(fichier, j);
-				/* Si il n'y a pas de donnï¿½es */
+				/* Si il n'y a pas de données */
 				if (!(donnees != null)) {
 					/* Le bloc n'est pas disponible */
 					blc = new HeaderBloc(-1);
@@ -520,14 +518,14 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode DebutLire() : Permet d'indiquer le dï¿½but de lecture
+	 * Méthode DebutLire() : Permet d'indiquer le début de lecture
 	 */
 	public synchronized void DebutLire() {
 		nbrLireEnCours++;
 	}
 
 	/*
-	 * Mï¿½thode FinLire() : Permet d'indiquer la fin de lecture
+	 * Méthode FinLire() : Permet d'indiquer la fin de lecture
 	 */
 	public synchronized void FinLire() {
 		nbrLireEnCours--;
@@ -536,14 +534,14 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode DebutRecherche() : Permet d'indiquer le dï¿½but de la recherche
+	 * Méthode DebutRecherche() : Permet d'indiquer le début de la recherche
 	 */
 	public synchronized void DebutRecherche() {
 		nbrRechercheEnCours++;
 	}
 
 	/*
-	 * Mï¿½thode FinRecherche() : Permet d'indiquer la fin de la recherche
+	 * Méthode FinRecherche() : Permet d'indiquer la fin de la recherche
 	 */
 	public synchronized void FinRecherche() {
 		nbrRechercheEnCours--;
@@ -552,13 +550,13 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode supprimerFichier() : Permet de supprimer un fichier
-	 * @param: Le fichier ï¿½ supprimer
+	 * Méthode supprimerFichier() : Permet de supprimer un fichier
+	 * @param: Le fichier à supprimer
 	 * 
 	 */
 	public synchronized void supprimerFichier(Fichier f2) {
 		try {
-			/* Dï¿½claration des variables */
+			/* Déclaration des variables */
 			File f = new File(this.chemin+f2.getNomFichier());
 			while (nbrRechercheEnCours != 0) {
 				try {
@@ -584,19 +582,19 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Methode afficherDetailFichier() : Permet d'afficher les dï¿½tails d'un fichier
+	 * Methode afficherDetailFichier() : Permet d'afficher les détails d'un fichier
 	 * @param : Le nom du fichier 
 	 */
 	public void afficherDetailFichier(String c) {
-		/* On recherche la prï¿½sence du fichier */
+		/* On recherche la présence du fichier */
 		Fichier f = this.RechercheFichier(c);
 		try {
-			/* On affiche les dï¿½tails du fichier */
+			/* On affiche les détails du fichier */
 			System.out.println("Nom du fichier : " + f.getNomFichier());
 			System.out.println("Date du fichier : " + f.getDate());
 			System.out.println("Emplacement du fichier : " + f.getEmplacement());
 			System.out.println("Taille du fichier : " + f.getTailleOctets() + " octets");
-			System.out.println("Disponibilitï¿½ du fichier : " + this.EtatFichier(f.getNomFichier()));
+			System.out.println("Disponibilité du fichier : " + this.EtatFichier(f.getNomFichier()));
 			System.out.println("List Header Blocs : " + f.getListHeaderBlocs().toString());
 		}	catch (Exception e) {
 			System.out.println("Fichier introuvable");
@@ -605,13 +603,13 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode renommerFichier() : Permet de renommer un fichier
-	 * @param: Le fichier ï¿½ renommer, le nouveau nom de fichier
+	 * Méthode renommerFichier() : Permet de renommer un fichier
+	 * @param: Le fichier à renommer, le nouveau nom de fichier
 	 * 
 	 */
 	public synchronized void renommerFichier(Fichier f2, String nom) {
 		try {
-			/* Dï¿½claration de variables */
+			/* Déclaration de variables */
 			File f = new File(this.chemin+f2.getNomFichier());
 			File f1 = new File(this.chemin+nom);
 
@@ -642,13 +640,13 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode afficherFichierDisponible() : Afficher les fichiers disponibles
+	 * Méthode afficherFichierDisponible() : Afficher les fichiers disponibles
 	 * 
 	 */
 	public void afficherFichierDisponible() {
-		/* On parcourt chaque entrï¿½e de la HashMap */
+		/* On parcourt chaque entrée de la HashMap */
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
-			/* Si l'ï¿½tat du fichier indique que le fichier est disponible */
+			/* Si l'état du fichier indique que le fichier est disponible */
 			if (this.EtatFichier(listFichier.getKey()) == 0) {
 				/* On affiche le nom du fichier */
 				System.out.println("Ce fichier est disponible : " + listFichier.getKey());
@@ -657,7 +655,7 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode DebutLectureDispo(): Permettre d'incrï¿½menter le nombre de lecture des fichiers disponibles
+	 * Méthode DebutLectureDispo(): Permettre d'incrémenter le nombre de lecture des fichiers disponibles
 	 * 
 	 */
 
@@ -667,7 +665,7 @@ public class GestionFichier implements Serializable {
 
 	
 	/*
-	 * Mï¿½thode FinLectureDispo(): Permettre de dï¿½crï¿½menter le nombre de lecture des fichiers disponibles
+	 * Méthode FinLectureDispo(): Permettre de décrémenter le nombre de lecture des fichiers disponibles
 	 * 
 	 */
 	public synchronized void FinLectureDispo() {
@@ -677,8 +675,8 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Methode nbDowloadInc : Permet d'incrï¿½menter le nombre de tï¿½lï¿½chargements
-	 * @return : Le nombre de tï¿½lï¿½chargements
+	 * Methode nbDowloadInc : Permet d'incrémenter le nombre de téléchargements
+	 * @return : Le nombre de téléchargements
 	 */
 
 	public synchronized void nbDowloadInc() {
@@ -695,7 +693,7 @@ public class GestionFichier implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode DebutLectureDispo(): Permettre d'incrï¿½menter le nombre de lecture pour le dï¿½but de l'upload
+	 * Méthode DebutLectureDispo(): Permettre d'incrémenter le nombre de lecture pour le début de l'upload
 	 * 
 	 */
 	
@@ -704,7 +702,7 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode FinLectureUpload(): Permettre de dï¿½crï¿½menter le nombre de lecture pour la fin de l'upload
+	 * Méthode FinLectureUpload(): Permettre de décrémenter le nombre de lecture pour la fin de l'upload
 	 * 
 	 */
 	public synchronized void FinLectureUpload() {
@@ -714,7 +712,7 @@ public class GestionFichier implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode DebutLectureDowload(): Permettre d'incrï¿½menter le nombre de lecture pour le dï¿½but du tï¿½lï¿½chargement
+	 * Méthode DebutLectureDowload(): Permettre d'incrémenter le nombre de lecture pour le début du téléchargement
 	 * 
 	 */
 	
@@ -723,7 +721,7 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Mï¿½thode FinLectureDowload(): Permettre de dï¿½crï¿½menter le nombre de lecture pour la fin du tï¿½lï¿½chargement
+	 * Méthode FinLectureDowload(): Permettre de décrémenter le nombre de lecture pour la fin du téléchargement
 	 * 
 	 */
 	public synchronized void FinLectureDowload() {
@@ -733,7 +731,7 @@ public class GestionFichier implements Serializable {
 	
 
 	/*
-	 * Methode nbUploadInc : Permet d'incrï¿½menter le nombre d'uploads
+	 * Methode nbUploadInc : Permet d'incrémenter le nombre d'uploads
 	 * @return : Le nombre d'uploads
 	 */
 	public synchronized void nbUploadInc() {
@@ -750,8 +748,8 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Methode getNbDowload : Permet d'obtenir le nombre de tï¿½lï¿½chargements
-	 * @return : Le nombre de tï¿½lï¿½chargements
+	 * Methode getNbDowload : Permet d'obtenir le nombre de téléchargements
+	 * @return : Le nombre de téléchargements
 	 */
 	public synchronized int getNbDowload() {
 		int nb;
@@ -774,10 +772,10 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Methode setNbDowload : Permet de changer le nombre de tï¿½lï¿½chargements
-	 * @param : Le nouveau nombre de tï¿½lï¿½chargements
+	 * Methode setNbDowload : Permet de changer le nombre de téléchargements
+	 * @param : Le nouveau nombre de téléchargements
 	 */
-	public void setNbDowload(int nbDowload) {
+	public synchronized void setNbDowload(int nbDowload) {
 		while (nbLectureDowload > 0) {
 			try {
 				this.wait();
@@ -794,7 +792,7 @@ public class GestionFichier implements Serializable {
 	 * Methode setNbUpload : Permet de changer le nombre d'uploads
 	 * @param : Le nouveau nombre d'uploads
 	 */
-	public void setNbUpload(int nbUpload) {
+	public synchronized void setNbUpload(int nbUpload) {
 		while (nbLectureUpload > 0) {
 			try {
 				this.wait();
@@ -808,7 +806,7 @@ public class GestionFichier implements Serializable {
 	}
 	
 	/*
-	 * Mï¿½thode reinitialisation : Permet de remettre les compteurs ï¿½ 0 
+	 * Méthode reinitialisation : Permet de remettre les compteurs à 0 
 	 */
 	
 	public void reinitialisation () {
@@ -822,21 +820,21 @@ public class GestionFichier implements Serializable {
 
 
 	/*
-	 * Methode rechercheNomFichierUml() : Permet de rechercher un nom de fichier depuis la JFrame
-	 * @return : La liste des fichiers qui correspond ï¿½ la recherche
+	 * Methode rechercheNomFichierIHM() : Permet de rechercher un nom de fichier depuis la JFrame
+	 * @return : La liste des fichiers qui correspond à la recherche
 	 */
-	public ArrayList<String> rechercheNomFichierUml() {
-		/* Dï¿½claration des variables */
+	public ArrayList<String> rechercheNomFichierIHM() {
+		/* Déclaration des variables */
 		ArrayList<String> al = new ArrayList<String>();		
-		/* On parcourt chaque entrï¿½e de la hashMap */
+		/* On parcourt chaque entrée de la hashMap */
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			try {
-				/* Si la clï¿½ du fichier (Nom du fichier) correspond ï¿½ la recherche (ou au moins les premiï¿½res lettres) */
-				if(listFichier.getKey().startsWith(UmlRechercheNom.getJTextField2().substring(0,3))) {
+				/* Si la clé du fichier (Nom du fichier) correspond à la recherche (ou au moins les premiéres lettres) */
+				if(listFichier.getKey().startsWith(IHMRechercheNom.getJTextField2().substring(0,3))) {
 					al.add(listFichier.getKey());
 				}
 			} catch (StringIndexOutOfBoundsException id) {
-				javax.swing.JOptionPane.showMessageDialog(null, "Veuillez saisir les trois premiï¿½res lettres", "Error", JOptionPane.ERROR_MESSAGE); 
+				javax.swing.JOptionPane.showMessageDialog(null, "Veuillez saisir les trois premiéres lettres", "Error", JOptionPane.ERROR_MESSAGE); 
 				break;
 			}
 		}
@@ -845,27 +843,27 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Methode rechercheDateFichierUml() : Permet de rechercher une date depuis la JFrame
-	 * @return : La liste des fichiers qui correspond ï¿½ la recherche
+	 * Methode rechercheDateFichierIHM() : Permet de rechercher une date depuis la JFrame
+	 * @return : La liste des fichiers qui correspond à la recherche
 	 */
 
-	public ArrayList<String> rechercheDateFichierUml() {
-		/* Dï¿½claration de variables*/
+	public ArrayList<String> rechercheDateFichierIHM() {
+		/* Déclaration de variables*/
 		ArrayList<String> al = new ArrayList<String>();
 		File rep = new File(this.chemin);
-		/* On rï¿½cupï¿½re les fichiers du rï¿½pertoire */
+		/* On récupére les fichiers du répertoire */
 		File[] files = rep.listFiles();
 		/* On parse la date */
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-		/* On parcourt chaque fichier du rï¿½pertoire */
+		/* On parcourt chaque fichier du répertoire */
 		for(int i=0; i<files.length; i++) {
-			/* On rï¿½cupï¿½re la date du fichier */
+			/* On récupére la date du fichier */
 			Date d = new Date(files[i].lastModified());
 			String da = dateFormat.format(d);
-			/* Si la date correspond ï¿½ la recherche */
-			if(da.equals(UmlRechercheDate.getJTextField2())) {
-				/* On l'ajoute ï¿½ l'arrayList */
+			/* Si la date correspond à la recherche */
+			if(da.equals(IHMRechercheDate.getJTextField2())) {
+				/* On l'ajoute à l'arrayList */
 				al.add(files[i].getName());
 			}
 		}
@@ -876,15 +874,15 @@ public class GestionFichier implements Serializable {
 	}
 
 	/*
-	 * Methode rechercheAuteurFichierUml() : Permet de rechercher un auteur depuis la JFrame
-	 * @return : La liste des fichiers qui correspond ï¿½ la recherche
+	 * Methode rechercheAuteurFichierIhm() : Permet de rechercher un auteur depuis la JFrame
+	 * @return : La liste des fichiers qui correspond à la recherche
 	 */
-	public ArrayList<String> rechercheAuteurFichierUml() {
-		/* Dï¿½claration de variables*/
+	public ArrayList<String> rechercheAuteurFichierIHM() {
+		/* Déclaration de variables*/
 		ArrayList<String> al = new ArrayList<String>();
 		Path path = Paths.get(this.chemin);
 
-		/* On recupï¿½re les propriï¿½tï¿½s du fichier et plus principalement l'auteur */
+		/* On recupére les propriétés du fichier et plus principalement l'auteur */
 		FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
 		UserPrincipal owner = null;
 		try {
@@ -894,10 +892,10 @@ public class GestionFichier implements Serializable {
 			e.printStackTrace();
 		}
 		String [] str =  owner.getName().split("\\\\");
-		/* On parcourt la liste des fichiers du rï¿½pertoire */
+		/* On parcourt la liste des fichiers du répertoire */
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
-			/* Si l'auteur recherchï¿½ correspond ï¿½ celui du fichier */
-			if(str[1].equals(UmlRechercheAuteur.getJTextField2())) {
+			/* Si l'auteur recherché correspond à celui du fichier */
+			if(str[1].equals(IHMRechercheAuteur.getJTextField2())) {
 				/* On l'ajoute dans l'arrayList */
 				al.add(listFichier.getKey());
 			}
@@ -910,25 +908,26 @@ public class GestionFichier implements Serializable {
 
 	/*
 	 * Methode rechercheNomFichier() : Permet de rechercher un nom de fichier
-	 * @return : La liste des fichiers qui correspond ï¿½ la recherche
-	 * @param : le critï¿½re de recherche
+	 * @return : La liste des fichiers qui correspond à la recherche
+	 * @param : le critére de recherche
 	 */
 	public ArrayList<String> rechercheNomFichier(String carac) {
 
-		/* Dï¿½claration des variables */
+		/* Déclaration des variables */
 		ArrayList<String> al = new ArrayList<String>();
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		carac=sc.next();
 
-		/* Pour chaque entrï¿½e de la HashMap*/
+		/* Pour chaque entrée de la HashMap*/
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
-			/* Si le nom du fichier correspond au critï¿½re de recherche (ou au moins ses premiï¿½res lettres)*/
+			/* Si le nom du fichier correspond au critére de recherche (ou au moins ses premiéres lettres)*/
 			if(listFichier.getKey().startsWith(carac.substring(0,1))) {
-				/* On ajoute ï¿½ l'ArrayList le nom du fichier */
+				/* On ajoute à l'ArrayList le nom du fichier */
 				al.add(listFichier.getKey());
 			}
 		}
-		/* On affiche les fichiers correspondant au critï¿½re de recherche */
+		/* On affiche les fichiers correspondant au critére de recherche */
 		for (int i=0; i<listFichier.size(); i++) {
 			System.out.println("Voici les fichiers disponibles :" + al.get(i));
 
@@ -940,28 +939,29 @@ public class GestionFichier implements Serializable {
 
 	/*
 	 * Methode rechercheDateFichier() : Permet de rechercher une date
-	 * @return : La liste des fichiers qui correspond ï¿½ la recherche
-	 * @param : le critï¿½re de recherche
+	 * @return : La liste des fichiers qui correspond à la recherche
+	 * @param : le critére de recherche
 	 */
 	public ArrayList<String> rechercheDateFichier(long carac) {
-		/* Dï¿½claration de variables*/
+		/* Déclaration de variables*/
 		ArrayList<String> al = new ArrayList<String>();
 		File rep = new File(this.chemin);
-		/* On rï¿½cupï¿½re les fichiers du rï¿½pertoire */
+		/* On récupére les fichiers du répertoire */
 		File[] files = rep.listFiles();
 		/* On parse la date */
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		carac=sc.nextInt();
 
-		/* On parcourt chaque fichier du rï¿½pertoire */
+		/* On parcourt chaque fichier du répertoire */
 		for(int i=0; i<files.length; i++) {
-			/* On rï¿½cupï¿½re la date du fichier */
+			/* On récupére la date du fichier */
 			Date d = new Date(files[i].lastModified());
 			String da = dateFormat.format(d);
-			/* Si la date correspond ï¿½ la recherche */
+			/* Si la date correspond à la recherche */
 			if(da.equals(carac)) {
-				/* On l'ajoute ï¿½ l'arrayList */
+				/* On l'ajoute à l'arrayList */
 				al.add(files[i].getName());
 			}
 		}
@@ -973,17 +973,18 @@ public class GestionFichier implements Serializable {
 
 	/*
 	 * Methode rechercheAuteurFichier() : Permet de rechercher un auteur
-	 * @return : La liste des fichiers qui correspond ï¿½ la recherche
-	 * @param : le critï¿½re de recherche
+	 * @return : La liste des fichiers qui correspond à la recherche
+	 * @param : le critére de recherche
 	 */
 	public ArrayList<String> rechercheAuteurFichier(String carac) {
-		/* Dï¿½claration de variables*/
+		/* Déclaration de variables*/
 		ArrayList<String> al = new ArrayList<String>();
 		Path path = Paths.get(this.chemin);
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		carac=sc.next();
 
-		/* On recupï¿½re les propriï¿½tï¿½s du fichier et plus principalement l'auteur */
+		/* On recupére les propriétés du fichier et plus principalement l'auteur */
 		FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
 		UserPrincipal owner = null;
 		try {
@@ -993,9 +994,9 @@ public class GestionFichier implements Serializable {
 			e.printStackTrace();
 		}
 		String [] str =  owner.getName().split("\\\\");
-		/* On parcourt la liste des fichiers du rï¿½pertoire */
+		/* On parcourt la liste des fichiers du répertoire */
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
-			/* Si l'auteur recherchï¿½ correspond ï¿½ celui du fichier */
+			/* Si l'auteur recherché correspond à celui du fichier */
 			if(str[1].equals(carac)) {
 				/* On l'ajoute dans l'arrayList */
 				al.add(listFichier.getKey());
