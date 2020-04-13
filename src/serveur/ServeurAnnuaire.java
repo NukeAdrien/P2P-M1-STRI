@@ -10,45 +10,77 @@ import systeme.fichiers.Fichier;
 import systeme.fichiers.GestionFichier;
 import systeme.fichiers.HeaderBloc;
 
+/*
+ * Classe ServeurAnnuaire : Permet d'instancier un nouveau serveur Annuaire
+ */
+
 public class ServeurAnnuaire {
-	/* Déclaration de variables */
+	/* Dï¿½claration de variables */
 	GestionFichier gestionFichier;
 	HashMap<String, GestionFichier> listServeurs;
 	PDUAnnuaire reponse;
-
+	
 	/*
-	 * Constructeur ServeuControle --> Ce constructeur prend en paramétre un gestion
-	 * de fichier Ce constructeur permet de créer un nouveau ServeurControle .
+	 * Constructeur ServeuControle --> Ce constructeur prend en paramï¿½tre un gestionnaire
+	 * de fichiers. Ce constructeur permet de crï¿½er un nouveau ServeurAnnuaire .
 	 */
+	
 	public ServeurAnnuaire(GestionFichier gf) {
 		gestionFichier = gf;
 		listServeurs = new HashMap<String, GestionFichier>();
 	}
 
+	/*
+	 * Methode Inscription : Permet de s'inscrire auprï¿½s d'un serveur annuaire
+	 * @param : La PDUAnnuaire ï¿½ traiter ainsi que l'adresse IP du serveur ï¿½ ajouter
+	 * @return : La PDUAnnuaire traitï¿½e
+	 */
+	
 	public PDUAnnuaire Inscription(PDUAnnuaire pdu, String adresse) {
+		/* Recupï¿½ration des donnï¿½es de la PDU */
 		adresse = adresse+":"+pdu.getDonnees();
+		/* Si l'adresse n'est pas encore prï¿½sente dans la liste */
 		if (listServeurs.get(adresse) == null) {
+			/* On ajoute cette nouvelle adresse */
 			listServeurs.put(adresse, pdu.getSysFichiers());
+			/* Si il un problï¿½me lors de l'enregistrement */
 			if (listServeurs.get(adresse) == null) {
+				/* On envoie une PDU NOK*/
 				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "NOK", null);
 			} else {
+				/*Sinon on envoie une PDU OK */
 				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "OK", null);
 			}
+			/* Si l'adresse existe dï¿½jï¿½ */
 		} else {
+			/* On modifie la liste des fichiers existants par celui du systï¿½me de fichier prï¿½cï¿½demment crï¿½ï¿½e */
 			listServeurs.get(adresse).setListFichier(pdu.getSysFichiers().getListFichier());
+			/* Puis on effectue la MAJ des fichiers */
 			reponse = new PDUAnnuaire("ANN", "REGISTRATION", this.listServeurs.get(adresse), "MAJ", null);
 		}
 		return reponse;
 	}
+	
+	/*
+	 * Mï¿½thode Search : Permet la recherche d'un ï¿½lï¿½ment dans l'annuaire
+	 * @param : La PDU ï¿½ traiter
+	 * @return : La PDU traitï¿½e
+	 */
 
 	public PDUAnnuaire Search(PDUAnnuaire pdu) {
 
 		return null;
 	}
 
+	/*
+	 * Mï¿½thode Dowload : Permet le tï¿½lï¿½chargement d'un ï¿½lï¿½ment dans l'annuaire
+	 * @param : La PDU ï¿½ traiter ainsi que l'adresse du serveur sur lequel se trouve le fichier
+	 * @return : La PDU traitï¿½e
+	 */
+	
 	public PDUAnnuaire Dowload(PDUAnnuaire pdu, String adresse) {
 		adresse = adresse+":"+pdu.getListServeurs().get(0);
-		/* Déclaration de variables */
+		/* Dï¿½claration de variables */
 		PDUAnnuaire reponse = null;
 		int i = 0;
 		Fichier fichier = null;
@@ -70,42 +102,63 @@ public class ServeurAnnuaire {
 		List<String> listServeurDispo = new ArrayList<String>();
 		/* On parcourt les headers blocs */
 		for (Map.Entry<String, GestionFichier> listServeur : listServeurs.entrySet()) {
+			/* On recherche la prï¿½sence de fichiers */
 			fichier = listServeur.getValue().RechercheFichier(pdu.getDonnees());
+			/* Si le fichier n'existe pas */
 			if (fichier != null) {
 				if (fichierFinal == null) {
+					/* On clone le fichier existant */
 					fichierFinal = (Fichier) fichier.clone();
 				}
+				/* On parcourt les headers blocs */
 				for (Map.Entry<Integer, HeaderBloc> headerbloc : fichier.getListHeaderBlocs().entrySet()) {
+					/* Si le bloc est disponible */
 					if (headerbloc.getValue().getDisponible() == 1) {
+						/* Alors chaque bloc constituant le ficher est disponible ï¿½galement */
 						fichierFinal.getListHeaderBlocs().get(headerbloc.getKey()).setDisponible(1);
 						i++;
 					}
 				}
 			}
+			/* 
+			 * On ajoute tous les fichiers dispos dans une autre liste de serveurs
+			 * Il contient donc tous les serveurs dnas lesquels un fichier est disponible
+			 */
 			if (i != 0) {
 				listServeurDispo.add(listServeur.getKey());
 			}
+			/* On rï¿½initialise les paramï¿½tres */
 			fichier = null;
 			i = 0;
 		}
+		/* Si le fichier est introuvable */
 		if(fichierFinal == null) {
-			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Fichier inconnu des autre serveurs", null);
+			/* On crï¿½e une PDU indiquant la situation */
+			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Fichier inconnu des autres serveurs", null);
 		}
+		/* Si le fichier est disponible */
 		else if (gestionFichier.EtatFichier(fichierFinal) == 1) {
+			/* On calcule le ratio */
 			ratio  = ((nbU+625)/nbD)*100;
+			/* Si le ratio est supï¿½rieur ï¿½ 50 */
 			if(ratio >= 50) {
+				/* Le tï¿½lï¿½chargement peut dï¿½buter */
 				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge", listServeurDispo);
 			}
+			/* Si le ratio est supï¿½rieur ï¿½ 25 */
 			else if (ratio >= 25) {
+				/* Le tï¿½lï¿½chargement pourra dï¿½buter dans 30 secs */
 				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge dans 30 secondes", listServeurDispo);
 			}
 			else {
-				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Vous ne pouvez pas téléchargé pour l'instant car votre ratio de Uplaod/Téléchargement est inferieur a 25% ", null);
+				/* Sinon annulation du tï¿½lï¿½chargement car son ratio est trop bas */
+				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Vous ne pouvez pas tï¿½lï¿½chargï¿½ pour l'instant car votre ratio de Uplaod/Tï¿½lï¿½chargement est inferieur a 25% ", null);
 			}
 		} else {
-			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Impossible de télécharger le fichier en entier", null);
+			/* Si le fichier n'est pas disponible ou partiellement disponible */
+			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Impossible de tï¿½lï¿½charger le fichier en entier", null);
 		}
-		/* On retourne la PDU traitée */
+		/* On retourne la PDU traitï¿½e */
 		return reponse;
 	}
 }

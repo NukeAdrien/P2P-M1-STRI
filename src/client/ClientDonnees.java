@@ -9,18 +9,18 @@ import socket.SocketClient;
 import systeme.fichiers.*;
 
 /*
- * Classe ClientDonnees --> Cette classe permet de gérer l'arrivée des données contenues dans une PDU
+ * Classe ClientDonnees --> Cette classe permet de gï¿½rer l'arrivï¿½e des donnï¿½es contenues dans une PDU
  */
 
 public class ClientDonnees {
 	
-	/* Déclaration de variables */
+	/* Dï¿½claration de variables */
 	SocketClient serveur;
 	GestionFichier sysFichiers;
 
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramètre un SocketClient et un gestion de fichier
-	 * Ce constructeur permet de créer un nouveau ClientDonnees.
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramï¿½tre un SocketClient et un gestion de fichier
+	 * Ce constructeur permet de crï¿½er un nouveau ClientDonnees.
 	 */
 	public ClientDonnees(GestionFichier g, SocketClient s) {
 		sysFichiers = g;
@@ -28,20 +28,20 @@ public class ClientDonnees {
 	}
 
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramètre un gestion de fichier
-	 * Ce constructeur permet de créer un nouveau ClientDonnees.
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramï¿½tre un gestion de fichier
+	 * Ce constructeur permet de crï¿½er un nouveau ClientDonnees.
 	 */
 	public ClientDonnees(GestionFichier g) {
 		sysFichiers = g;
 	}
 
 	/*
-	 * Méthode InitialiserConnexion : Méthode permettant de tester la connexion client/serveur
-	 * @param : L'adresse IP et le numéro de port à lier au socket
-	 * @return : 0 si ça s'est passée, 1 sinon
+	 * Mï¿½thode InitialiserConnexion : Mï¿½thode permettant de tester la connexion client/serveur
+	 * @param : L'adresse IP et le numï¿½ro de port ï¿½ lier au socket
+	 * @return : 0 si ï¿½a s'est passï¿½e, 1 sinon
 	 */
 	public Integer InitialiserConnexion(String ip, Integer port) {
-		/* Si il y a un problème lors de l'initialisation du socket */
+		/* Si il y a un problï¿½me lors de l'initialisation du socket */
 		if (serveur.InitialisationSocket(ip, 4444) != 0) {
 			/*Affichage d'un message d'erreur */
 			System.out.println("Impossible de joindre le serveur");
@@ -52,15 +52,15 @@ public class ClientDonnees {
 	}
 
 	/*
-	 * Méthode Download : Méthode permettant au client de télécharger le fichier est ses blocs de données associés.
+	 * Mï¿½thode Download : Mï¿½thode permettant au client de tï¿½lï¿½charger le fichier est ses blocs de donnï¿½es associï¿½s.
 	 * @param : Le nom du fichier et sa liste des blocs
-	 * @return : 0 si ça s'est passée, 1 sinon
+	 * @return : 0 si ï¿½a s'est passï¿½e, 1 sinon
 	 */
 	
 	public Integer Dowload(Fichier fichier, HashMap<Integer, HeaderBloc> listHeaderBlocs) {
-		/* Si il n'y a pas de blocs encore présents */
+		/* Si il n'y a pas de blocs encore prï¿½sents */
 		if (listHeaderBlocs == null) {
-			/* Alors on récupère les blocs présents dans le fichier*/
+			/* Alors on rï¿½cupï¿½re les blocs prï¿½sents dans le fichier*/
 			listHeaderBlocs = fichier.getListHeaderBlocs();
 		}
 		/*On parcourt tous les blocs*/
@@ -68,27 +68,27 @@ public class ClientDonnees {
 			/*On instancie une PDUDonnees*/
 			PDUDonnees requete = new PDUDonnees("DATA",fichier.getNomFichier() ,(int)headerbloc.getKey(), null);
 			// Envoie de la PDU au serveur
-			/*Si il y a un problème lors de l'envoie de la PDU au client */
+			/*Si il y a un problï¿½me lors de l'envoie de la PDU au client */
 			if (serveur.EnvoiePDU(requete) != 0) {
 				/*On ferme la Socket*/
 				serveur.FermerSocket();
 				/*Affichage d'un message d'erreur*/
-				System.out.println("Erreur lors de l'envoie de la requete");
+				System.out.println("Erreur lors de l'envoi de la requï¿½te");
 				return 1;
 			}
-			/* Déclaration de variables de type PDU et de PDUDonnees */
+			/* Dï¿½claration de variables de type PDU et de PDUDonnees */
 			PDU reponsePDU = null;
 			PDUDonnees reponse = null;
-			/* On Recupere la PDU recu */
+			/* On Rï¿½cupï¿½re la PDU recu */
 			reponsePDU = serveur.RecevoirPDU();
-			/* Si il y a un problème lors de la réception de la PDU */
+			/* Si il y a un problï¿½me lors de la rï¿½ception de la PDU */
 			if (reponsePDU == null) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur de connexion avec le serveur");
 				return 1;
 				/* Si reponsePDU est de l'instance PDUDonnees*/
 			}else if(reponsePDU instanceof PDUDonnees) {
-				/*On caste reponsePDU pour pouvoir récupérer les données*/
+				/*On caste reponsePDU pour pouvoir rï¿½cupï¿½rer les donnï¿½es*/
 				reponse = (PDUDonnees) reponsePDU;
 			}else {
 				/* Affichage d'un message d'erreur */
@@ -97,20 +97,20 @@ public class ClientDonnees {
 				/*On ferme la socket*/
 				return 1;
 			}
-			/* Si la variable reponse a un type de PDU correspondant à DATA */
+			/* Si la variable reponse a un type de PDU correspondant ï¿½ DATA */
 			if (reponse.getType().compareTo("DATA") == 0) {
-				/* Si il y a un problème lors de l'écriture du bloc*/
+				/* Si il y a un problï¿½me lors de l'ï¿½criture du bloc*/
 				if(sysFichiers.Ecrire(fichier,(int) headerbloc.getKey(),reponse.getBloc()) != 0) {
 					/*On indique que ce bloc n'est pas disponible*/
 					sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), -1);
 				}
-				/* Si il y a pas eu de problèmes, on indique que ce bloc est disponible*/
+				/* Si il y a pas eu de problï¿½mes, on indique que ce bloc est disponible*/
 				sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), 1);
-				/*Incrémente le nombre de téléchargement*/
+				/* On Incrï¿½mente le nombre de tï¿½lï¿½chargement*/
 				sysFichiers.nbDowloadInc();
-			/* Si la variable reponse a un type de PDU correspondant à ERR */
+			/* Si la variable reponse a un type de PDU correspondant ï¿½ ERR */
 			} else if (reponse.getType().compareTo("ERR") == 0) {
-				/* On récupère les données qu'elle a pu recevoir */
+				/* On rï¿½cupï¿½re les donnï¿½es qu'elle a pu recevoir */
 				System.out.println(reponse.getDonnees());
 			} else {
 				/* Affichage d'un message d'erreur */

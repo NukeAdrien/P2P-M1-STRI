@@ -2,9 +2,11 @@ package envoie.reception;
 
 import systeme.fichiers.Fichier;
 
+
 /*
  * Classe PDUControle --> Classe permettant de contrôler une PDU ... Hérite de la classe PDU
  */
+
 
 public class PDUControle extends PDU {
 	/* Déclaration de variables */
@@ -12,7 +14,7 @@ public class PDUControle extends PDU {
 	Fichier fichier;
 	
 	/*
-	 * Constructeur PDUControle --> Ce constructeur prend en paramètres celles de sa classe héritée mais la commande qui va permettre
+	 * Constructeur PDUControle --> Ce constructeur prend en paramètres celles de sa classe héritée mais aussi la commande qui va permettre
 	 * d'interagir avec la PDU et le Fichier où sera stockée la PDU.
 	 */
 	public PDUControle(String type, String commande, String donnees, Fichier fichier) {
@@ -30,7 +32,7 @@ public class PDUControle extends PDU {
 	}
 	
 	/*
-	 * Méthode getCommande : Méthode permettant de changer la commande permettant d'intéragir avec la PDU
+	 * Méthode setCommande : Méthode permettant de changer la commande permettant d'intéragir avec la PDU
 	 * @param : la nouvelle commande en String
 	 */
 	public void setCommande(String commande) {
@@ -46,7 +48,7 @@ public class PDUControle extends PDU {
 	}
 	
 	/*
-	 * Méthode getFichier : Méthode permettant de changer le Fichier dans lequel sera stockée la PDU
+	 * Méthode setFichier : Méthode permettant de changer le Fichier dans lequel sera stockée la PDU
 	 * @param : le nouveau fichier de type Fichier
 	 */
 	public void setFichier(Fichier fichier) {

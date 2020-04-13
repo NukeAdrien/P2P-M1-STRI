@@ -40,6 +40,7 @@ public class ClientP2P implements Runnable {
 		Scanner sc = new Scanner(System.in);
 		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
+		/* Choix du protocole */
 		System.out.println("Entrez TCP ou UDP: ");
 		N4 = sc.nextLine();
 		if (N4.compareTo("TCP") == 0 && N4.compareTo("UDP") == 0) {
@@ -55,23 +56,26 @@ public class ClientP2P implements Runnable {
 			/* On crée une liste de ports */
 			List<Integer> listPort = new ArrayList<Integer>();
 			System.out.println("Menu : ");
+			/* Présentation du menu */
 			while (choix < 0 || choix > 5) {
 				System.out.println("1 - Télécharger un simple fichier");
-				System.out.println("2 - Télécharger un fichier depuis plusieur serveur");
+				System.out.println("2 - Télécharger un fichier depuis plusieurs serveurs");
 				System.out.println("3 - Télécharger en P2P");
-				System.out.println("4 - Voir la liste des fichiers disponible");
+				System.out.println("4 - Voir la liste des fichiers disponibles");
 				System.out.println("5 - Vos fichiers");
 				System.out.println("0 - Quitter");
-
+				/* L'utilisateur entre son choix */
 				System.out.println("Entrez votre choix :");
 				if (sc.hasNextInt()) {
 					choix = sc.nextInt();
+					/* Si il y a un problème au niveau de la saisie */
 				} else {
 					sc.nextLine();
-					System.out.println("Entrer invalide");
+					System.out.println("Entrée invalide");
 				}
 				if (choix < 0 && choix > 5) {
-					System.out.println("Erreur saisie");
+					/* Affichage d'un message d'erreur */
+					System.out.println("Erreur de saisie");
 				}
 			}
 			nomFichier = sc.nextLine();
@@ -101,9 +105,9 @@ public class ClientP2P implements Runnable {
 			case 2:
 				/* On le laisse entrer le nom de fichier, le nombre de serveurs à contacter */
 
-				System.out.println("Entrez le nom du fichier a télécharger : ");
+				System.out.println("Entrez le nom du fichier à télécharger : ");
 				nomFichier = sc.nextLine();
-				System.out.println("Entrez le nombre de serveur a contacter : ");
+				System.out.println("Entrez le nombre de serveurs à contacter : ");
 				nbServeur = sc.nextInt();
 				sc.nextLine();
 				/*
@@ -125,6 +129,7 @@ public class ClientP2P implements Runnable {
 					 */
 					controle.TelechargementParallele(nomFichier, listIP, listPort);
 				} else {
+					/* Affichage d'un message d'erreur */
 					System.out.println("Erreur de saisie");
 				}
 				break;
@@ -132,13 +137,16 @@ public class ClientP2P implements Runnable {
 				boolean menuAnnuaire = false;
 				String adresseIP;
 				int numeroPort;
+				/* Tant que l'utilisateur ne s'est pas encore inscrit */
 				if (this.annuaire == null) {
 					System.out.println("Entrez l'IP du serveur : ");
 					adresseIP = sc.nextLine();
 					System.out.println("Entrez le port du serveur : ");
 					numeroPort = sc.nextInt();
 					sc.nextLine();
+					/* L'annuaire "ajoute" ce nouveau client */
 					annuaire = new ClientAnnuaire(N4, sysFichiers);
+					/* L'annuaire enregistre l'adresse IP du serveur, le port du serveur, et le port du serveur annuaire */
 					annuaire.Inscription(adresseIP, numeroPort,this.portServeur);
 				}
 				while (menuAnnuaire == false) {
@@ -156,21 +164,23 @@ public class ClientP2P implements Runnable {
 							choix = sc.nextInt();
 						} else {
 							sc.nextLine();
-							System.out.println("Entrer invalide");
+							System.out.println("Entrée invalide");
 						}
 						if (choix < 0 && choix > 4) {
-							System.out.println("Erreur saisie");
+							System.out.println("Erreur de saisie");
 						}
 					}
 					nomFichier = sc.nextLine();
 					switch (choix) {
 					/* Si l'utilisateur a choisi l'option 1 */
 					case 1:
+						/* On laisse l'utilisateur saisir adresse Ip/port*/
 						System.out.println("Entrez l'IP du serveur : ");
 						adresseIP = sc.nextLine();
 						System.out.println("Entrez le port du serveur : ");
 						numeroPort = sc.nextInt();
 						sc.nextLine();
+						/*L'annuaire inscrit ce nouveau serveur */
 						annuaire.Inscription(adresseIP, numeroPort,this.portServeur);
 						break;
 					case 2:
@@ -180,20 +190,22 @@ public class ClientP2P implements Runnable {
 						/*
 						 * On le laisse entrer le nom de fichier
 						 */
-						System.out.println("Entrez le nom du fichier a télécharger : ");
+						System.out.println("Entrez le nom du fichier à télécharger : ");
 						nomFichier = sc.nextLine();
 						/*
-						 * On peut donc télécharger le fichier avec comme paramètre le nom de fichier
+						 * Si le téléchargement est possible
+						 * On peut donc télécharger le fichier avec comme paramètre le nom de fichier, la liste IP des serveurs et la liste des ports des serveurs
 						 */
 						if(annuaire.Telechargement(nomFichier, listIP, listPort, this.portServeur)==0) {
 							controle.TelechargementParallele(nomFichier, listIP, listPort);
 						}
 						else {
-							System.out.println("Le fichier n'a pas pu etre téléchargé");
+							/* Affichage d'un message d'erreur */
+							System.out.println("Le fichier n'a pas pu être téléchargé");
 						}
-						/* On rénitialise une liste d'adresses IP */
+						/* On réinitialise la liste d'adresses IP */
 						listIP = new ArrayList<String>();
-						/* On rénitialise une liste de ports */
+						/* On réinitialise la liste de ports */
 						listPort = new ArrayList<Integer>();
 						break;
 					case 4:
@@ -207,7 +219,8 @@ public class ClientP2P implements Runnable {
 				}
 				break;
 			case 4:
-				System.out.println("Entrer le chemin du dossier :");
+				/* Si l'utilisateur souhaite voir ses fichiers disponibles */
+				System.out.println("Entrez le chemin du dossier :");
 				String chemin = sc.nextLine();
 				sysFichiers = new GestionFichier(chemin);
 				this.sysFichiers.initGestionFichier();
@@ -229,62 +242,80 @@ public class ClientP2P implements Runnable {
 							choix = sc.nextInt();
 						} else {
 							sc.nextLine();
-							System.out.println("Entrer invalide");
+							System.out.println("Entrée invalide");
 						}
 						if (choix < 0 && choix > 3) {
-							System.out.println("Erreur saisie");
+							System.out.println("Erreur de saisie");
 						}
 					}
 					switch (choix) {
 					case 1:
+						/* Si l'utilisateur souhaite voir le détail de ses fichiers */
 						String res = null;
 						try {
+							/*On laisse l'utilisateur entrer son nom de fichier */
 							System.out.println("Veuillez entrer le nom du fichier : ");
-							sysFichiers = new GestionFichier("./Telechargment/");
+							/* On initialise un gestionnaire de fichier */
+							sysFichiers = new GestionFichier("./Telechargement/");
 							res = scan.next();
 							this.sysFichiers.initGestionFichier();
+							/* Puis on affiche les détails */
 							this.sysFichiers.afficherDetailFichier(res);
 						} catch (NoSuchElementException e) {
+							/* Affichage d'un message d'erreur si le fichier est introuvable */
 							System.out.println("Aucune entrée trouvée");
 							e.printStackTrace();
 						}
 						break;
 					case 2:
+						/* Si l'utilisateur souhaite supprimer l'un de ses fichiers */
 						res = null;
 						try {
+							/*On laisse l'utilisateur entrer son nom de fichier */
 							System.out.println("Veuillez entrer le nom du fichier : ");
+							/* On initialise un gestionnaire de fichier */
 							sysFichiers = new GestionFichier("./Telechargment/");
 							res = scan.next();
 							this.sysFichiers.initGestionFichier();
+							/* On recherche le fichier afin de savoir si il existe dans la hashMap */
 							Fichier red = this.sysFichiers.RechercheFichier(res);
+							/* Puis on supprime le fichier en question */
 							this.sysFichiers.supprimerFichier(red);
 							System.out.println(this.sysFichiers.getListFichier());
 						} catch (NoSuchElementException e) {
+							/* Affichage d'un message d'erreur si le fichier est introuvable */
 							System.out.println("Aucune entrée trouvée");
 							e.printStackTrace();
 						}
 						break;
 					case 3:
+						/* Si l'utilisateur souhaite renommer l'un de ses fichiers */
 						res = null;
 						try {
+							/*On laisse l'utilisateur entrer son nom de fichier */
 							System.out.println("Veuillez entrer le nom du fichier à renommer : ");
+							/* On initialise un gestionnaire de fichier */
 							sysFichiers = new GestionFichier("./Telechargment/");
 							res = scan.next();
 							this.sysFichiers.initGestionFichier();
+							/* On recherche le fichier afin de savoir si il existe dans la hashMap */
 							Fichier red = this.sysFichiers.RechercheFichier(res);
 							res = null;
+							/* On laisse l'utilisateur entrer le nouveau de fichier */
 							System.out.println("Veuillez entrer le nouveau nom du fichier : ");
 							res = scan.next();
+							/* Puis on renomme le fichier en question */
 							this.sysFichiers.renommerFichier(red, res);
 							System.out.println(this.sysFichiers.getListFichier());
 							this.sysFichiers.afficherDetailFichier(res);
 						} catch (NoSuchElementException e) {
+							/* Affichage d'un message d'erreur si le fichier est introuvable */
 							System.out.println("Aucune entrée trouvée");
 							e.printStackTrace();
 						}
 						break;
 					default:
-						System.out.println("Erreur saisie");
+						System.out.println("Erreur de saisie");
 						break;
 					}
 				}

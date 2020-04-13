@@ -45,6 +45,7 @@ public class PDUDonnees extends PDU {
 		return index;
 	}
 	
+
 	/*
 	 * Méthode setIndex : Méthode permettant de changer l'index d'un des blocs constituant la PDU
 	 * @param : le nouvel index d'un des blocs constituant la PDU

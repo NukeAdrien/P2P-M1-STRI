@@ -3,7 +3,7 @@ package envoie.reception;
 import java.io.Serializable;
 
 /*
- * Classe PDU --> Classe permettant d'envoyer de créer une PDU
+ * Classe PDU --> Classe permettant de gérér une PDU
  */
 
 public class PDU implements Serializable {
@@ -12,7 +12,7 @@ public class PDU implements Serializable {
 	String type,donnees;
 	
 	/*
-	 * Constructeur PDU --> Ce constructeur prend en paramètre le type de PDU ainsi que les données qu'il contienne
+	 * Constructeur PDU --> Ce constructeur prend en paramètre le type de PDU ainsi que les données associés
 	 */
 
 	public PDU(String type, String donnees) {
@@ -38,7 +38,7 @@ public class PDU implements Serializable {
 	}
 
 	/*
-	 * Méthode getType : Méthode permettant d'obtenir le type de la PDU
+	 * Méthode getDonnees : Méthode permettant d'obtenir les données de la PDU
 	 * @return : les données de la PDU en String
 	 */
 	public String getDonnees() {
@@ -46,7 +46,7 @@ public class PDU implements Serializable {
 	}
 
 	/*
-	 * Méthode getType : Méthode permettant de changer les données de la PDU
+	 * Méthode setDonnees : Méthode permettant de changer les données de la PDU
 	 * @param : les nouvelles données de la PDU en String
 	 */
 	public void setDonnees(String donnees) {
