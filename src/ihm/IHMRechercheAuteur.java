@@ -22,7 +22,7 @@ import javax.swing.border.Border;
 import systeme.fichiers.GestionFichier;
 
 /*
- * Classe UmlRechercheAuteur : Génère la fenêtre JFrame permettant la recherche par auteur
+ * Classe IhmRechercheAuteur : Génère la fenêtre JFrame permettant la recherche par auteur
  * 
  */
 
@@ -48,7 +48,7 @@ public class IHMRechercheAuteur implements ActionListener {
 	JButton button;
 
 	/*
-	 * Constructeur UmlRechercheAuteur : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur IhmRechercheAuteur : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
 	public IHMRechercheAuteur() {

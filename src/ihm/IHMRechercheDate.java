@@ -48,7 +48,7 @@ public class IHMRechercheDate implements ActionListener {
 
 	
 	/*
-	 * Constructeur UmlRechercheDate : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur IhmRechercheDate : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
 	public IHMRechercheDate() {
