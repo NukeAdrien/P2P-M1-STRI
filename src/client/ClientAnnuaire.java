@@ -99,10 +99,6 @@ public class ClientAnnuaire {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de commande");
 		}
-		/* Création d'une PDU de fin de recherhe */
-		PDUControle fin = new PDUControle(null, null, "FIN", null);
-		/* On l'envoie */
-		serveur.EnvoiePDU(fin);
 		/* On ferme le socket */
 		serveur.FermerSocket();
 		return;
@@ -197,10 +193,6 @@ public class ClientAnnuaire {
 				}
 			} else {
 				System.out.println(dowload.getDonnees());
-				/* On crée la PDU de fin de téléchargement */
-				PDUControle fin = new PDUControle(null, null, "FIN", null);
-				/* On envoie la PDU */
-				serveur.EnvoiePDU(fin);
 				/* On ferme le socket */
 				serveur.FermerSocket();
 				return 1;
@@ -209,18 +201,10 @@ public class ClientAnnuaire {
 		} else {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de commande");
-			/* On crée la PDU de fin de téléchargement */
-			PDUControle fin = new PDUControle(null, null, "FIN", null);
-			/* On envoie la PDU */
-			serveur.EnvoiePDU(fin);
 			/* On ferme le socket */
 			serveur.FermerSocket();
 			return 1;
 		}
-		/* On crée la PDU de fin de téléchargement */
-		PDUControle fin = new PDUControle(null, null, "FIN", null);
-		/* On envoie la PDU */
-		serveur.EnvoiePDU(fin);
 		/* On ferme le socket */
 		serveur.FermerSocket();
 		return 0;

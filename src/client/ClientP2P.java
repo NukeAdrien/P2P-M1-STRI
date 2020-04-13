@@ -17,35 +17,30 @@ public class ClientP2P implements Runnable {
 	GestionFichier sysFichiers;
 	ClientAnnuaire annuaire = null;
 	int portServeur;
+	String transport;
+	
 	/*
 	 * Constructeur ClientP2P --> Ce constructeur prend en paramètre un gestion de
 	 * fichier Ce constructeur permet de créer un nouveau ClientP2P.
 	 */
-	public ClientP2P(GestionFichier g, int p) {
+	public ClientP2P(GestionFichier g, int p,String t) {
 		this.sysFichiers = g;
 		this.portServeur = p;
+		this.transport = t;
 	}
 
 	/* Méthode run : méthode d'exécution du thread */
-	@SuppressWarnings("resource")
 	public void run() {
 		/* Déclaration de variables */
 		int choix = -1;
 		int port, nbServeur, i;
 		boolean fin = false;
 		String nomFichier, ip;
-		String N4;
 
 		/* Déclaration d'une varibale de type Scanner */
 		Scanner sc = new Scanner(System.in);
-		@SuppressWarnings("resource")
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Entrez TCP ou UDP: ");
-		N4 = sc.nextLine();
-		if (N4.compareTo("TCP") == 0 && N4.compareTo("UDP") == 0) {
-			return;
-		}
-		ClientControle controle = new ClientControle(N4, sysFichiers);
+
+		ClientControle controle = new ClientControle(this.transport, sysFichiers);
 
 		/* On laisse le choix à l'utilisateur */
 		while (fin == false) {
@@ -138,7 +133,7 @@ public class ClientP2P implements Runnable {
 					System.out.println("Entrez le port du serveur : ");
 					numeroPort = sc.nextInt();
 					sc.nextLine();
-					annuaire = new ClientAnnuaire(N4, sysFichiers);
+					annuaire = new ClientAnnuaire(this.transport, sysFichiers);
 					annuaire.Inscription(adresseIP, numeroPort,this.portServeur);
 				}
 				while (menuAnnuaire == false) {
@@ -241,7 +236,7 @@ public class ClientP2P implements Runnable {
 						try {
 							System.out.println("Veuillez entrer le nom du fichier : ");
 							sysFichiers = new GestionFichier("./Telechargment/");
-							res = scan.next();
+							res = sc.next();
 							this.sysFichiers.initGestionFichier();
 							this.sysFichiers.afficherDetailFichier(res);
 						} catch (NoSuchElementException e) {
@@ -254,7 +249,7 @@ public class ClientP2P implements Runnable {
 						try {
 							System.out.println("Veuillez entrer le nom du fichier : ");
 							sysFichiers = new GestionFichier("./Telechargment/");
-							res = scan.next();
+							res = sc.next();
 							this.sysFichiers.initGestionFichier();
 							Fichier red = this.sysFichiers.RechercheFichier(res);
 							this.sysFichiers.supprimerFichier(red);
@@ -269,12 +264,12 @@ public class ClientP2P implements Runnable {
 						try {
 							System.out.println("Veuillez entrer le nom du fichier à renommer : ");
 							sysFichiers = new GestionFichier("./Telechargment/");
-							res = scan.next();
+							res = sc.next();
 							this.sysFichiers.initGestionFichier();
 							Fichier red = this.sysFichiers.RechercheFichier(res);
 							res = null;
 							System.out.println("Veuillez entrer le nouveau nom du fichier : ");
-							res = scan.next();
+							res = sc.next();
 							this.sysFichiers.renommerFichier(red, res);
 							System.out.println(this.sysFichiers.getListFichier());
 							this.sysFichiers.afficherDetailFichier(res);

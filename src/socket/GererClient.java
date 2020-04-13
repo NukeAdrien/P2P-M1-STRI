@@ -21,7 +21,7 @@ public class GererClient implements Runnable {
 	PDU requete, reponse;
 	Boolean quitter = false;
 	String adresse;
-
+	
 	/*
 	 * Constructeur GererClient --> Ce constructeur prend en paramètres un socket
 	 * (UDP ou TCP) * crée ainsi qu'un gestion de Protocole
@@ -34,14 +34,14 @@ public class GererClient implements Runnable {
 	/* Méthode run : méthode d'exécution du thread */
 	@Override
 	public void run() {
-		/* On envoie la PDU au client */
+		/* On cree la PDU au client */
 		Envoie envoieClient = new Envoie(sockClient);
-		/* On reçoit la PDU du client */
+		/* On cree la PDU du client */
 		Recevoir receptionClient = new Recevoir(sockClient);
 		/* On initialise la variable requete */
 		requete = null;
 		/* On reçoit la PDU du client */
-		requete = receptionClient.RecevoirPDU();
+		requete = receptionClient.RecevoirPDUTCP();
 		/* Tant que la connexion est toujours active */
 		while (quitter == false) {
 			/* Si il y a un problème lors de la réception */
@@ -64,12 +64,12 @@ public class GererClient implements Runnable {
 				 * Après la gestion de la requete, on envoie la PDU au client pour une
 				 * réception
 				 */
-				envoieClient.EnvoiePDU(reponse);
+				envoieClient.EnvoiePDUTCP(reponse);
 			}
 			/* Initialisation d'une requête */
 			requete = null;
 			/* On reçoit la PDU du client */
-			requete = receptionClient.RecevoirPDU();
+			requete = receptionClient.RecevoirPDUTCP();
 			/* Si tous les données ont été transmises */
 			if (requete.getDonnees().compareTo("FIN") == 0) {
 				/* On peut fermer la connexion */
@@ -86,8 +86,4 @@ public class GererClient implements Runnable {
 		return;
 
 	}
-
-/*	public Boolean FinSocket(PDU reponse) {
-		return false;
-	}*/
 }

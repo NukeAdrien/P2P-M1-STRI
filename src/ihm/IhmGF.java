@@ -46,7 +46,7 @@ public class IHMGF extends JFrame implements ActionListener {
 	ClientControle cc;
 
 	/*
-	 * Constructeur IHMGF : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur UmlGF : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 
 	public IHMGF(ClientControle cc) {

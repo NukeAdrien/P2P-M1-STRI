@@ -50,7 +50,7 @@ public class IHMP2P extends JFrame implements ActionListener {
 	JButton j4 = new JButton("Télécharger ");
 
 	/*
-	 * Constructeur IhmP2P : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur UmlP2P : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
 	@SuppressWarnings("static-access")

@@ -50,11 +50,10 @@ public class TelechargementSimpleIHM extends JFrame implements ActionListener {
 	JButton j4 = new JButton("Télécharger ");
 
 	/*
-	 * Constructeur TelechargementSimpleIhm : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur TelechargementSimpleUml : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	ClientControle cc = null;
-	
-	@SuppressWarnings("static-access")
+
 	public TelechargementSimpleIHM(ClientControle cc) {
 		
 		this.cc=cc;

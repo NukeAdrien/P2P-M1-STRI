@@ -152,8 +152,6 @@ public class ClientControleThread implements Runnable {
 						System.out.println(ip + ":" + port + " Ne posséde aucun bloc du fichier");
 					}
 					/* Fermeture du socket */
-					requete = new PDUControle(null, null, "FIN", null);
-					serveur.EnvoiePDU(requete);
 					serveur.FermerSocket();
 					return;
 				}
@@ -166,10 +164,6 @@ public class ClientControleThread implements Runnable {
 				transfert.Dowload(sysFichiers.getListFichier().get(fichierDl.getNomFichier()), listHeaderBlocs);
 				System.out.println(ip + ":" + port + " | J'ai téléchargé : " + listHeaderBlocs.size() + "/"
 						+ sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
-				/* On crée la PDU de fin de téléchargement */
-				requete = new PDUControle(null, null, "FIN", null);
-				/* On envoie la PDU */
-				serveur.EnvoiePDU(requete);
 				/* On ferme le socket */
 				serveur.FermerSocket();
 				if(this.main == 1) {
@@ -181,19 +175,11 @@ public class ClientControleThread implements Runnable {
 			} else if (requete.getFichier() == null) {
 				/* On affiche les données du fichier */
 				System.out.println(requete.getDonnees());
-				/* On crée la PDU de fin de téléchargement */
-				requete = new PDUControle(null, null, "FIN", null);
-				/* On envoie la PDU */
-				serveur.EnvoiePDU(requete);
 				/* On ferme le socket */
 				serveur.FermerSocket();
 			} else {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur de commande");
-				/* On crée la PDU de fin de téléchargement */
-				requete = new PDUControle(null, null, "FIN", null);
-				/* On envoie la PDU */
-				serveur.EnvoiePDU(requete);
 				/* On ferme le socket */
 				serveur.FermerSocket();
 			}

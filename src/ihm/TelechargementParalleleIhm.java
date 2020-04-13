@@ -53,7 +53,7 @@ public class TelechargementParalleleIHM extends JFrame implements ActionListener
 
 
 	/*
-	 * Constructeur TelechargementParalleleIhm : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur TelechargementParalleleUml : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
 	public TelechargementParalleleIHM(ClientControle cc) {

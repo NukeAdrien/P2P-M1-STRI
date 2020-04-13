@@ -1,7 +1,9 @@
 package envoie.reception;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Socket;
 
@@ -14,6 +16,9 @@ public class Recevoir {
 	DatagramSocket sockClientUDP = null;
 	Socket sockClientTCP = null;
 	ObjectInputStream receptionPDU;
+	 DatagramPacket dgram;
+	 String ipRequete;
+	 int portRequete;
 
 	/*
 	 * Constructeur Recevoir --> Ce constructeur prend en paramètre un socket TCP instancié
@@ -40,7 +45,7 @@ public class Recevoir {
 	 * Méthode EnvoiePDU : Cette méthode permet d'envoyer une PDU.
 	 * @return : Retourne la PDU reçu  
 	 */
-	public PDU RecevoirPDU() {
+	public PDU RecevoirPDUTCP() {
 		/* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
 		if (sockClientTCP != null) {
 			/* On instancie un objet pour pouvoir lire la PDU */
@@ -62,37 +67,65 @@ public class Recevoir {
 				/* Sinon on retourne null */
 				return null;
 			}
-			/* Si le socket UDP crée n'est pas nulle... Autrement dit si le socket UDP a bien été créée*/
-		} else if (sockClientUDP != null) {
-			// TODO Auto-generated method stu
-
-		} else
-
-		{
+			
+		}else{
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur d'initialisation du socket");
 			return null;
 		}
-		return null;
+	}
+		public PDU RecevoirPDUUDP() {
+			/* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
+			if (sockClientUDP != null) {
+				try{
+					// Construction du tampon et de l’objet qui vont servir à recevoir
+					 byte[] buffer = new byte[100000];
+					 this.dgram = new DatagramPacket(buffer, buffer.length);
+					 // Attends puis reçoit un datagramme
+					 sockClientUDP.receive(dgram); 
+					 this.ipRequete = dgram.getAddress().toString();
+					 this.portRequete = dgram.getPort();
+					 // Extrait les données
+					 ByteArrayInputStream stream = new ByteArrayInputStream(dgram.getData());
+					 ObjectInputStream o = new ObjectInputStream(stream);
+					 try {
+						PDU pdu = (PDU) o.readObject();
+						if(pdu == null) {
+							System.out.println("Erreur readObject");
+						}
+						return pdu;
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+						System.out.println("Erreur UDP");
+						return null;
+					}
+					}
+					catch(IOException ioe) {
+					 System.out.println("Erreur socket : " + ioe.getMessage());
+					 return null;
+					}
+
+			} else{
+				/* Affichage d'un message d'erreur */
+				System.out.println("Erreur d'initialisation du socket");
+				return null;
+			}
 	}
 
-	/*
-	 * Méthode RecevoirByte.. Cette méthode permet de recevoir une PDU avec les données.
-	 * @param : Prend en paramètre une PDU à recevoir
-	 * @return : Retourne 0 si ça s'est bien passée,  sinon 1  
-	 */
-	// Integer RecevoirByte(PDU requete) {
-		///* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
-		//if (sockClientTCP != null) {
+		public String getIpRequete() {
+			return ipRequete;
+		}
 
-			/* Si le socket UDP crée n'est pas nulle... Autrement si le socket UDP a bien été créée*/
-		//} else if (sockClientUDP != null) {
+		public void setIpRequete(String ipRequete) {
+			this.ipRequete = ipRequete;
+		}
 
-			/* Affichage d'un message d'erreur*/
-		//} else {
-			//System.out.println("Erreur d'initialisation du socket");
-			//return 1;
-		//}/
-		//return 0;
-	//}
+		public int getPortRequete() {
+			return portRequete;
+		}
+
+		public void setPortRequete(int portRequete) {
+			this.portRequete = portRequete;
+		}
+
 }

@@ -7,7 +7,7 @@ import serveur.GestionProtocole;
 import java.io.IOException;
 
 /*
- * Classe SocketClientTCP --> Cette classe permet de créer, d'instancier et de lancer un socket
+ * Classe SocketTCP --> Cette classe permet de créer, d'instancier et de lancer un socket
  */
 
 public class SocketServeurTCP extends Thread {

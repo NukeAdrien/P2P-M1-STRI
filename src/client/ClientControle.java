@@ -115,10 +115,6 @@ public class ClientControle {
 					/* Affichage d'un message de succés */
 					System.out.println("Fichier téléchargé");
 				}
-				/* On crée la PDU de fin de téléchargement */
-				simpleTel = new PDUControle("CTRL", "TSF", "FIN", null);
-				/* On envoie la PDU */
-				serveur.EnvoiePDU(simpleTel);
 				/* On ferme le socket */
 				serveur.FermerSocket();
 				/* Si le fichier n'existe pas */

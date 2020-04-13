@@ -49,7 +49,7 @@ public class IHMRechercheNom implements ActionListener {
 	ClientControle cc;
 
 	/*
-	 * Constructeur IhmRechercheNom : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur UmlRechercheNom : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
 	

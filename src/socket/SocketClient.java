@@ -18,6 +18,9 @@ public class SocketClient {
 	String typeTransport;
 	Envoie envoyer;
 	Recevoir recevoir;
+	String ip;
+	int port;
+
 
 	/*
 	 * Constructeur SocketClient --> Ce constructeur prend en paramètre le type de connexion utilisé
@@ -34,12 +37,18 @@ public class SocketClient {
 	 * @return : 0 si ça d'est bien passée, 1 sinon 
 	 */
 
-	public Integer InitialisationSocket(String ip, Integer port) {
+	public Integer InitialisationSocket(String i, Integer p) {
+		this.ip=i;
+		this.port=p;
 		/* Si c'est UDP */
-		if (typeTransport == "UDP") {
+		if (typeTransport.compareTo("UDP")==0) {
 			try {
 				/* On crée un datagramme UDP */
-				sockClientUDP = new DatagramSocket(4444);
+				sockClientUDP = new DatagramSocket();
+				/* On envoie ce socket pour qu'il soit traité */
+				envoyer = new Envoie(sockClientUDP);
+				/* On reçoit la socket traité */
+				recevoir = new Recevoir(sockClientUDP);
 			} catch (SocketException e) {
 				e.printStackTrace();
 				return 1;
@@ -73,14 +82,19 @@ public class SocketClient {
 		/* Si le socket existe */
 		if (sockClientTCP != null) {
 			/* Si il y a un problème lors de l'envoi */
-			if (envoyer.EnvoiePDU(pdu) != 0) {
+			if (envoyer.EnvoiePDUTCP(pdu) != 0) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur lors de l'envoi de la PDU");
 				return 1;
 			}
 			/* Si le datagramme existe */
 		} else if (sockClientUDP != null) {
-			// TODO Auto-generated method stu
+			/* Si il y a un problème lors de l'envoi */
+			if (envoyer.EnvoiePDUUDP(pdu,this.ip,this.port) != 0) {
+				/* Affichage d'un message d'erreur */
+				System.out.println("Erreur lors de l'envoi de la PDU");
+				return 1;
+			}
 		} else {
 			/* Affichage d'un message d'erreur sinon */
 			System.out.println("Le socket client n'a pas été initialisé");
@@ -99,7 +113,7 @@ public class SocketClient {
 		/* Si le socket existe */
 		if (sockClientTCP != null) {
 			/*On reçoit la PDU */
-			reponse = recevoir.RecevoirPDU();
+			reponse = recevoir.RecevoirPDUTCP();
 			if (reponse == null) {
 				/* Affichage d'un message d'erreur s'il n'y a pas de réponses */
 				System.out.println("Erreur lors de la réception de la PDU");
@@ -107,7 +121,13 @@ public class SocketClient {
 			}
 			/* Si le datagramme existe */
 		} else if (sockClientUDP != null) {
-			// TODO Auto-generated method stu
+				/*On reçoit la PDU */
+				reponse = recevoir.RecevoirPDUUDP();
+				if (reponse == null) {
+					/* Affichage d'un message d'erreur s'il n'y a pas de réponses */
+					System.out.println("Erreur lors de la réception de la PDU");
+					return null;
+				}
 		} else {
 			/* Affichage d'un message d'erreur sinon */
 			System.out.println("Le socket client n'a pas été initialisé");
@@ -121,11 +141,15 @@ public class SocketClient {
 	 */
 	public void FermerSocket() {
 		/* Si c'est de l'UDP */
-		if (typeTransport == "UDP") {
+		if (typeTransport.compareTo("UDP")==0) {
 			/* On ferme la connexion */
 			sockClientUDP.close();
 		} else {
 			/* Si c'est du TCP */
+			/* On crée la PDU de fin de téléchargement */
+			PDUControle fin = new PDUControle(null, null, "FIN", null);
+			/* On envoie la PDU */
+			this.EnvoiePDU(fin);
 			try {
 				/* On ferme la connexion */
 				sockClientTCP.close();

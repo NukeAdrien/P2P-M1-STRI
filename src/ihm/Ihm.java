@@ -57,7 +57,7 @@ public class IHM extends JFrame implements ActionListener {
 
 
 	/*
-	 * Constructeur Ihm : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur Uml : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	public IHM(GestionFichier f) {
 		/*On ajoute au panel un nouveau Layout*/
@@ -177,7 +177,7 @@ public class IHM extends JFrame implements ActionListener {
 		/* Si l'utilisateur a cliqué sur le bouton bt1 */
 		if(arg0.getSource() == bt1) {
 			@SuppressWarnings("unused")
-			/* On crée l'objet TelechargementSimpleIhm */
+			/* On crée l'objet TelechargementSimpleUml */
 
 			TelechargementSimpleIHM tsu = new TelechargementSimpleIHM(this.controle);
 		}
@@ -189,7 +189,7 @@ public class IHM extends JFrame implements ActionListener {
 			if(gjt.length()!=0) {
 				/* On parse le String en entier */
 				Integer nb = Integer.parseInt(gjt);
-				/* On crée un objet TelechargementParalleleIhm */
+				/* On crée un objet TelechargementParalleleUml */
 				TelechargementParalleleIHM tpu = new TelechargementParalleleIHM(this.controle);
 				/* On lance la méthode GenererTrame avec comme paramètre le numéro de champ
 				 * (qui correspond à une paire de JTextArea (IP) et JTextArea (Port)) que l'utilisateur a saisi
@@ -204,13 +204,13 @@ public class IHM extends JFrame implements ActionListener {
 		
 		/* Si l'utilisateur a cliqué sur le bouton bt3 */
 		if(arg0.getSource() == bt3) {
-			/* Lancement de la fenêtre IhmP2P */
+			/* Lancement de la fenêtre UmlP2P */
 			@SuppressWarnings("unused")
-			IHMP2P Ihmp2p = new IHMP2P();
+			IHMP2P umlp2p = new IHMP2P();
 		}
 		/* Si l'utilisateur a cliqué sur le bouton bt4 */
 		if(arg0.getSource() == bt4) {
-			/* Lancement de la fenêtre IhmGF */
+			/* Lancement de la fenêtre UmlGF */
 			@SuppressWarnings("unused")
 			IHMGF umgf = new IHMGF(this.controle);
 			

@@ -26,7 +26,7 @@ import socket.SocketServeurTCP;
 import systeme.fichiers.GestionFichier;
 
 /*
- * Classe PreIhm : Génère la première fenêtre JFrame.
+ * Classe PreUML : Génère la première fenêtre JFrame.
  * 
  */
 public class PreIHM extends JFrame implements ActionListener {
@@ -69,7 +69,7 @@ public class PreIHM extends JFrame implements ActionListener {
 	}
 
 	/*
-	 * Constructeur PreIhm : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur PreUml : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	public PreIHM() {
 
@@ -188,7 +188,7 @@ public class PreIHM extends JFrame implements ActionListener {
 					serveurTCP.start();
 
 					@SuppressWarnings("unused")
-					IHM Ihm = new IHM(sysFichiers);
+					IHM ihm = new IHM(sysFichiers);
 				}else {
 					javax.swing.JOptionPane.showMessageDialog(panel, "Un ou plusieurs champs sont vides", "Error", JOptionPane.ERROR_MESSAGE); 
 				}
