@@ -16,7 +16,7 @@ public class P2P {
 
 	public static void main(String[] args) {
 		/* Déclaration des variables */
-		String chemin, annuaire = "", transport = "";
+		String chemin, annuaire = "", transport = "",ip="";
 		int port = -1;
 		SocketServeurTCP serveurTCP;
 		SocketServeurUDP serveurUDP;
@@ -75,8 +75,15 @@ public class P2P {
 		/* Si l'utilisateur a choisi d'un module annuaire */
 		if (annuaire.compareTo("OUI") == 0) {
 			/* On laisse l'utilisateur entrer l'adresse IP pour le serveur d'annuaire */
-			System.out.println("Entrez une adresse IP pour le serveur d'annuaire");
-			String ip = c.nextLine();
+			while(! ip.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+				System.out.println("Entrez une adresse IP pour le serveur d'annuaire");
+				ip = c.nextLine();
+				if(! ip.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+					System.out.println("Erreur de saisie");
+				}
+			}
+			
+			
 			/*
 			 * Crée et instancie un ServeurAnnuaire pour ajouter l'adresse IP précedemment
 			 * entré

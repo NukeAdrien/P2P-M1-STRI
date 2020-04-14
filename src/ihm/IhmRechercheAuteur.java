@@ -19,6 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import main.PreIhm;
 import systeme.fichiers.GestionFichier;
 
 /*

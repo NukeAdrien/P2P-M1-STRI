@@ -54,6 +54,7 @@ public class SocketServeurUDP extends Thread {
 					sockServeur.close();
 					return;
 				} else {
+					/*Récupere l'adresse ip de l'emmeteur*/
 					adresse = receptionClient.getIpRequete();
 					adresse = adresse.substring(1);
 					receptionClient.setIpRequete(adresse);

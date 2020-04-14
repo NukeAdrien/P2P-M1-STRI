@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import client.ClientControle;
+import main.PreIhm;
 import systeme.fichiers.GestionFichier;
 
 /*

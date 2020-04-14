@@ -75,7 +75,7 @@ public class Recevoir {
 		}
 	}
 		public PDU RecevoirPDUUDP() {
-			/* Si le socket TCP crée n'est pas nulle... Autrement si le socket TCP a bien été créée*/
+			/* Verifie que le socket UDP a été créé*/
 			if (sockClientUDP != null) {
 				try{
 					// Construction du tampon et de l’objet qui vont servir à recevoir
@@ -89,10 +89,12 @@ public class Recevoir {
 					 ByteArrayInputStream stream = new ByteArrayInputStream(dgram.getData());
 					 ObjectInputStream o = new ObjectInputStream(stream);
 					 try {
+						 //Cast l'objet inputstream en PDU
 						PDU pdu = (PDU) o.readObject();
 						if(pdu == null) {
 							System.out.println("Erreur readObject");
 						}
+						//Retourne la PDU
 						return pdu;
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
@@ -111,19 +113,35 @@ public class Recevoir {
 				return null;
 			}
 	}
-
+		
+		/*
+		 * Methode getIpRequete : Permet d'obtenir ip de l'emmeteur du datagram
+		 * @return : IP
+		 */
 		public String getIpRequete() {
 			return ipRequete;
 		}
-
+		
+		/*
+		 * Methode setIpRequete : Permet de mettre IP de l'emmeteur du datagram
+		 * @param : IP
+		 */
 		public void setIpRequete(String ipRequete) {
 			this.ipRequete = ipRequete;
 		}
-
+		
+		/*
+		 * Methode getPortRequete: Permet d'obtenir le port de l'emmeteur
+		 * @return : le numero du port
+		 */
 		public int getPortRequete() {
 			return portRequete;
 		}
-
+		
+		/*
+		 * Methode setPortRequete: Permet de changer le numero de port de l'emmeteur
+		 * @param : le numero du port
+		 */
 		public void setPortRequete(int portRequete) {
 			this.portRequete = portRequete;
 		}

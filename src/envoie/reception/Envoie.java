@@ -72,14 +72,14 @@ public class Envoie {
 	}
 
 	/*
-	 * Méthode EnvoiePDUUDP : Cette méthode permet d'envoyer une PDU.
+	 * Méthode EnvoiePDUUDP : Cette méthode permet d'envoyer une PDU en UDP. 
 	 * 
-	 * @param : Prend en paramètre une PDU à envoyer
+	 * @param : Prend en paramètre une PDU à envoyer,Ip et port du destinataire
 	 * 
 	 * @return : Retourne 0 si ça s'est bien passée, sinon 1
 	 */
 	public Integer EnvoiePDUUDP(PDU requete,String ip,int port) {
-		
+		//Vérifie l'existance du socket
 		 if (sockClientUDP != null) {
 			// Transformation en tableau d'octets
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();

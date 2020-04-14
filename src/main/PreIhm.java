@@ -1,4 +1,4 @@
-package ihm;
+package main;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import ihm.Ihm;
 import serveur.GestionProtocole;
 import serveur.ServeurControle;
 import serveur.ServeurDonnees;
