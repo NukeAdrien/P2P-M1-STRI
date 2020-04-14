@@ -68,7 +68,7 @@ public class ServeurAnnuaire {
 	 */
 
 	public PDUAnnuaire Search(PDUAnnuaire pdu) {
-
+		
 		return null;
 	}
 
@@ -143,12 +143,12 @@ public class ServeurAnnuaire {
 			/* Si le ratio est supérieur à 50 */
 			if(ratio >= 50) {
 				/* Le téléchargement peut débuter */
-				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge", listServeurDispo);
+				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier est disponible et va etre téléchargé", listServeurDispo);
 			}
 			/* Si le ratio est supérieur à 25 */
 			else if (ratio >= 25) {
 				/* Le téléchargement pourra débuter dans 30 secs */
-				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier va etre telecharge dans 30 secondes", listServeurDispo);
+				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Le fichier est disponible et va etre téléchargé dans 30 secondes", listServeurDispo);
 			}
 			else {
 				/* Sinon annulation du téléchargement car son ratio est trop bas */

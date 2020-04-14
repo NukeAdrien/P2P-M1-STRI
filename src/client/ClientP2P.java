@@ -18,12 +18,12 @@ public class ClientP2P implements Runnable {
 	ClientAnnuaire annuaire = null;
 	int portServeur;
 	String transport;
-	
+
 	/*
 	 * Constructeur ClientP2P --> Ce constructeur prend en paramètre un gestion de
 	 * fichier Ce constructeur permet de créer un nouveau ClientP2P.
 	 */
-	public ClientP2P(GestionFichier g, int p,String t) {
+	public ClientP2P(GestionFichier g, int p, String t) {
 		this.sysFichiers = g;
 		this.portServeur = p;
 		this.transport = t;
@@ -33,9 +33,9 @@ public class ClientP2P implements Runnable {
 	public void run() {
 		/* Déclaration de variables */
 		int choix = -1;
-		int port, nbServeur, i;
+		int port = -1, nbServeur = -1, i;
 		boolean fin = false;
-		String nomFichier, ip;
+		String nomFichier, ip = "";
 
 		/* Déclaration d'une varibale de type Scanner */
 		Scanner sc = new Scanner(System.in);
@@ -76,16 +76,36 @@ public class ClientP2P implements Runnable {
 				fin = true;
 				break;
 			case 1:
+				/* Initialisation */
+				ip = "";
+				port = -1;
 				/*
 				 * On le laisse entrer le nom de fichier, l'adresse IP, et le niméro de port à
 				 * lier au socket
 				 */
 				System.out.println("Entrez le nom du fichier a télécharger : ");
 				nomFichier = sc.nextLine();
-				System.out.println("Entrez l'IP du serveur : ");
-				ip = sc.nextLine();
-				System.out.println("Entrez le port du serveur : ");
-				port = sc.nextInt();
+				while (!ip.matches(
+						"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+					System.out.println("Entrez l'IP du serveur : ");
+					ip = sc.nextLine();
+					if (!ip.matches(
+							"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+						System.out.println("Erreur de saisie");
+					}
+				}
+				while (port == -1) {
+					System.out.println("Entrez le port du serveur :");
+					if (sc.hasNextInt()) {
+						port = sc.nextInt();
+						if (port < 1) {
+							port = -1;
+						}
+					} else {
+						sc.nextLine();
+						System.out.println("Entrer invalide");
+					}
+				}
 				sc.nextLine();
 				/*
 				 * On peut donc télécharger le fichier avec comme paramètre le nom de fichier,
@@ -94,12 +114,25 @@ public class ClientP2P implements Runnable {
 				controle.TelechargementSimple(nomFichier, ip, port);
 				break;
 			case 2:
+				/* Initialisation */
+				ip = "";
+				port = -1;
+				nbServeur = -1;
 				/* On le laisse entrer le nom de fichier, le nombre de serveurs à contacter */
-
 				System.out.println("Entrez le nom du fichier a télécharger : ");
 				nomFichier = sc.nextLine();
-				System.out.println("Entrez le nombre de serveur a contacter : ");
-				nbServeur = sc.nextInt();
+				while (nbServeur == -1) {
+					System.out.println("Entrez le nombre de serveur a contacter : ");
+					if (sc.hasNextInt()) {
+						nbServeur = sc.nextInt();
+						if (nbServeur < 1) {
+							nbServeur = -1;
+						}
+					} else {
+						sc.nextLine();
+						System.out.println("Entrer invalide");
+					}
+				}
 				sc.nextLine();
 				/*
 				 * Pour chaque serveur, on demande à l'utilisateur son adresse IP et son numéro
@@ -107,11 +140,34 @@ public class ClientP2P implements Runnable {
 				 */
 				if (nbServeur > 0) {
 					for (i = 0; i < nbServeur; i++) {
-						System.out.println("Entrez l'IP du serveur : ");
-						listIP.add(sc.nextLine());
-						System.out.println("Entrez le port du serveur : ");
-						listPort.add(sc.nextInt());
+						while (!ip.matches(
+								"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+							System.out.println("Entrez l'IP du serveur : ");
+							ip = sc.nextLine();
+							if (!ip.matches(
+									"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+								System.out.println("Erreur de saisie");
+							} else {
+								listIP.add(ip);
+							}
+						}
+						while (port == -1) {
+							System.out.println("Entrez le port du serveur :");
+							if (sc.hasNextInt()) {
+								port = sc.nextInt();
+								if (port < 1) {
+									port = -1;
+								} else {
+									listPort.add(port);
+								}
+							} else {
+								sc.nextLine();
+								System.out.println("Entrer invalide");
+							}
+						}
 						sc.nextLine();
+						port = -1;
+						ip = "";
 					}
 					/*
 					 * On appelle la méthode telechargementParallele permettant de télécharger des
@@ -125,16 +181,33 @@ public class ClientP2P implements Runnable {
 				break;
 			case 3:
 				boolean menuAnnuaire = false;
-				String adresseIP;
-				int numeroPort;
+				String adresseIP = "";
+				int numeroPort=-1;
 				if (this.annuaire == null) {
-					System.out.println("Entrez l'IP du serveur : ");
-					adresseIP = sc.nextLine();
-					System.out.println("Entrez le port du serveur : ");
-					numeroPort = sc.nextInt();
+					while (!adresseIP.matches(
+							"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+						System.out.println("Entrez l'IP du serveur : ");
+						adresseIP = sc.nextLine();
+						if (!adresseIP.matches(
+								"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+							System.out.println("Erreur de saisie");
+						}
+					}
+					while (numeroPort == -1) {
+						System.out.println("Entrez le port du serveur :");
+						if (sc.hasNextInt()) {
+							numeroPort = sc.nextInt();
+							if (numeroPort < 1) {
+								numeroPort = -1;
+							}
+						} else {
+							sc.nextLine();
+							System.out.println("Entrer invalide");
+						}
+					}
 					sc.nextLine();
 					annuaire = new ClientAnnuaire(this.transport, sysFichiers);
-					annuaire.Inscription(adresseIP, numeroPort,this.portServeur);
+					annuaire.Inscription(adresseIP, numeroPort, this.portServeur);
 				}
 				while (menuAnnuaire == false) {
 					choix = -1;
@@ -161,15 +234,32 @@ public class ClientP2P implements Runnable {
 					switch (choix) {
 					/* Si l'utilisateur a choisi l'option 1 */
 					case 1:
-						System.out.println("Entrez l'IP du serveur : ");
-						adresseIP = sc.nextLine();
-						System.out.println("Entrez le port du serveur : ");
-						numeroPort = sc.nextInt();
+						while (!adresseIP.matches(
+								"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+							System.out.println("Entrez l'IP du serveur : ");
+							adresseIP = sc.nextLine();
+							if (!adresseIP.matches(
+									"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+								System.out.println("Erreur de saisie");
+							}
+						}
+						while (numeroPort == -1) {
+							System.out.println("Entrez le port du serveur :");
+							if (sc.hasNextInt()) {
+								numeroPort = sc.nextInt();
+								if (numeroPort < 1) {
+									numeroPort = -1;
+								}
+							} else {
+								sc.nextLine();
+								System.out.println("Entrer invalide");
+							}
+						}
 						sc.nextLine();
-						annuaire.Inscription(adresseIP, numeroPort,this.portServeur);
+						annuaire.Inscription(adresseIP, numeroPort, this.portServeur);
 						break;
 					case 2:
-
+						System.out.println("La fonction n'a pas été encore dévelopé");
 						break;
 					case 3:
 						/*
@@ -180,10 +270,9 @@ public class ClientP2P implements Runnable {
 						/*
 						 * On peut donc télécharger le fichier avec comme paramètre le nom de fichier
 						 */
-						if(annuaire.Telechargement(nomFichier, listIP, listPort, this.portServeur)==0) {
+						if (annuaire.Telechargement(nomFichier, listIP, listPort, this.portServeur) == 0) {
 							controle.TelechargementParallele(nomFichier, listIP, listPort);
-						}
-						else {
+						} else {
 							System.out.println("Le fichier n'a pas pu etre téléchargé");
 						}
 						/* On rénitialise une liste d'adresses IP */
@@ -202,10 +291,6 @@ public class ClientP2P implements Runnable {
 				}
 				break;
 			case 4:
-				System.out.println("Entrer le chemin du dossier :");
-				String chemin = sc.nextLine();
-				sysFichiers = new GestionFichier(chemin);
-				this.sysFichiers.initGestionFichier();
 				this.sysFichiers.afficherFichierDisponible();
 				break;
 			case 5:
@@ -235,9 +320,7 @@ public class ClientP2P implements Runnable {
 						String res = null;
 						try {
 							System.out.println("Veuillez entrer le nom du fichier : ");
-							sysFichiers = new GestionFichier("./Telechargment/");
 							res = sc.next();
-							this.sysFichiers.initGestionFichier();
 							this.sysFichiers.afficherDetailFichier(res);
 						} catch (NoSuchElementException e) {
 							System.out.println("Aucune entrée trouvée");
@@ -248,9 +331,7 @@ public class ClientP2P implements Runnable {
 						res = null;
 						try {
 							System.out.println("Veuillez entrer le nom du fichier : ");
-							sysFichiers = new GestionFichier("./Telechargment/");
 							res = sc.next();
-							this.sysFichiers.initGestionFichier();
 							Fichier red = this.sysFichiers.RechercheFichier(res);
 							this.sysFichiers.supprimerFichier(red);
 							System.out.println(this.sysFichiers.getListFichier());
@@ -263,9 +344,7 @@ public class ClientP2P implements Runnable {
 						res = null;
 						try {
 							System.out.println("Veuillez entrer le nom du fichier à renommer : ");
-							sysFichiers = new GestionFichier("./Telechargment/");
 							res = sc.next();
-							this.sysFichiers.initGestionFichier();
 							Fichier red = this.sysFichiers.RechercheFichier(res);
 							res = null;
 							System.out.println("Veuillez entrer le nouveau nom du fichier : ");

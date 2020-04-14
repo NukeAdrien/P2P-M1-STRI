@@ -101,17 +101,13 @@ public class ClientControleThread implements Runnable {
 		if (requete.getCommande().compareTo("TPF") == 0) {
 			/* Si le fichier existe */
 			if (requete.getFichier() != null) {
-				System.out.println(ip+":"+port+" a le fichier");
 				/* On récupére le fichier */
 				fichierDl = requete.getFichier();
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
 					/* On ajoute le fichier dans GestionFichier */
-					System.out.println(ip+":"+port+" crée le fichier");
 					sysFichiers.AjouterFichier(fichierDl);
-					System.out.println(ip+":"+port+" a crée le fichier");
 				} 
-				System.out.println(ip+":"+port+" je ne suis pas coincé");
 				/* On crée une liste d'headers blocs */
 				HashMap<Integer, HeaderBloc> listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
 				/* On parcourt les headers blocs */
@@ -124,7 +120,6 @@ public class ClientControleThread implements Runnable {
 						if (sysFichiers.setReserver(fichierDl.getNomFichier(), headerbloc.getKey()) == 0) {
 							/*On ajoute le bloc dans la HashMap*/
 							listHeaderBlocs.put(headerbloc.getKey(), headerbloc.getValue());
-							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey());
 							try {
 								Thread.sleep(20);
 							} catch (InterruptedException e) {
@@ -137,10 +132,7 @@ public class ClientControleThread implements Runnable {
 					} else {
 						/* Si le bloc n'est pas disponible, on incrémente le nombre de blocs indisponible*/
 						if (fichierDl.getDisponible(headerbloc.getKey()) == -1) {
-							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"ne posséde pas le bloc");
 							nbBlocIndisp++;
-						}else {
-							System.out.println(ip+":"+port+" reserve  :" +headerbloc.getKey()+"bloc déjé réservé ou dl");
 						}
 					}
 				}
@@ -155,8 +147,6 @@ public class ClientControleThread implements Runnable {
 					serveur.FermerSocket();
 					return;
 				}
-				System.out.println("" + ip + ":" + port+" dispose de "+ listHeaderBlocs.size() + "/"
-						+ sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs().size());
 				/* Création d'un objet ClientDonnees */
 				ClientDonnees transfert = new ClientDonnees(sysFichiers, serveur);
 				/* Téléchargement du fichier */

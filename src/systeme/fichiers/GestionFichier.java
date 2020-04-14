@@ -346,21 +346,16 @@ public class GestionFichier implements Serializable {
 	 */
 	public synchronized void AjouterFichier(Fichier f) {
 		Fichier f2 = (Fichier) f.clone();
-		System.out.println(nbrRechercheEnCours);
-		System.out.println("Entrer dans la creation du fichier");
 		while (nbrRechercheEnCours != 0) {
 			System.out.println(nbrRechercheEnCours);
 			try {
-				System.out.println("J'attends");
 				this.wait();
 			} catch (InterruptedException e) {
 				
 				e.printStackTrace();
 			}
-			System.out.println("Je suis coincé");
 			if (this.RechercheFichier(f.nomFichier) != null) {
 				notifyAll();
-				System.out.println("Quitte sans cree le fichier");
 				return;
 			}
 		}
@@ -374,7 +369,6 @@ public class GestionFichier implements Serializable {
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : f2.getListHeaderBlocs().entrySet()) {
 			this.listFichier.get(f2.getNomFichier()).setDisponible(headerbloc.getKey(), -1);
 		}
-		System.out.println("Quitte en créant le fichier");
 		notifyAll();
 		return;
 	}
@@ -399,18 +393,6 @@ public class GestionFichier implements Serializable {
 	public void setChemin(String chemin) {
 		this.chemin = chemin;
 	}
-
-	/*
-	 * private HashMap<String, Fichier> getFilesRec() { File f = new
-	 * File(nomFichier); File[] listFiles = f.listFiles(); for (int i = 0; i <
-	 * listFiles.length; i++) { if (listFiles[i].isDirectory()) {
-	 * //getFilesRec(allFiles, listFiles[i].toString()); } else
-	 * allFiles.add(listFiles[i].toString()); } for (int i=0; i<allFiles.size();
-	 * i++) { this.getTailleFichier(nomFichier); Fichier fichier = new
-	 * Fichier(allFiles.get(i), this.dateModifFichier(nomFichier),
-	 * this.chemin+allFiles.get(i), this.getTailleFichier(nomFichier));
-	 * this.listFichier.add(nomFichier, fichier); } }
-	 */
 
 	/*
 	 * Méthode getTailleFichier : Méthode permettant de récpérer la taille du
@@ -645,7 +627,7 @@ public class GestionFichier implements Serializable {
 		/* On parcourt chaque entrée de la HashMap */
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			/* Si l'état du fichier indique que le fichier est disponible */
-			if (this.EtatFichier(listFichier.getKey()) == 0) {
+			if (this.EtatFichier(listFichier.getValue()) == 1) {
 				/* On affiche le nom du fichier */
 				System.out.println("Ce fichier est disponible : " + listFichier.getKey());
 			}
