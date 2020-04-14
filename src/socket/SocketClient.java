@@ -32,7 +32,7 @@ public class SocketClient {
 	}
 	
 	/*
-	 * Méthode InitialisationSocket : Permet d'initialiser un socket
+	 * Méthode InitialisationSocket : Permet d'initialiser un socket UDP ou TCP
 	 * @param : L'adresse ip de destination et le port de destination
 	 * @return : 0 si ça d'est bien passée, 1 sinon 
 	 */
@@ -45,9 +45,9 @@ public class SocketClient {
 			try {
 				/* On crée un datagramme UDP */
 				sockClientUDP = new DatagramSocket();
-				/* On envoie ce socket pour qu'il soit traité */
+				/* On en crée unobjet Envoie */
 				envoyer = new Envoie(sockClientUDP);
-				/* On reçoit la socket traité */
+				/* On en crée un objet Recevoir */
 				recevoir = new Recevoir(sockClientUDP);
 			} catch (SocketException e) {
 				e.printStackTrace();
@@ -59,9 +59,9 @@ public class SocketClient {
 			try {
 				/* On crée un socket TCP */
 				sockClientTCP = new Socket(ip, port);
-				/* On envoie ce socket pour qu'il soit traité */
+				/* On en crée un objet Envoie */
 				envoyer = new Envoie(sockClientTCP);
-				/* On reçoit la socket traité */
+				/* On en crée un objet Recevoir */
 				recevoir = new Recevoir(sockClientTCP);
 			} catch (IOException ioe) {
 				/* Affichage d'un message d'erreur si'il y a un problème */
@@ -73,23 +73,23 @@ public class SocketClient {
 	}
 
 	/*
-	 * Méthode EnvoiePDU : Permet d'envoyer la PDU
+	 * Méthode EnvoiePDU : Permet d'envoyer la PDU UDP ou TCP
 	 * @param : La PDU à envoyer
 	 * @return : 0 si ça d'est bien passée, 1 sinon 
 	 */
 	
 	public Integer EnvoiePDU(PDU pdu) {
-		/* Si le socket existe */
+		/* Si le socket TCP existe */
 		if (sockClientTCP != null) {
-			/* Si il y a un problème lors de l'envoi */
+			/* Appel la méthode envoie TCP*/
 			if (envoyer.EnvoiePDUTCP(pdu) != 0) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur lors de l'envoi de la PDU");
 				return 1;
 			}
-			/* Si le datagramme existe */
+			/* Si le datagramme existe UDP */
 		} else if (sockClientUDP != null) {
-			/* Si il y a un problème lors de l'envoi */
+			/* Appel la méthode envoie UDP*/
 			if (envoyer.EnvoiePDUUDP(pdu,this.ip,this.port) != 0) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur lors de l'envoi de la PDU");
@@ -104,24 +104,24 @@ public class SocketClient {
 	}
 
 	/*
-	 * Méthode RecevoirPDU : Permet d'envoyer la PDU
+	 * Méthode RecevoirPDU : Permet d'envoyer la PDU UDP ou TCP
 	 * @return : 0 si ça d'est bien passée, 1 sinon 
 	 */
 	public PDU RecevoirPDU() {
 		/* Déclaration de variables */
 		PDU reponse = null;
-		/* Si le socket existe */
+		/* Si le socket TCP existe  */
 		if (sockClientTCP != null) {
-			/*On reçoit la PDU */
+			/*On reçoit la PDU TCP */
 			reponse = recevoir.RecevoirPDUTCP();
 			if (reponse == null) {
 				/* Affichage d'un message d'erreur s'il n'y a pas de réponses */
 				System.out.println("Erreur lors de la réception de la PDU");
 				return null;
 			}
-			/* Si le datagramme existe */
+			/* Si le datagramme UDP existe */
 		} else if (sockClientUDP != null) {
-				/*On reçoit la PDU */
+				/*On reçoit la PDU UDP */
 				reponse = recevoir.RecevoirPDUUDP();
 				if (reponse == null) {
 					/* Affichage d'un message d'erreur s'il n'y a pas de réponses */

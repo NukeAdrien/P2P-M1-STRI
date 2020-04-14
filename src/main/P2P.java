@@ -22,11 +22,13 @@ public class P2P {
 		SocketServeurUDP serveurUDP;
 		GestionProtocole protocole;
 		/* Déclaration d'une varibale de type Scanner */
+		@SuppressWarnings("resource")
 		Scanner c = new Scanner(System.in);
 
 		/*
 		 * On laisse l'utilisateur entrer le port du serveur, le chemin du dossier ainsi
 		 * qu'un potentiel ajout du module annuaire
+		 * DE plus on sécurise la saisie
 		 */
 		System.out.println("Application P2P");
 		while (port == -1) {

@@ -939,6 +939,7 @@ public class GestionFichier implements Serializable {
 	 * @return : La liste des fichiers qui correspond à la recherche
 	 * @param : le critére de recherche
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public ArrayList<String> rechercheDateFichier(long carac) {
 		/* Déclaration de variables*/
 		ArrayList<String> al = new ArrayList<String>();

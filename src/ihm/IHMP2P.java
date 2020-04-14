@@ -53,7 +53,6 @@ public class IHMP2P extends JFrame implements ActionListener {
 	 * Constructeur UmlP2P : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
-	@SuppressWarnings("static-access")
 	public IHMP2P() {
 		
 		/* Declaration et initialisation de la JFrame */

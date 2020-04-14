@@ -5,7 +5,6 @@ import java.util.List;
 
 import envoie.reception.PDU;
 import envoie.reception.PDUAnnuaire;
-import envoie.reception.PDUControle;
 import socket.SocketClient;
 import systeme.fichiers.GestionFichier;
 
