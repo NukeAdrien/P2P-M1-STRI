@@ -29,7 +29,7 @@ import systeme.fichiers.GestionFichier;
  * Classe PreUML : Génère la première fenêtre JFrame.
  * 
  */
-public class PreIHM extends JFrame implements ActionListener {
+public class PreIhm extends JFrame implements ActionListener {
 
 	/*
 	 * Déclaration des variables
@@ -63,7 +63,7 @@ public class PreIHM extends JFrame implements ActionListener {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new PreIHM();
+				new PreIhm();
 			}
 		});
 	}
@@ -71,7 +71,7 @@ public class PreIHM extends JFrame implements ActionListener {
 	/*
 	 * Constructeur PreUml : Génère la fenêtre et les actions (ActionListener) associées
 	 */
-	public PreIHM() {
+	public PreIhm() {
 
 		/*Déclaration d'une bordure pour les contours des champs modifiables*/
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
@@ -179,16 +179,16 @@ public class PreIHM extends JFrame implements ActionListener {
 				/* Si les champs ne sont pas vides */
 				if(st.length()!=0 && sta.length()!=0) {
 					/* On lance la prochaine fenêtre */
-					GestionFichier sysFichiers = new GestionFichier(PreIHM.getJTextField1());
+					GestionFichier sysFichiers = new GestionFichier(PreIhm.getJTextField1());
 					sysFichiers.initGestionFichier();
 					ServeurControle sc = new ServeurControle(sysFichiers);
 					ServeurDonnees sd = new ServeurDonnees(sysFichiers);
 					GestionProtocole protocole = new GestionProtocole(sc,sd);
-					SocketServeurTCP serveurTCP = new SocketServeurTCP(protocole,Integer.parseInt(PreIHM.getJTextField2()));
+					SocketServeurTCP serveurTCP = new SocketServeurTCP(protocole,Integer.parseInt(PreIhm.getJTextField2()));
 					serveurTCP.start();
 
 					@SuppressWarnings("unused")
-					IHM ihm = new IHM(sysFichiers);
+					Ihm ihm = new Ihm(sysFichiers);
 				}else {
 					javax.swing.JOptionPane.showMessageDialog(panel, "Un ou plusieurs champs sont vides", "Error", JOptionPane.ERROR_MESSAGE); 
 				}

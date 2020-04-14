@@ -26,7 +26,7 @@ import systeme.fichiers.GestionFichier;
  * 
  */
 
-public class IHMRechercheDate implements ActionListener {
+public class IhmRechercheDate implements ActionListener {
 	/*
 	 * Déclaration des variables
 	 */
@@ -51,7 +51,7 @@ public class IHMRechercheDate implements ActionListener {
 	 * Constructeur UmlRechercheDate : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
-	public IHMRechercheDate() {
+	public IhmRechercheDate() {
 		/* Création d'une bordure */
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 		/*On ajoute au panel un nouveau Layout*/
@@ -125,7 +125,7 @@ public class IHMRechercheDate implements ActionListener {
 			/* On vérifie que le champ ne soit pas vide */
 			if(textArea1.getText().length()!=0) {
 				/*On crée un objet de type GestionFichier*/
-				GestionFichier gf = new GestionFichier(PreIHM.getJTextField1()+PreIHM.getJTextField2());
+				GestionFichier gf = new GestionFichier(PreIhm.getJTextField1()+PreIhm.getJTextField2());
 				/*On initialise le Gestion de Fichier */
 				gf.initGestionFichier();
 				/* On déclare et initialise une ArrayList qui permettre d'accueillir les noms des fichiers */

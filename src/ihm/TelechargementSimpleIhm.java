@@ -24,7 +24,7 @@ import client.ClientControle;
  * 
  */
 
-public class TelechargementSimpleIHM extends JFrame implements ActionListener {
+public class TelechargementSimpleIhm extends JFrame implements ActionListener {
 	/*
 	 * Déclaration des variables
 	 */
@@ -54,7 +54,7 @@ public class TelechargementSimpleIHM extends JFrame implements ActionListener {
 	 */
 	ClientControle cc = null;
 
-	public TelechargementSimpleIHM(ClientControle cc) {
+	public TelechargementSimpleIhm(ClientControle cc) {
 		
 		this.cc=cc;
 		/* Declaration et initialisation de la JFrame */

@@ -24,7 +24,7 @@ import systeme.fichiers.GestionFichier;
  * Classe IHMP2P : Génère la fenêtre JFrame destinée à au téléchargement P2P.
  * 
  */
-public class IHMP2P extends JFrame implements ActionListener {
+public class IhmP2P extends JFrame implements ActionListener {
 	/*
 	 * Déclaration des variables
 	 */
@@ -53,7 +53,7 @@ public class IHMP2P extends JFrame implements ActionListener {
 	 * Constructeur UmlP2P : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
-	public IHMP2P() {
+	public IhmP2P() {
 		
 		/* Declaration et initialisation de la JFrame */
 		JFrame f=new JFrame();    
