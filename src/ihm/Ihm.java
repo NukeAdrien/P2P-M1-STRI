@@ -17,7 +17,7 @@ import java.awt.event.*;
  * Classe IHM : Génère la fenêtre JFrame destinée aux fonctionnalités du projet.
  * 
  */
-public class IHM extends JFrame implements ActionListener {
+public class Ihm extends JFrame implements ActionListener {
 	
 	/*
 	 * Déclaration des variables
@@ -59,7 +59,7 @@ public class IHM extends JFrame implements ActionListener {
 	/*
 	 * Constructeur Uml : Génère la fenêtre et les actions (ActionListener) associées
 	 */
-	public IHM(GestionFichier f) {
+	public Ihm(GestionFichier f) {
 		/*On ajoute au panel un nouveau Layout*/
 		panel.setLayout(Grid);
 
@@ -179,7 +179,7 @@ public class IHM extends JFrame implements ActionListener {
 			@SuppressWarnings("unused")
 			/* On crée l'objet TelechargementSimpleUml */
 
-			TelechargementSimpleIHM tsu = new TelechargementSimpleIHM(this.controle);
+			TelechargementSimpleIhm tsu = new TelechargementSimpleIhm(this.controle);
 		}
 		/* Si l'utilisateur a cliqué sur le bouton bt2 */
 		if(arg0.getSource() == bt2) {
@@ -190,7 +190,7 @@ public class IHM extends JFrame implements ActionListener {
 				/* On parse le String en entier */
 				Integer nb = Integer.parseInt(gjt);
 				/* On crée un objet TelechargementParalleleUml */
-				TelechargementParalleleIHM tpu = new TelechargementParalleleIHM(this.controle);
+				TelechargementParalleleIhm tpu = new TelechargementParalleleIhm(this.controle);
 				/* On lance la méthode GenererTrame avec comme paramètre le numéro de champ
 				 * (qui correspond à une paire de JTextArea (IP) et JTextArea (Port)) que l'utilisateur a saisi
 				 */
@@ -206,13 +206,13 @@ public class IHM extends JFrame implements ActionListener {
 		if(arg0.getSource() == bt3) {
 			/* Lancement de la fenêtre UmlP2P */
 			@SuppressWarnings("unused")
-			IHMP2P umlp2p = new IHMP2P();
+			IhmP2P umlp2p = new IhmP2P();
 		}
 		/* Si l'utilisateur a cliqué sur le bouton bt4 */
 		if(arg0.getSource() == bt4) {
 			/* Lancement de la fenêtre UmlGF */
 			@SuppressWarnings("unused")
-			IHMGF umgf = new IHMGF(this.controle);
+			IhmGF umgf = new IhmGF(this.controle);
 			
 		}
 	}

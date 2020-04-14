@@ -19,42 +19,39 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import client.ClientControle;
 import systeme.fichiers.GestionFichier;
 
 /*
- * Classe IHMRechercheNom : Génère la fenêtre JFrame permettant la recherche par nom
+ * Classe UmlRechercheAuteur : Génère la fenêtre JFrame permettant la recherche par auteur
  * 
  */
 
-public class IHMRechercheNom implements ActionListener {
+public class IhmRechercheAuteur implements ActionListener {
 	/*
 	 * Déclaration des variables
 	 */
 	/* Declaration et initialisation de la JFrame */
 	JFrame go1 = new JFrame("P2P-M1-STRI");
+	
 	/* Déclaration et initialisation d'un panel. C'est un composant de type conteneur dont
 	 *  la vocation est d'accueillir d'autres objets de même type ou des objets de type composant (boutons, cases à cocher…). 
 	 */
 	JPanel panel = new JPanel();
 	/* Déclaration et initialisation d'un Layout */
 	GridBagLayout Grid = new GridBagLayout();
+	JLabel Title = new JLabel("P2P-M1-STRI", SwingConstants.CENTER);
 	
 	/* Déclaration et initialisation des JLabel et JTextArea */
-	JLabel Title = new JLabel("P2P-M1-STRI", SwingConstants.CENTER);
-	JLabel anotherLabel1 = new JLabel("Nom du fichier :", SwingConstants.CENTER);
+	JLabel anotherLabel1 = new JLabel("Nom de l'auteur :", SwingConstants.CENTER);
 	static JTextArea textArea1 = new JTextArea();
 	
 	JButton button;
-	ClientControle cc;
 
 	/*
-	 * Constructeur UmlRechercheNom : Génère la fenêtre et les actions (ActionListener) associées
+	 * Constructeur UmlRechercheAuteur : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
-	
-	public IHMRechercheNom(ClientControle cc) {
-		this.cc=cc;
+	public IhmRechercheAuteur() {
 		/* Création d'une bordure */
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 		/*On ajoute au panel un nouveau Layout*/
@@ -130,16 +127,15 @@ public class IHMRechercheNom implements ActionListener {
 			/* On vérifie que le champ ne soit pas vide */
 			if(textArea1.getText().length()!=0) {
 				/*On crée un objet de type GestionFichier*/
-				GestionFichier gf = new GestionFichier(PreIHM.getJTextField1()+PreIHM.getJTextField2());
+				GestionFichier gf = new GestionFichier(PreIhm.getJTextField1()+PreIhm.getJTextField2());
 				/*On initialise le Gestion de Fichier */
 				gf.initGestionFichier();
 				/* On déclare et initialise une ArrayList qui permettre d'accueillir les noms des fichiers */
 				ArrayList<String> al = new ArrayList<String>();
 				/* On effectuer la recherche */
-				al = gf.rechercheNomFichierIHM();
+				al = gf.rechercheAuteurFichierIHM();
 				/* On affiche le résultat */
-				javax.swing.JOptionPane.showMessageDialog(null, al); 
-
+				javax.swing.JOptionPane.showMessageDialog(null, al);
 			}else {
 				/* Si le champ est vide on affiche un message d'erreur */
 				javax.swing.JOptionPane.showMessageDialog(panel, "Le champ est vide", "Error", JOptionPane.ERROR_MESSAGE); 
@@ -150,10 +146,9 @@ public class IHMRechercheNom implements ActionListener {
 	}
 
 	/*
-	 * Methode getJTextField2() : Permet de récuperer le champ du JTextArea
+	 * Methode getJTextField1() : Permet de récuperer le champ du JTextArea
 	 * @return : Le texte contenu dans le JTextArea
 	 */
-	
 	public static String getJTextField2() {
 		return  textArea1.getText();
 	}

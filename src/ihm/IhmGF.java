@@ -15,7 +15,7 @@ import java.awt.event.*;
  * Classe IHMGF : Génère la fenêtre JFrame destinée à la fonctionnalité gestion de fichiers 
  * 
  */
-public class IHMGF extends JFrame implements ActionListener {
+public class IhmGF extends JFrame implements ActionListener {
 
 	/*
 	 * Déclaration des variables
@@ -49,7 +49,7 @@ public class IHMGF extends JFrame implements ActionListener {
 	 * Constructeur UmlGF : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 
-	public IHMGF(ClientControle cc) {
+	public IhmGF(ClientControle cc) {
 		this.cc=cc;
 		/*On ajoute au panel un nouveau Layout*/
 		panel.setLayout(Grid);
@@ -141,19 +141,19 @@ public class IHMGF extends JFrame implements ActionListener {
 		if(arg0.getSource() == bt1) {
 			/* Création de l'objet qui permet la recherche par nom */
 			@SuppressWarnings("unused")
-			IHMRechercheNom urn = new IHMRechercheNom(cc);
+			IhmRechercheNom urn = new IhmRechercheNom(cc);
 		}
 		/* Si l'utilisateur a cliqué sur le bouton bt3 */
 		if(arg0.getSource() == bt3) {
 			/* Création de l'objet qui permet la recherche par date */
 			@SuppressWarnings("unused")
-			IHMRechercheDate urd = new IHMRechercheDate();
+			IhmRechercheDate urd = new IhmRechercheDate();
 		}
 		/* Si l'utilisateur a cliqué sur le bouton bt4 */
 		if(arg0.getSource() == bt4) {
 			/* Création de l'objet qui permet la recherche par auteur */
 			@SuppressWarnings("unused")
-			IHMRechercheAuteur ura = new IHMRechercheAuteur();
+			IhmRechercheAuteur ura = new IhmRechercheAuteur();
 		}
 	}
 } 

@@ -26,7 +26,7 @@ import client.ClientControle;
  * 
  */
 
-public class TelechargementParalleleIHM extends JFrame implements ActionListener {
+public class TelechargementParalleleIhm extends JFrame implements ActionListener {
 	
 	/*
 	 * Déclaration des variables
@@ -56,7 +56,7 @@ public class TelechargementParalleleIHM extends JFrame implements ActionListener
 	 * Constructeur TelechargementParalleleUml : Génère la fenêtre et les actions (ActionListener) associées
 	 */
 	
-	public TelechargementParalleleIHM(ClientControle cc) {
+	public TelechargementParalleleIhm(ClientControle cc) {
 		this.cc=cc;
 		@SuppressWarnings("unused")
 		/*Déclaration d'une bordure pour les contours des champs modifiables*/

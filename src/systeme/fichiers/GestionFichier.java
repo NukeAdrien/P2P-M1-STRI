@@ -828,7 +828,7 @@ public class GestionFichier implements Serializable {
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			try {
 				/* Si la clé du fichier (Nom du fichier) correspond à la recherche (ou au moins les premiéres lettres) */
-				if(listFichier.getKey().startsWith(IHMRechercheNom.getJTextField2().substring(0,3))) {
+				if(listFichier.getKey().startsWith(IhmRechercheNom.getJTextField2().substring(0,3))) {
 					al.add(listFichier.getKey());
 				}
 			} catch (StringIndexOutOfBoundsException id) {
@@ -860,7 +860,7 @@ public class GestionFichier implements Serializable {
 			Date d = new Date(files[i].lastModified());
 			String da = dateFormat.format(d);
 			/* Si la date correspond à la recherche */
-			if(da.equals(IHMRechercheDate.getJTextField2())) {
+			if(da.equals(IhmRechercheDate.getJTextField2())) {
 				/* On l'ajoute à l'arrayList */
 				al.add(files[i].getName());
 			}
@@ -892,7 +892,7 @@ public class GestionFichier implements Serializable {
 		/* On parcourt la liste des fichiers du répertoire */
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			/* Si l'auteur recherché correspond à celui du fichier */
-			if(str[1].equals(IHMRechercheAuteur.getJTextField2())) {
+			if(str[1].equals(IhmRechercheAuteur.getJTextField2())) {
 				/* On l'ajoute dans l'arrayList */
 				al.add(listFichier.getKey());
 			}
