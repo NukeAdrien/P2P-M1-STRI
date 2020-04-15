@@ -130,11 +130,8 @@ public class ClientControleThread implements Runnable {
 							try {
 								Thread.sleep(20);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}else {
-							System.out.println(ip+":"+port+"je n'ai pas reussi a réserver "+headerbloc.getKey());
 						}
 					} else {
 						/* Si le bloc n'est pas disponible, on incrémente le nombre de blocs indisponible*/

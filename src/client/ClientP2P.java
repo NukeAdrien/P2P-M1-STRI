@@ -52,7 +52,7 @@ public class ClientP2P implements Runnable {
 			System.out.println("Menu : ");
 			while (choix < 0 || choix > 5) {
 				System.out.println("1 - Télécharger un simple fichier");
-				System.out.println("2 - Télécharger un fichier depuis plusieur serveur");
+				System.out.println("2 - Télécharger un fichier depuis plusieurs serveurs");
 				System.out.println("3 - Télécharger en P2P");
 				System.out.println("4 - Voir la liste des fichiers disponible");
 				System.out.println("5 - Vos fichiers");
@@ -126,10 +126,10 @@ public class ClientP2P implements Runnable {
 					System.out.println("Entrez le nombre de serveur a contacter : ");
 					if (sc.hasNextInt()) {
 						nbServeur = sc.nextInt();
-						if (port < 1024 || port > 49151) {
-							port = -1;
-							System.out.println("Nombre non compris entre 1024 et 49151");
-						}
+						if (nbServeur < 1 || nbServeur > 50) {
+							nbServeur = -1;
+							System.out.println("Entrée non comprise entre 1 et 50");
+							}
 					} else {
 						sc.nextLine();
 						System.out.println("Entrée invalide");
@@ -193,7 +193,7 @@ public class ClientP2P implements Runnable {
 					/* On vérifie que l'adresse IP est bien formaté*/
 					while (!adresseIP.matches(
 							"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
-						System.out.println("Entrez l'IP du serveur : ");
+						System.out.println("Entrez l'IP du serveur d'annuaire : ");
 						adresseIP = sc.nextLine();
 						/* On vérifie que l'adresse IP est bien formaté*/
 						if (!adresseIP.matches(
@@ -206,8 +206,8 @@ public class ClientP2P implements Runnable {
 						System.out.println("Entrez le port du serveur :");
 						if (sc.hasNextInt()) {
 							numeroPort = sc.nextInt();
-							if (port < 1024 || port > 49151) {
-								port = -1;
+							if (numeroPort < 1024 || numeroPort > 49151) {
+								numeroPort = -1;
 								System.out.println("Nombre non compris entre 1024 et 49151");
 							}
 						} else {
@@ -260,8 +260,8 @@ public class ClientP2P implements Runnable {
 							System.out.println("Entrez le port du serveur :");
 							if (sc.hasNextInt()) {
 								numeroPort = sc.nextInt();
-								if (port < 1024 || port > 49151) {
-									port = -1;
+								if (numeroPort < 1024 || numeroPort > 49151) {
+									numeroPort = -1;
 									System.out.println("Nombre non compris entre 1024 et 49151");
 								}
 							} else {
@@ -308,17 +308,18 @@ public class ClientP2P implements Runnable {
 			case 4:
 				this.sysFichiers.afficherFichierDisponible();
 				break;
+
 			case 5:
-				/* Déclaration d'une varibale de type Scanner */
-				sc = new Scanner(System.in);
+				boolean menuFichier = false;
 				/* On laisse le choix à l'utilisateur */
-				while (fin == false) {
+				while (menuFichier == false) {
 					choix = -1;
 					System.out.println("Menu : ");
-					while (choix < 0 || choix > 3) {
+					while (choix < 0 || choix > 4) {
 						System.out.println("1 - Afficher les details du fichier");
 						System.out.println("2 - Supprimer un fichier");
 						System.out.println("3 - Renommer un fichier");
+						System.out.println("4 - Retour");
 						System.out.println("Entrez votre choix :");
 						if (sc.hasNextInt()) {
 							choix = sc.nextInt();
@@ -326,7 +327,7 @@ public class ClientP2P implements Runnable {
 							sc.nextLine();
 							System.out.println("Entrer invalide");
 						}
-						if (choix < 0 && choix > 3) {
+						if (choix < 0 && choix > 4) {
 							System.out.println("Erreur saisie");
 						}
 					}
@@ -378,13 +379,17 @@ public class ClientP2P implements Runnable {
 							e.printStackTrace();
 						}
 						break;
+					case 4:
+						menuFichier = true;
+						break;
 					default:
 						/* Sinon il y a une erreur de saisie */
 						System.out.println("Erreur saisie");
 						break;
 					}
+					
 				}
-
+				break;
 			default:
 				/* Sinon il y a une erreur de saisie */
 				System.out.println(choix);

@@ -169,7 +169,7 @@ public class ClientAnnuaire {
 
 				/* Si la donnée contenue dans la PDU est équivalent à "Le fichier va etre telecharge dans 30 secondes" */
 				/* Alors on crée un timer */
-				if (dowload.getDonnees().compareTo("Le fichier va etre telecharge dans 30 secondes") == 0) {
+				if (dowload.getDonnees().compareTo("Le fichier est disponible et va etre téléchargé dans 30 secondes") == 0) {
 					int t = 31;
 					while (t > 0) {
 						try {
