@@ -24,7 +24,7 @@ public class GererClient implements Runnable {
 	
 	/*
 	 * Constructeur GererClient --> Ce constructeur prend en paramètres un socket
-	 * (UDP ou TCP) * crée ainsi qu'un gestion de Protocole
+	 * (UDP ou TCP) crée ainsi qu'un gestion de Protocole
 	 */
 	public GererClient(Socket socket, GestionProtocole g) {
 		sockClient = socket;
@@ -34,9 +34,9 @@ public class GererClient implements Runnable {
 	/* Méthode run : méthode d'exécution du thread */
 	@Override
 	public void run() {
-		/* On cree la PDU au client */
+		/* On crée la PDU au client */
 		Envoie envoieClient = new Envoie(sockClient);
-		/* On cree la PDU du client */
+		/* On crée la PDU du client */
 		Recevoir receptionClient = new Recevoir(sockClient);
 		/* On initialise la variable requete */
 		requete = null;

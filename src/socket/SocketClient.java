@@ -45,9 +45,9 @@ public class SocketClient {
 			try {
 				/* On crée un datagramme UDP */
 				sockClientUDP = new DatagramSocket();
-				/* On en crée unobjet Envoie */
+				/* On crée unobjet Envoie */
 				envoyer = new Envoie(sockClientUDP);
-				/* On en crée un objet Recevoir */
+				/* On crée un objet Recevoir */
 				recevoir = new Recevoir(sockClientUDP);
 			} catch (SocketException e) {
 				e.printStackTrace();
@@ -59,12 +59,12 @@ public class SocketClient {
 			try {
 				/* On crée un socket TCP */
 				sockClientTCP = new Socket(ip, port);
-				/* On en crée un objet Envoie */
+				/* On crée un objet Envoie */
 				envoyer = new Envoie(sockClientTCP);
-				/* On en crée un objet Recevoir */
+				/* On crée un objet Recevoir */
 				recevoir = new Recevoir(sockClientTCP);
 			} catch (IOException ioe) {
-				/* Affichage d'un message d'erreur si'il y a un problème */
+				/* Affichage d'un message d'erreur si il y a un problème */
 				System.out.println("Erreur de création ou de connexion : " + ioe.getMessage());
 				return 1;
 			}
@@ -81,15 +81,15 @@ public class SocketClient {
 	public Integer EnvoiePDU(PDU pdu) {
 		/* Si le socket TCP existe */
 		if (sockClientTCP != null) {
-			/* Appel la méthode envoie TCP*/
+			/* Appel la méthode EnvoiePDUTCP*/
 			if (envoyer.EnvoiePDUTCP(pdu) != 0) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur lors de l'envoi de la PDU");
 				return 1;
 			}
-			/* Si le datagramme existe UDP */
+			/* Si le datagramme existe  */
 		} else if (sockClientUDP != null) {
-			/* Appel la méthode envoie UDP*/
+			/* Appel la méthode EnvoiePDUUDP*/
 			if (envoyer.EnvoiePDUUDP(pdu,this.ip,this.port) != 0) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur lors de l'envoi de la PDU");

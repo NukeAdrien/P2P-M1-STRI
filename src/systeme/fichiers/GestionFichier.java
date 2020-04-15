@@ -38,7 +38,7 @@ public class GestionFichier implements Serializable {
 	int nbDowload;
 	int nbUpload;
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramètres un
 	 * SocketClient et un gestion de fichier Ce constructeur permet de créer un
 	 * nouveau ClientDonnees.
 	 */
@@ -67,7 +67,7 @@ public class GestionFichier implements Serializable {
 		for (Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			/* On compare la clé de la hash map avec le nom fichier */
 			if (listFichier.getKey().compareTo(nomFichier) == 0) {
-				/* On récupére le fichier */
+				/* On récupère le fichier */
 				recherche = this.listFichier.get(nomFichier);
 				break;
 			}
@@ -91,7 +91,7 @@ public class GestionFichier implements Serializable {
 		this.DebutRecherche();
 		/* Déclaration de variables */
 		Fichier fichier = null;
-		/* On récupére le nom de fichier (si il existe) */
+		/* On récupère le nom de fichier (si il existe) */
 		fichier = this.listFichier.get(nomFichier);
 		/* Si le fichier n'existe pas */
 		if (fichier == null) {
@@ -170,7 +170,7 @@ public class GestionFichier implements Serializable {
 		int taille = bloc.length;
 		long offset = taille * numBloc;
 
-		/* On récupére l'emplacement du fichier */		
+		/* On récupère l'emplacement du fichier */		
 		File fle = new File(fichier.getEmplacement());
 		try {
 			/* On ouvre les flux */
@@ -208,7 +208,7 @@ public class GestionFichier implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		/* On récupére l'emplacement du fichier */
+		/* On récupère l'emplacement du fichier */
 		String file = fichier.getEmplacement();
 		/* Déclaration d'un nouveau fichier */
 		RandomAccessFile ecriture = null;
@@ -314,7 +314,7 @@ public class GestionFichier implements Serializable {
 	/*
 	 * Méthode setReserver : Permet de modifier la réservation du bloc de fichier.
 	 * @param : Le nom de fichier ainsi que son numéro de bloc
-	 * @return : 0 si éa s'est bien passée, 1 sinon  
+	 * @return : 0 si ça s'est bien passée, 1 sinon  
 	 */
 	public synchronized int setReserver(String nom, Integer index) {
 		/* Si le bloc n'est pas disponible */
@@ -342,7 +342,7 @@ public class GestionFichier implements Serializable {
 	/*
 	 * Méthode AjouterFichier : Méthode permettant d'ajouter un fichier et la HashMap
 	 * 
-	 * @param : le fichier et ajouter
+	 * @param : le fichier à ajouter
 	 */
 	public synchronized void AjouterFichier(Fichier f) {
 		Fichier f2 = (Fichier) f.clone();
@@ -410,7 +410,7 @@ public class GestionFichier implements Serializable {
 
 	/*
 	 * Méthode dateModifFichier : Méthode permettant de récupérer la date de la
-	 * derniére modification du fichier.
+	 * dernière modification du fichier.
 	 * 
 	 * @param : Le nom du fichier
 	 * 
@@ -429,10 +429,10 @@ public class GestionFichier implements Serializable {
 
 	}
 	/*
-	 * Méthode initGestionFichier : Méthode permettant d'initialiser une gestion de
-	 * fichier.
+	 * Méthode initGestionFichier : Méthode permettant d'initialiser un gestionnaire de
+	 * fichiers.
 	 * 
-	 * @return : 0 si éa s'est bien passée, 1 sinon
+	 * @return : 0 si ça s'est bien passée, 1 sinon
 	 */
 
 	public Integer initGestionFichier() {
@@ -460,9 +460,9 @@ public class GestionFichier implements Serializable {
 		/* On parcourt la liste de fichiers contenues dans l'ArrayList */
 
 		for (int i = 0; i < allFiles.size(); i++) {
-			/* On récupére la taille du fichier */
+			/* On récupère la taille du fichier */
 			double taillFich = this.getTailleFichier(this.chemin + allFiles.get(i));
-			/* On récupére la derniére date de modification du fichier */
+			/* On récupère la dernière date de modification du fichier */
 			String date = this.dateModifFichier(allFiles.get(i));
 			/* On déclare un nouveau fichier */
 			Fichier fichier = new Fichier(allFiles.get(i), date, this.chemin + allFiles.get(i), (long) taillFich);
@@ -557,6 +557,7 @@ public class GestionFichier implements Serializable {
 			/* On notifie la modification */
 			notifyAll();
 		} catch (Exception e) {
+			/* Affichage d'un message d'erreur*/
 			System.out.println("Fichier introuvable");
 		}
 	}
@@ -615,6 +616,7 @@ public class GestionFichier implements Serializable {
 			/* On notifie la modification */
 			notifyAll();
 		} catch (Exception e) {
+			/*Affichage d'un message d'erreur*/
 			System.out.println("Fichier introuvable");
 		}
 	}
@@ -809,7 +811,7 @@ public class GestionFichier implements Serializable {
 		/* On parcourt chaque entrée de la hashMap */
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
 			try {
-				/* Si la clé du fichier (Nom du fichier) correspond à la recherche (ou au moins les premiéres lettres) */
+				/* Si la clé du fichier (Nom du fichier) correspond à la recherche (ou au moins les 3 premières lettres) */
 				if(listFichier.getKey().startsWith(IhmRechercheNom.getJTextField2().substring(0,3))) {
 					al.add(listFichier.getKey());
 				}
@@ -836,9 +838,9 @@ public class GestionFichier implements Serializable {
 		/* On parse la date */
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-		/* On parcourt chaque fichier du répertoire */
+		/* On parcourt chaque fichier du repertoire */
 		for(int i=0; i<files.length; i++) {
-			/* On récupére la date du fichier */
+			/* On récupère la date du fichier */
 			Date d = new Date(files[i].lastModified());
 			String da = dateFormat.format(d);
 			/* Si la date correspond à la recherche */
@@ -862,7 +864,7 @@ public class GestionFichier implements Serializable {
 		ArrayList<String> al = new ArrayList<String>();
 		Path path = Paths.get(this.chemin);
 
-		/* On recupére les propriétés du fichier et plus principalement l'auteur */
+		/* On recupère les propriétés du fichier et plus principalement l'auteur */
 		FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
 		UserPrincipal owner = null;
 		try {
@@ -888,7 +890,7 @@ public class GestionFichier implements Serializable {
 	/*
 	 * Methode rechercheNomFichier() : Permet de rechercher un nom de fichier
 	 * @return : La liste des fichiers qui correspond à la recherche
-	 * @param : le critére de recherche
+	 * @param : le critère de recherche
 	 */
 	public ArrayList<String> rechercheNomFichier(String carac) {
 
@@ -900,13 +902,13 @@ public class GestionFichier implements Serializable {
 
 		/* Pour chaque entrée de la HashMap*/
 		for(Entry<String, Fichier> listFichier : this.getListFichier().entrySet()) {
-			/* Si le nom du fichier correspond au critére de recherche (ou au moins ses premiéres lettres)*/
+			/* Si le nom du fichier correspond au critère de recherche (ou au moins ses premières lettres)*/
 			if(listFichier.getKey().startsWith(carac.substring(0,1))) {
 				/* On ajoute à l'ArrayList le nom du fichier */
 				al.add(listFichier.getKey());
 			}
 		}
-		/* On affiche les fichiers correspondant au critére de recherche */
+		/* On affiche les fichiers correspondant au critère de recherche */
 		for (int i=0; i<listFichier.size(); i++) {
 			System.out.println("Voici les fichiers disponibles :" + al.get(i));
 
@@ -919,14 +921,14 @@ public class GestionFichier implements Serializable {
 	/*
 	 * Methode rechercheDateFichier() : Permet de rechercher une date
 	 * @return : La liste des fichiers qui correspond à la recherche
-	 * @param : le critére de recherche
+	 * @param : le critère de recherche
 	 */
 	@SuppressWarnings("unlikely-arg-type")
 	public ArrayList<String> rechercheDateFichier(long carac) {
 		/* Déclaration de variables*/
 		ArrayList<String> al = new ArrayList<String>();
 		File rep = new File(this.chemin);
-		/* On récupére les fichiers du répertoire */
+		/* On récupère les fichiers du répertoire */
 		File[] files = rep.listFiles();
 		/* On parse la date */
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -936,7 +938,7 @@ public class GestionFichier implements Serializable {
 
 		/* On parcourt chaque fichier du répertoire */
 		for(int i=0; i<files.length; i++) {
-			/* On récupére la date du fichier */
+			/* On récupère la date du fichier */
 			Date d = new Date(files[i].lastModified());
 			String da = dateFormat.format(d);
 			/* Si la date correspond à la recherche */
@@ -954,7 +956,7 @@ public class GestionFichier implements Serializable {
 	/*
 	 * Methode rechercheAuteurFichier() : Permet de rechercher un auteur
 	 * @return : La liste des fichiers qui correspond à la recherche
-	 * @param : le critére de recherche
+	 * @param : le critère de recherche
 	 */
 	public ArrayList<String> rechercheAuteurFichier(String carac) {
 		/* Déclaration de variables*/
@@ -964,7 +966,7 @@ public class GestionFichier implements Serializable {
 		Scanner sc = new Scanner(System.in);
 		carac=sc.next();
 
-		/* On recupére les propriétés du fichier et plus principalement l'auteur */
+		/* On recupère les propriétés du fichier et plus principalement l'auteur */
 		FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
 		UserPrincipal owner = null;
 		try {

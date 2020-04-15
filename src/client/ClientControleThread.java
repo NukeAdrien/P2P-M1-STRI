@@ -24,8 +24,8 @@ public class ClientControleThread implements Runnable {
 	int main;
 
 	/*
-	 * Constructeur ClientControleThread --> Ce constructeur prend en paramétre le
-	 * protocole de transport choisie un GestionFichier, le nom du fichier,
+	 * Constructeur ClientControleThread --> Ce constructeur prend en paramètre le
+	 * protocole de transport choisi un GestionFichier, le nom du fichier,
 	 * l'adresse ip et le port Ce constructeur permet de créer un nouveau
 	 * ClientControleThread.
 	 */
@@ -38,6 +38,13 @@ public class ClientControleThread implements Runnable {
 		this.port = p;
 		main = 0;
 	}
+	
+	/*
+	 * Constructeur ClientControleThread --> Ce constructeur prend en paramètre le
+	 * protocole de transport choisi un GestionFichier, le nom du fichier,
+	 * l'adresse, le port, ainsi que le main. Ce constructeur permet de créer un nouveau
+	 * ClientControleThread.
+	 */
 	
 	public ClientControleThread(String t, GestionFichier g, String i, int p, String nf, int m) {
 		this.transport = t;
@@ -59,7 +66,7 @@ public class ClientControleThread implements Runnable {
 		// Crée le socket en indiquant le mode de transport (TCP ou UDP)
 		SocketClient serveur = new SocketClient(transport);
 		/*
-		 * Si il y a un probléme avec l'initialisation du socket, l'adresse IP et le
+		 * Si il y a un problème avec l'initialisation du socket, l'adresse IP et le
 		 * port du destinataire
 		 */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
@@ -67,26 +74,26 @@ public class ClientControleThread implements Runnable {
 			System.out.println("Impossible de joindre le serveur");
 			return;
 		}
-		/* Si il y un probléme avec l'envoie de la PDU au serveur */
+		/* Si il y un problème avec l'envoi de la PDU au serveur */
 		if (serveur.EnvoiePDU(requete) != 0) {
 			/* On ferme le socket */
 			serveur.FermerSocket();
 			/* Affichage d'un message d'erreur */
-			System.out.println("Erreur lors de l'envoi de la requéte");
+			System.out.println("Erreur lors de l'envoi de la requête");
 			return;
 		}
 		/* On initialise la variable */
 		PDU reponse = null;
-		/* On récupére la PDU recu */
+		/* On récupère la PDU recu */
 		reponse = serveur.RecevoirPDU();
 		/* Si la PDU n'est pas nulle */
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur " + this.ip + ":" + this.port);
 			return;
-			/* Si la réponse est une instance de PDU contréle */
+			/* Si la réponse est une instance de PDU contrôle */
 		} else if (reponse instanceof PDUControle) {
-			/* On récupére la PDUContréle */
+			/* On récupère la PDUControle */
 			requete = (PDUControle) reponse;
 		} else {
 			/* Affichage d'un message d'erreur */
@@ -101,7 +108,7 @@ public class ClientControleThread implements Runnable {
 		if (requete.getCommande().compareTo("TPF") == 0) {
 			/* Si le fichier existe */
 			if (requete.getFichier() != null) {
-				/* On récupére le fichier */
+				/* On récupère le fichier */
 				fichierDl = requete.getFichier();
 				/* Si le fichier n'existe pas dans GestionFichier */
 				if (sysFichiers.RechercheFichier(nomFichier) == null) {
@@ -141,7 +148,7 @@ public class ClientControleThread implements Runnable {
 					if (nbBlocIndisp == sysFichiers.getListFichier().get(fichierDl.getNomFichier()).getListHeaderBlocs()
 							.size()) {
 						/* Affichage d'un message d'erreur */
-						System.out.println(ip + ":" + port + " Ne posséde aucun bloc du fichier");
+						System.out.println(ip + ":" + port + " Ne possède aucun bloc du fichier");
 					}
 					/* Fermeture du socket */
 					serveur.FermerSocket();

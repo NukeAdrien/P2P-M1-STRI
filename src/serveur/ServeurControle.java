@@ -60,7 +60,7 @@ public class ServeurControle {
 		/* Déclaration de variables */
 		PDU reponse = null;
 		Fichier fichier;
-		/* On recherche si les fichiers existe */
+		/* On recherche si le fichier existe */
 		fichier = gestionFichier.RechercheFichier(requete.getDonnees());
 		/* Si le fichier n'existe pas */
 		if (fichier == null) {

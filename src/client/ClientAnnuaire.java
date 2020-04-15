@@ -16,7 +16,7 @@ public class ClientAnnuaire {
 	int port;
 
 	/*
-	 * Constructeur ClientAnnuaire --> Ce constructeur prend en paramétre le
+	 * Constructeur ClientAnnuaire --> Ce constructeur prend en paramètre le
 	 * protocole de transport choisi et un GestionFichier Ce constructeur permet de
 	 * créer un nouveau ClientAnnuaire.
 	 */
@@ -27,14 +27,14 @@ public class ClientAnnuaire {
 	}
 
 	/*
-	 * Methode Inscription : Permet de s'inscrire auprés d'un serveur annuaire
+	 * Methode Inscription : Permet de s'inscrire auprès d'un serveur annuaire
 	 * @param : L'adresse ip du serveur, le port source et le port de destination
 	 */
 	public void Inscription(String ip, int port, int portServeur) {
-		/* Cree le socket en indiquant le mode de transport (TCP ou UDP) */
+		/* Crée le socket en indiquant le mode de transport (TCP ou UDP) */
 		SocketClient serveur = new SocketClient(transport);
 		/*
-		 * Si il y a un probléme avec l'initialisation avec le socket, l'adresse IP et
+		 * Si il y a un problème avec l'initialisation avec le socket, l'adresse IP et
 		 * le port du destinataire
 		 */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
@@ -46,7 +46,7 @@ public class ClientAnnuaire {
 		PDUAnnuaire register = new PDUAnnuaire("ANN", "REGISTRATION", this.sysFichiers, Integer.toString(portServeur),
 				null);
 
-		/* Si il y un probléme avec l'envoi de la PDU au serveur */
+		/* Si il y un problème avec l'envoi de la PDU au serveur */
 		if (serveur.EnvoiePDU(register) != 0) {
 			/* On ferme le socket */
 			serveur.FermerSocket();
@@ -56,16 +56,16 @@ public class ClientAnnuaire {
 		}
 		/* On initialise la variable */
 		PDU reponse = null;
-		/* On récupére la PDU reéu */
+		/* On récupère la PDU reçu */
 		reponse = serveur.RecevoirPDU();
 		/* Si la PDU n'est pas nulle */
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur");
 			return;
-			/* Si la réponse est une instance de PDU contréle */
+			/* Si la réponse est une instance de PDUAnnuaire */
 		} else if (reponse instanceof PDUAnnuaire) {
-			/* On récupére la PDUControle */
+			/* On récupère la PDUControle */
 			register = (PDUAnnuaire) reponse;
 		} else {
 			/* Affichage d'un message d'erreur */
@@ -75,17 +75,17 @@ public class ClientAnnuaire {
 			return;
 		}
 		/* On vérifie la reponse */
-		/* Si la commande correspond à celle de l'inscription auprés d'un Serveur Annuaire */
+		/* Si la commande correspond à celle de l'inscription auprès d'un Serveur Annuaire */
 		if (register.getMethode().compareTo("REGISTRATION") == 0) {
 			/* Si la commande est un enregistrement */
 			if (register.getDonnees().compareTo("OK") == 0) {
-				System.out.println("Vous pouvez rechercher des fichier depuis l'annuaire !");
+				System.out.println("Vous pouvez rechercher des fichiers depuis l'annuaire !");
 				this.ip = ip;
 				this.port = port;
 			} 
 			/* Si la commande correspond à une MAJ des données */
 			else if(register.getDonnees().compareTo("MAJ") == 0) {
-				System.out.println("Vous pouvez rechercher des fichier depuis l'annuaire !");
+				System.out.println("Vous pouvez rechercher des fichiers depuis l'annuaire !");
 				this.ip = ip;
 				this.port = port;
 				this.sysFichiers.setNbDowload(register.getSysFichiers().getNbDowload());
@@ -120,7 +120,7 @@ public class ClientAnnuaire {
 		/* Crée le socket en indiquant le mode de transport (TCP ou UDP) */
 		SocketClient serveur = new SocketClient(transport);
 		/*
-		 * Si il y a un probléme avec l'initialisation avec le socket, l'adresse IP et
+		 * Si il y a un problème avec l'initialisation avec le socket, l'adresse IP et
 		 * le port du destinataire
 		 */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
@@ -131,7 +131,7 @@ public class ClientAnnuaire {
 		/* Création d'une PDU Annuaire */
 		PDUAnnuaire dowload = new PDUAnnuaire("ANN", "DOWLOAD", this.sysFichiers, nomFichier, portServeur);
 
-		/* Si il y un probléme avec l'envoi de la PDU au serveur */
+		/* Si il y un problème avec l'envoi de la PDU au serveur */
 		if (serveur.EnvoiePDU(dowload) != 0) {
 			/* On ferme le socket */
 			serveur.FermerSocket();
@@ -141,14 +141,14 @@ public class ClientAnnuaire {
 		}
 		/* On initialise la variable */
 		PDU reponse = null;
-		/* On récupére la PDU recu */
+		/* On récupère la PDU rçcu */
 		reponse = serveur.RecevoirPDU();
 		/* Si la PDU n'est pas nulle */
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur");
 			return 1;
-			/* Si la réponse est une instance de PDU contréle */
+			/* Si la réponse est une instance de PDUAnnuaire */
 		} else if (reponse instanceof PDUAnnuaire) {
 			/* On récupére la PDUControle */
 			dowload = (PDUAnnuaire) reponse;
@@ -164,10 +164,10 @@ public class ClientAnnuaire {
 		if (dowload.getMethode().compareTo("DOWLOAD") == 0) {
 			/* Si le fichier existe */
 			if (dowload.getListServeurs() != null) {
-				/* On récupére les données */
+				/* On récupère les données */
 				System.out.println(dowload.getDonnees());
 
-				/* Si la donnée contenuer dans la PDU est équivalent à "Le fichier va etre telecharge dans 30 secondes" */
+				/* Si la donnée contenue dans la PDU est équivalent à "Le fichier va etre telecharge dans 30 secondes" */
 				/* Alors on crée un timer */
 				if (dowload.getDonnees().compareTo("Le fichier va etre telecharge dans 30 secondes") == 0) {
 					int t = 31;
@@ -182,10 +182,10 @@ public class ClientAnnuaire {
 					}
 				}
 
-				/* On parcours la liste des serveurs */
+				/* On parcourt la liste des serveurs */
 				for(int i =0; i < dowload.getListServeurs().size();i++) {
 					String[] temp = dowload.getListServeurs().get(i).split(":");
-					/* On ajoute dans les arrayList les éléments respectifs au modéle suivant : <IP>:<Port>*/
+					/* On ajoute dans les arrayList les éléments respectifs au modèle suivant : <IP>:<Port>*/
 					listIP.add(i,temp[0]);
 					listPort.add(i,Integer.parseInt(temp[1]));
 				}

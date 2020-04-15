@@ -3,7 +3,7 @@ package envoie.reception;
 import java.io.Serializable;
 
 /*
- * Classe PDU --> Classe permettant de gérér une PDU
+ * Classe PDU --> Classe permettant de gérer une PDU
  */
 
 @SuppressWarnings("serial")

@@ -12,7 +12,7 @@ public class ServeurDonnees {
 	GestionFichier sysFichier;
 
 	/*
-	 * Constructeur ServeurDonnees --> Ce constructeur prend en paramétre un gestionnaire de fichiers
+	 * Constructeur ServeurDonnees --> Ce constructeur prend en paramètre un gestionnaire de fichiers
 	 * Ce constructeur permet de créer un nouveau ServeurDonnees.
 	 */
 	public ServeurDonnees(GestionFichier g) {
@@ -21,7 +21,7 @@ public class ServeurDonnees {
 
 	/*
 	 * Méthode Upload : Méthode permettant de charger les données dans les blocs dans la PDU avant son envoi
-	 * @param : la requéte à traiter
+	 * @param : la requête à traiter
 	 * @return : la PDU une fois les données chargées
 	 */
 	public PDU Upload(PDUDonnees requete) {
@@ -37,10 +37,10 @@ public class ServeurDonnees {
 		if (bloc != null) {
 			/*On encapsule les données lues dans une PDUDonnees pour pouvoir les envoyer par la suite */
 			reponse = new PDUDonnees("DATA",null, requete.getIndex(), bloc);
-			sysFichier.nbUploadInc();
 			/* On incrémente le nombre d'upload */
+			sysFichier.nbUploadInc();
 		}else {
-			/* Affichage d'une requéte d'erreur */
+			/* Affichage d'une requête d'erreur */
 			reponse = new PDUDonnees("ERR","Erreur lors de la lecture du bloc : "+requete.getIndex(), requete.getIndex(),null);
 		}
 		/* On retourne la PDU */

@@ -32,7 +32,7 @@ public class PDUAnnuaire extends PDU {
 	}
 
 	/*
-	 * Constructeur PDUAnnaire : Prend en paramètre le type de connexion utilisé (UDP ou TCP), le gestion de fichier associé, les données à envoyer ainsi que la liste des serveurs.
+	 * Constructeur PDUAnnaire : Prend en paramètre le type de connexion utilisé (UDP ou TCP), le gestionnaire de fichiers associé, les données à envoyer ainsi que la liste des serveurs.
 	 * Instancie un nouveau PDUAnnuaire
 	 */
 	public PDUAnnuaire(String type, String methode, GestionFichier lF,String donnees,List<String> lS) {

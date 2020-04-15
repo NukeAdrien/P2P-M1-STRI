@@ -21,7 +21,7 @@ public class ServeurAnnuaire {
 	PDUAnnuaire reponse;
 	
 	/*
-	 * Constructeur ServeuControle --> Ce constructeur prend en paramétre un gestionnaire
+	 * Constructeur ServeuControle --> Ce constructeur prend en paramètre un gestionnaire
 	 * de fichiers. Ce constructeur permet de créer un nouveau ServeurAnnuaire .
 	 */
 	
@@ -31,7 +31,7 @@ public class ServeurAnnuaire {
 	}
 
 	/*
-	 * Methode Inscription : Permet de s'inscrire auprés d'un serveur annuaire
+	 * Methode Inscription : Permet de s'inscrire auprès d'un serveur annuaire
 	 * @param : La PDUAnnuaire à traiter ainsi que l'adresse IP du serveur à ajouter
 	 * @return : La PDUAnnuaire traitée
 	 */
@@ -43,7 +43,7 @@ public class ServeurAnnuaire {
 		if (listServeurs.get(adresse) == null) {
 			/* On ajoute cette nouvelle adresse */
 			listServeurs.put(adresse, pdu.getSysFichiers());
-			/* Si il un probléme lors de l'enregistrement */
+			/* Si il un problème lors de l'enregistrement */
 			if (listServeurs.get(adresse) == null) {
 				/* On envoie une PDU NOK*/
 				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "NOK", null);
@@ -51,9 +51,9 @@ public class ServeurAnnuaire {
 				/*Sinon on envoie une PDU OK */
 				reponse = new PDUAnnuaire("ANN", "REGISTRATION", null, "OK", null);
 			}
-			/* Si l'adresse existe déjé */
+			/* Si l'adresse existe déjà */
 		} else {
-			/* On modifie la liste des fichiers existants par celui du systéme de fichier précédemment créée */
+			/* On modifie la liste des fichiers existants par celui du système de fichiers précédemment créée */
 			listServeurs.get(adresse).setListFichier(pdu.getSysFichiers().getListFichier());
 			/* Puis on effectue la MAJ des fichiers */
 			reponse = new PDUAnnuaire("ANN", "REGISTRATION", this.listServeurs.get(adresse), "MAJ", null);
@@ -88,10 +88,12 @@ public class ServeurAnnuaire {
 		double ratio;
 		double nbU,nbD;
 		nbD = this.listServeurs.get(adresse).getNbDowload();
+		/* On vérifie que son ratio est correct, en récupérant le nombre de téléchargements effectués */
 		if(nbD > pdu.getSysFichiers().getNbDowload()) {
 			reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Vous trichez !", null);
 			return reponse;
 		}else {
+			/* Sinon pn incrémente le nombre de téléchargements */
 			listServeurs.get(adresse).setListFichier(pdu.getSysFichiers().getListFichier());
 			nbU = pdu.getSysFichiers().getNbUpload();
 			nbD = pdu.getSysFichiers().getNbDowload();
@@ -122,12 +124,12 @@ public class ServeurAnnuaire {
 			}
 			/* 
 			 * On ajoute tous les fichiers dispos dans une autre liste de serveurs
-			 * Il contient donc tous les serveurs dnas lesquels un fichier est disponible
+			 * Il contient donc tous les serveurs dans lesquels un fichier est disponible
 			 */
 			if (i != 0) {
 				listServeurDispo.add(listServeur.getKey());
 			}
-			/* On réinitialise les paramétres */
+			/* On réinitialise les paramètres */
 			fichier = null;
 			i = 0;
 		}
@@ -152,7 +154,7 @@ public class ServeurAnnuaire {
 			}
 			else {
 				/* Sinon annulation du téléchargement car son ratio est trop bas */
-				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Vous ne pouvez pas téléchargé pour l'instant car votre ratio de Uplaod/Téléchargement est inferieur a 25% ", null);
+				reponse = new PDUAnnuaire("ANN", "DOWLOAD", null, "Vous ne pouvez pas télécharger pour l'instant car votre ratio de Upload/Téléchargement est inferieur a 25% ", null);
 			}
 		} else {
 			/* Si le fichier n'est pas disponible ou partiellement disponible */

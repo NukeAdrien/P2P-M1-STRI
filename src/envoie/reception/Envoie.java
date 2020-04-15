@@ -62,7 +62,7 @@ public class Envoie {
 				e.printStackTrace();
 				return 1;
 			}
-			/* Si le socket n'est pas initialiser alors on envoie un message d'erreur*/
+			/* Si le socket n'est pas initialisé alors on envoie un message d'erreur*/
 		} else {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur d'initialisation du socket");
@@ -74,7 +74,7 @@ public class Envoie {
 	/*
 	 * Méthode EnvoiePDUUDP : Cette méthode permet d'envoyer une PDU en UDP. 
 	 * 
-	 * @param : Prend en paramètre une PDU à envoyer,Ip et port du destinataire
+	 * @param : Prend en paramètre une PDU à envoyer,Ip et le port du destinataire
 	 * 
 	 * @return : Retourne 0 si ça s'est bien passée, sinon 1
 	 */
@@ -103,7 +103,7 @@ public class Envoie {
 				System.err.println("Erreur lors de l'envoi du message : " + e);
 				return 1;
 			}
-			/*Si le socket n'est pas initialiser alors on envoie un message d'erreur*/
+			/*Si le socket n'est pas initialisé alors on envoie un message d'erreur*/
 		} else {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur d'initialisation du socket");

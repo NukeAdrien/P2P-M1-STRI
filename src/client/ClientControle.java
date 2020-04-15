@@ -18,7 +18,7 @@ public class ClientControle {
 	GestionFichier sysFichiers;
 	
 	/*
-	 * Constructeur ClientControle --> Ce constructeur prend en paramétre le
+	 * Constructeur ClientControle --> Ce constructeur prend en paramètre le
 	 * protocole de transport choisi et un GestionFichier Ce constructeur permet de
 	 * créer un nouveau ClientControle.
 	 */
@@ -39,12 +39,12 @@ public class ClientControle {
 	public void TelechargementSimple(String nomFichier, String ip, int port) {
 		/* Déclaration de variables */
 		Fichier fichierDl;
-		/* Cree un objet PDU pour l'envoyer au serveur */
+		/* Crée un objet PDU pour l'envoyer au serveur */
 		PDUControle simpleTel = new PDUControle("CTRL", "TSF", nomFichier, null);
 		/* Crée le socket en indiquant le mode de transport (TCP ou UDP) */
 		SocketClient serveur = new SocketClient(transport);
 		/*
-		 * Si il y a un probléme avec l'initialisation avec le socket, l'adresse IP et
+		 * Si il y a un problème avec l'initialisation avec le socket, l'adresse IP et
 		 * le port du destinataire
 		 */
 		if (serveur.InitialisationSocket(ip, port) != 0) {
@@ -52,24 +52,24 @@ public class ClientControle {
 			System.out.println("Impossible de joindre le serveur");
 			return;
 		}
-		/* Si il y un probléme avec l'envoie de la PDU au serveur */
+		/* Si il y un problème avec l'envoi de la PDU au serveur */
 		if (serveur.EnvoiePDU(simpleTel) != 0) {
 			/* On ferme le socket */
 			serveur.FermerSocket();
 			/* Affichage d'un message d'erreur */
-			System.out.println("Erreur lors de l'envoi de la requéte");
+			System.out.println("Erreur lors de l'envoi de la requête");
 			return;
 		}
 		/* On initialise la variable */
 		PDU reponse = null;
-		/* On récupére la PDU reéu */
+		/* On récupère la PDU reçu */
 		reponse = serveur.RecevoirPDU();
 		/* Si la PDU n'est pas nulle */
 		if (reponse == null) {
 			/* Affichage d'un message d'erreur */
 			System.out.println("Erreur de connexion avec le serveur");
 			return;
-			/* Si la réponse est une instance de PDU contréle */
+			/* Si la réponse est une instance de PDUControle */
 		} else if (reponse instanceof PDUControle) {
 			/* On récupére la PDUControle */
 			simpleTel = (PDUControle) reponse;
@@ -108,11 +108,11 @@ public class ClientControle {
 						System.out.println("Erreur lors du téléchargement du fichier");
 						System.out.println("Impossible de télécharger le fichier");
 					} else {
-						/* Affichage d'un message de succés */
+						/* Affichage d'un message de succès */
 						System.out.println("Fichier téléchargé");
 					}
 				} else {
-					/* Affichage d'un message de succés */
+					/* Affichage d'un message de succès */
 					System.out.println("Fichier téléchargé");
 				}
 				/* On ferme le socket */

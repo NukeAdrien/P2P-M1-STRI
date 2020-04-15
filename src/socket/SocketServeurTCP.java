@@ -34,7 +34,7 @@ public class SocketServeurTCP extends Thread {
 			/*On initialise un serveur Socket */
 			sockServeur = new ServerSocket(port);
 			try {
-				/* On réalise une boucle finie */
+				/* On réalise une boucle infinie */
 				while (true) {
 					/* On accepte les sockets venant du client */
 					sockClient = sockServeur.accept();

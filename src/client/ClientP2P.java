@@ -63,7 +63,7 @@ public class ClientP2P implements Runnable {
 					choix = sc.nextInt();
 				} else {
 					sc.nextLine();
-					System.out.println("Entrer invalide");
+					System.out.println("Entrée invalide");
 				}
 				if (choix < 0 && choix > 5) {
 					System.out.println("Erreur saisie");
@@ -103,7 +103,7 @@ public class ClientP2P implements Runnable {
 						}
 					} else {
 						sc.nextLine();
-						System.out.println("Entrer invalide");
+						System.out.println("Entrée invalide");
 					}
 				}
 				sc.nextLine();
@@ -118,7 +118,7 @@ public class ClientP2P implements Runnable {
 				ip = "";
 				port = -1;
 				nbServeur = -1;
-				/* On le laisse entrer le nom de fichier, le nombre de serveurs à contacter */
+				/* On le laisse entrer le nom de fichier et le nombre de serveurs à contacter */
 				System.out.println("Entrez le nom du fichier a télécharger : ");
 				nomFichier = sc.nextLine();
 				while (nbServeur == -1) {
@@ -130,22 +130,25 @@ public class ClientP2P implements Runnable {
 						}
 					} else {
 						sc.nextLine();
-						System.out.println("Entrer invalide");
+						System.out.println("Entrée invalide");
 					}
 				}
 				sc.nextLine();
 				/*
 				 * Pour chaque serveur, on demande à l'utilisateur son adresse IP et son numéro
-				 * de ports
+				 * de port
 				 */
 				if (nbServeur > 0) {
 					for (i = 0; i < nbServeur; i++) {
+						/* On vérifie que l'adresse IP est bien formaté*/
 						while (!ip.matches(
 								"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
 							System.out.println("Entrez l'IP du serveur : ");
 							ip = sc.nextLine();
+							/* On vérifie que l'adresse IP est bien formaté*/
 							if (!ip.matches(
 									"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+								/* Sinon affichage d'un message d'erreur */
 								System.out.println("Erreur de saisie");
 							} else {
 								listIP.add(ip);
@@ -162,7 +165,7 @@ public class ClientP2P implements Runnable {
 								}
 							} else {
 								sc.nextLine();
-								System.out.println("Entrer invalide");
+								System.out.println("Entrée invalide");
 							}
 						}
 						sc.nextLine();
@@ -184,11 +187,14 @@ public class ClientP2P implements Runnable {
 				String adresseIP = "";
 				int numeroPort=-1;
 				if (this.annuaire == null) {
+					/* On vérifie que l'adresse IP est bien formaté*/
 					while (!adresseIP.matches(
 							"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
 						System.out.println("Entrez l'IP du serveur : ");
 						adresseIP = sc.nextLine();
+						/* On vérifie que l'adresse IP est bien formaté*/
 						if (!adresseIP.matches(
+								/* Sinon affichage d'un message d'erreur */
 								"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
 							System.out.println("Erreur de saisie");
 						}
@@ -202,7 +208,7 @@ public class ClientP2P implements Runnable {
 							}
 						} else {
 							sc.nextLine();
-							System.out.println("Entrer invalide");
+							System.out.println("Entrée invalide");
 						}
 					}
 					sc.nextLine();
@@ -234,12 +240,15 @@ public class ClientP2P implements Runnable {
 					switch (choix) {
 					/* Si l'utilisateur a choisi l'option 1 */
 					case 1:
+						/* On vérifie que l'adresse IP est bien formaté*/
 						while (!adresseIP.matches(
 								"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
 							System.out.println("Entrez l'IP du serveur : ");
 							adresseIP = sc.nextLine();
+							/* On vérifie que l'adresse IP est bien formaté*/
 							if (!adresseIP.matches(
 									"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+								/* Sinon affichage d'un message d'erreur */
 								System.out.println("Erreur de saisie");
 							}
 						}
@@ -252,14 +261,15 @@ public class ClientP2P implements Runnable {
 								}
 							} else {
 								sc.nextLine();
-								System.out.println("Entrer invalide");
+								System.out.println("Entrée invalide");
 							}
 						}
 						sc.nextLine();
+						/* On procède à l'inscription */
 						annuaire.Inscription(adresseIP, numeroPort, this.portServeur);
 						break;
 					case 2:
-						System.out.println("La fonction n'a pas été encore dévelopé");
+						System.out.println("La fonction n'a pas été encore dévelopée");
 						break;
 					case 3:
 						/*
@@ -275,9 +285,9 @@ public class ClientP2P implements Runnable {
 						} else {
 							System.out.println("Le fichier n'a pas pu etre téléchargé");
 						}
-						/* On rénitialise une liste d'adresses IP */
+						/* On réinitialise une liste d'adresses IP */
 						listIP = new ArrayList<String>();
-						/* On rénitialise une liste de ports */
+						/* On réinitialise une liste de ports */
 						listPort = new ArrayList<Integer>();
 						break;
 					case 4:
@@ -316,11 +326,13 @@ public class ClientP2P implements Runnable {
 						}
 					}
 					switch (choix) {
+					/* Si l'utilisateur choisi l'option 1 */
 					case 1:
 						String res = null;
 						try {
 							System.out.println("Veuillez entrer le nom du fichier : ");
 							res = sc.next();
+							/* On affiche les details du fichier en fonction du nom de fichier entré */
 							this.sysFichiers.afficherDetailFichier(res);
 						} catch (NoSuchElementException e) {
 							System.out.println("Aucune entrée trouvée");
@@ -328,8 +340,10 @@ public class ClientP2P implements Runnable {
 						}
 						break;
 					case 2:
+						/* Si l'utilisateur choisi l'option 2 */
 						res = null;
 						try {
+							/* On supprime le fichier en fonction du nom de fichier entré */
 							System.out.println("Veuillez entrer le nom du fichier : ");
 							res = sc.next();
 							Fichier red = this.sysFichiers.RechercheFichier(res);
@@ -341,8 +355,10 @@ public class ClientP2P implements Runnable {
 						}
 						break;
 					case 3:
+						/* Si l'utilisateur choisi l'option 3 */
 						res = null;
 						try {
+							/* On renomme le fichier en fonction du nom de fichier entré */
 							System.out.println("Veuillez entrer le nom du fichier à renommer : ");
 							res = sc.next();
 							Fichier red = this.sysFichiers.RechercheFichier(res);
@@ -358,6 +374,7 @@ public class ClientP2P implements Runnable {
 						}
 						break;
 					default:
+						/* Sinon il y a une erreur de saisie */
 						System.out.println("Erreur saisie");
 						break;
 					}

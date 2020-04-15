@@ -40,7 +40,7 @@ public class SocketServeurUDP extends Thread {
 			Envoie envoieClient = new Envoie(sockServeur);
 			/* On cree la PDU du client */
 			Recevoir receptionClient = new Recevoir(sockServeur);
-			/* On réalise une boucle finie */
+			/* On réalise une boucle infinie */
 			while (true) {
 				/* On initialise la variable requete */
 				requete = null;
@@ -54,7 +54,7 @@ public class SocketServeurUDP extends Thread {
 					sockServeur.close();
 					return;
 				} else {
-					/*Récupere l'adresse ip de l'emmeteur*/
+					/*Récupere l'adresse ip de l'emetteur*/
 					adresse = receptionClient.getIpRequete();
 					adresse = adresse.substring(1);
 					receptionClient.setIpRequete(adresse);

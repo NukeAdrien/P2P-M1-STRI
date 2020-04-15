@@ -13,7 +13,7 @@ public class PDUDonnees extends PDU {
 	
 	/*
 	 * Constructeur PDUDonnees --> Ce constructeur prend en paramètres celles de sa classe héritée qu'est le type de la PDU 
-	 * et les données qu'elle contienne... Il prend aussi en paramètre l'index d'un bloc contenue dans la PDU
+	 * et les données qu'elle contienne... Il prend aussi en paramètres l'index d'un bloc contenue dans la PDU
 	 * mais aussi les données d'un bloc contenue dans la PDU également.
 	 */
 	public PDUDonnees(String type, String donnees,Integer index,byte[] bloc) {

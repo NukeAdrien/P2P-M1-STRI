@@ -85,7 +85,7 @@ public class Recevoir {
 					 sockClientUDP.receive(dgram); 
 					 this.ipRequete = dgram.getAddress().toString();
 					 this.portRequete = dgram.getPort();
-					 // Extrait les données
+					 // Extraction des données
 					 ByteArrayInputStream stream = new ByteArrayInputStream(dgram.getData());
 					 ObjectInputStream o = new ObjectInputStream(stream);
 					 try {
@@ -115,7 +115,7 @@ public class Recevoir {
 	}
 		
 		/*
-		 * Methode getIpRequete : Permet d'obtenir ip de l'emmeteur du datagram
+		 * Methode getIpRequete : Permet d'obtenir ip de l'emetteur du datagramme
 		 * @return : IP
 		 */
 		public String getIpRequete() {
@@ -123,15 +123,15 @@ public class Recevoir {
 		}
 		
 		/*
-		 * Methode setIpRequete : Permet de mettre IP de l'emmeteur du datagram
-		 * @param : IP
+		 * Methode setIpRequete : Permet de changer l'IP de l'emetteur du datagramme
+		 * @param : la nouvelle IP
 		 */
 		public void setIpRequete(String ipRequete) {
 			this.ipRequete = ipRequete;
 		}
 		
 		/*
-		 * Methode getPortRequete: Permet d'obtenir le port de l'emmeteur
+		 * Methode getPortRequete: Permet d'obtenir le port de l'emetteur
 		 * @return : le numero du port
 		 */
 		public int getPortRequete() {
@@ -139,8 +139,8 @@ public class Recevoir {
 		}
 		
 		/*
-		 * Methode setPortRequete: Permet de changer le numero de port de l'emmeteur
-		 * @param : le numero du port
+		 * Methode setPortRequete: Permet de changer le numero de port de l'emetteur
+		 * @param : le nouveau numero du port
 		 */
 		public void setPortRequete(int portRequete) {
 			this.portRequete = portRequete;

@@ -84,7 +84,7 @@ public class Fichier implements Serializable,Cloneable {
 	
 
 	/*
-	 * Méthode getListHeaderBlocs : Méthode permettant de récuperer tous les HeaderBlocs d'un fichier
+	 * Méthode getListHeaderBlocs : Méthode permettant de récupérer tous les HeaderBlocs d'un fichier
 	 * @return : la liste de tous les HeaderBlocs du fichier stockées dans une HashMap (avec comme clé l'index, et en valeur
 	 * l'HeaderBloc). Pour plus d'informations se référer à la classe HeaderBloc.java
 	 */
@@ -180,7 +180,7 @@ public class Fichier implements Serializable,Cloneable {
 			e.printStackTrace();
 		}
 		o.listHeaderBlocs = new HashMap<Integer, HeaderBloc>();
-		/* On parcourt la list des headers Blocs */
+		/* On parcourt la liste des headers Blocs */
 		for (Map.Entry<Integer, HeaderBloc> headerbloc : this.listHeaderBlocs.entrySet()) {
 			HeaderBloc t = new HeaderBloc(headerbloc.getValue().getDisponible());
 			@SuppressWarnings("unused")

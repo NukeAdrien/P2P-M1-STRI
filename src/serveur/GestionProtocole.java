@@ -15,7 +15,7 @@ public class GestionProtocole {
 	PDU reponse;
 
 	/*
-	 * Constructeur GestionProtocole --> Ce constructeur prend en paramétre un ServeurControle et ServeurDonnees
+	 * Constructeur GestionProtocole --> Ce constructeur prend en paramètres un ServeurControle et ServeurDonnees
 	 * Ce constructeur permet de créer un nouveau GestionProtocole.
 	 */
 	public GestionProtocole(ServeurControle sc, ServeurDonnees sd) {
@@ -24,7 +24,7 @@ public class GestionProtocole {
 	}
 	
 	/*
-	 * Constructeur GestionProtocole --> Ce constructeur prend en paramétre un ServeurControle, un ServeurDonnees
+	 * Constructeur GestionProtocole --> Ce constructeur prend en paramètres un ServeurControle, un ServeurDonnees
 	 * Ce constructeur permet de créer un nouveau GestionProtocole.
 	 */
 	public GestionProtocole(ServeurControle sc, ServeurDonnees sd, ServeurAnnuaire sa) {
@@ -35,9 +35,9 @@ public class GestionProtocole {
 	
 	
 	/*
-	 * Méthode gestionRequete : Méthode permettant de gérer la requéte traitée
-	 * @param : la requéte PDU à traiter et l'adresse Ip provenant de la PDU
-	 * @return : la PDU une fois la requéte traitée
+	 * Méthode gestionRequete : Méthode permettant de gérer la requête traitée
+	 * @param : la requête PDU à traiter et l'adresse Ip provenant de la PDU
+	 * @return : la PDU une fois la requête traitée
 	 */
 	public PDU gestionRequete(PDU requetePDU, String adresse) {
 		/* Si la variable requetePDU est une instance de PDUControle*/
@@ -93,7 +93,7 @@ public class GestionProtocole {
 				return reponse;
 			default:
 				/*Affichage d'un message d'erreur*/
-				System.out.println("Erreur requéte inexistante");
+				System.out.println("Erreur requête inexistante");
 				return null;
 			}
 			

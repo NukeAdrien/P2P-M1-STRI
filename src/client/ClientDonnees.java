@@ -19,7 +19,7 @@ public class ClientDonnees {
 	GestionFichier sysFichiers;
 
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un SocketClient et un gestion de fichier
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramètre un SocketClient et un gestionnaire de fichiers
 	 * Ce constructeur permet de créer un nouveau ClientDonnees.
 	 */
 	public ClientDonnees(GestionFichier g, SocketClient s) {
@@ -28,7 +28,7 @@ public class ClientDonnees {
 	}
 
 	/*
-	 * Constructeur ClientDonnees --> Ce constructeur prend en paramétre un gestion de fichier
+	 * Constructeur ClientDonnees --> Ce constructeur prend en paramètre un gestion de fichier
 	 * Ce constructeur permet de créer un nouveau ClientDonnees.
 	 */
 	public ClientDonnees(GestionFichier g) {
@@ -41,7 +41,7 @@ public class ClientDonnees {
 	 * @return : 0 si éa s'est passée, 1 sinon
 	 */
 	public Integer InitialiserConnexion(String ip, Integer port) {
-		/* Si il y a un probléme lors de l'initialisation du socket */
+		/* Si il y a un problème lors de l'initialisation du socket */
 		if (serveur.InitialisationSocket(ip, 4444) != 0) {
 			/*Affichage d'un message d'erreur */
 			System.out.println("Impossible de joindre le serveur");
@@ -52,7 +52,7 @@ public class ClientDonnees {
 	}
 
 	/*
-	 * Méthode Download : Méthode permettant au client de télécharger le fichier est ses blocs de données associés.
+	 * Méthode Download : Méthode permettant au client de télécharger le fichier et ses blocs de données associés.
 	 * @param : Le nom du fichier et sa liste des blocs
 	 * @return : 0 si éa s'est passée, 1 sinon
 	 */
@@ -60,7 +60,7 @@ public class ClientDonnees {
 	public Integer Dowload(Fichier fichier, HashMap<Integer, HeaderBloc> listHeaderBlocs) {
 		/* Si il n'y a pas de blocs encore présents */
 		if (listHeaderBlocs == null) {
-			/* Alors on récupére les blocs présents dans le fichier*/
+			/* Alors on récupère les blocs présents dans le fichier*/
 			listHeaderBlocs = fichier.getListHeaderBlocs();
 		}
 		/*On parcourt tous les blocs*/
@@ -68,20 +68,20 @@ public class ClientDonnees {
 			/*On instancie une PDUDonnees*/
 			PDUDonnees requete = new PDUDonnees("DATA",fichier.getNomFichier() ,(int)headerbloc.getKey(), null);
 			// Envoie de la PDU au serveur
-			/*Si il y a un probléme lors de l'envoie de la PDU au client */
+			/*Si il y a un problème lors de l'envoi de la PDU au client */
 			if (serveur.EnvoiePDU(requete) != 0) {
 				/*On ferme la Socket*/
 				serveur.FermerSocket();
 				/*Affichage d'un message d'erreur*/
-				System.out.println("Erreur lors de l'envoi de la requéte");
+				System.out.println("Erreur lors de l'envoi de la requête");
 				return 1;
 			}
 			/* Déclaration de variables de type PDU et de PDUDonnees */
 			PDU reponsePDU = null;
 			PDUDonnees reponse = null;
-			/* On Récupére la PDU recu */
+			/* On Récupère la PDU recu */
 			reponsePDU = serveur.RecevoirPDU();
-			/* Si il y a un probléme lors de la réception de la PDU */
+			/* Si il y a un problème lors de la réception de la PDU */
 			if (reponsePDU == null) {
 				/* Affichage d'un message d'erreur */
 				System.out.println("Erreur de connexion avec le serveur");
@@ -99,18 +99,18 @@ public class ClientDonnees {
 			}
 			/* Si la variable reponse a un type de PDU correspondant à DATA */
 			if (reponse.getType().compareTo("DATA") == 0) {
-				/* Si il y a un probléme lors de l'écriture du bloc*/
+				/* Si il y a un problème lors de l'écriture du bloc*/
 				if(sysFichiers.Ecrire(fichier,(int) headerbloc.getKey(),reponse.getBloc()) != 0) {
 					/*On indique que ce bloc n'est pas disponible*/
 					sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), -1);
 				}
-				/* Si il y a pas eu de problémes, on indique que ce bloc est disponible*/
+				/* Si il y a pas eu de problèmes, on indique que ce bloc est disponible*/
 				sysFichiers.setDisponible(fichier.getNomFichier(), (int) headerbloc.getKey(), 1);
 				/* On Incrémente le nombre de téléchargement*/
 				sysFichiers.nbDowloadInc();
 			/* Si la variable reponse a un type de PDU correspondant à ERR */
 			} else if (reponse.getType().compareTo("ERR") == 0) {
-				/* On récupére les données qu'elle a pu recevoir */
+				/* On récupère les données qu'elle a pu recevoir */
 				System.out.println(reponse.getDonnees());
 			} else {
 				/* Affichage d'un message d'erreur */
