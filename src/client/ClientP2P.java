@@ -98,8 +98,9 @@ public class ClientP2P implements Runnable {
 					System.out.println("Entrez le port du serveur :");
 					if (sc.hasNextInt()) {
 						port = sc.nextInt();
-						if (port < 1) {
+						if (port < 1024 || port > 49151) {
 							port = -1;
+							System.out.println("Nombre non compris entre 1024 et 49151");
 						}
 					} else {
 						sc.nextLine();
@@ -125,8 +126,9 @@ public class ClientP2P implements Runnable {
 					System.out.println("Entrez le nombre de serveur a contacter : ");
 					if (sc.hasNextInt()) {
 						nbServeur = sc.nextInt();
-						if (nbServeur < 1) {
-							nbServeur = -1;
+						if (port < 1024 || port > 49151) {
+							port = -1;
+							System.out.println("Nombre non compris entre 1024 et 49151");
 						}
 					} else {
 						sc.nextLine();
@@ -158,9 +160,10 @@ public class ClientP2P implements Runnable {
 							System.out.println("Entrez le port du serveur :");
 							if (sc.hasNextInt()) {
 								port = sc.nextInt();
-								if (port < 1) {
+								if (port < 1024 || port > 49151) {
 									port = -1;
-								} else {
+									System.out.println("Nombre non compris entre 1024 et 49151");
+								}else {
 									listPort.add(port);
 								}
 							} else {
@@ -203,8 +206,9 @@ public class ClientP2P implements Runnable {
 						System.out.println("Entrez le port du serveur :");
 						if (sc.hasNextInt()) {
 							numeroPort = sc.nextInt();
-							if (numeroPort < 1) {
-								numeroPort = -1;
+							if (port < 1024 || port > 49151) {
+								port = -1;
+								System.out.println("Nombre non compris entre 1024 et 49151");
 							}
 						} else {
 							sc.nextLine();
@@ -256,8 +260,9 @@ public class ClientP2P implements Runnable {
 							System.out.println("Entrez le port du serveur :");
 							if (sc.hasNextInt()) {
 								numeroPort = sc.nextInt();
-								if (numeroPort < 1) {
-									numeroPort = -1;
+								if (port < 1024 || port > 49151) {
+									port = -1;
+									System.out.println("Nombre non compris entre 1024 et 49151");
 								}
 							} else {
 								sc.nextLine();

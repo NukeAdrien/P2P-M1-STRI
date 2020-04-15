@@ -35,8 +35,9 @@ public class P2P {
 			System.out.println("Entrez le port du serveur :");
 			if (c.hasNextInt()) {
 				port = c.nextInt();
-				if (port < 1) {
+				if (port < 1024 || port > 49151) {
 					port = -1;
+					System.out.println("Nombre non compris entre 1024 et 49151");
 				}
 			} else {
 				c.nextLine();
